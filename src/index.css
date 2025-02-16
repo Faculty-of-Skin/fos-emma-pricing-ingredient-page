@@ -43,7 +43,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-spa-beige text-foreground antialiased;
   }
 
   html {
@@ -53,18 +53,55 @@
 
 /* Custom scrollbar for modern browsers */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  @apply bg-spa-beige;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
+  @apply bg-spa-stone/50 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  @apply bg-spa-stone;
+}
+
+@layer components {
+  .section-padding {
+    @apply py-24 px-4 md:px-6 lg:px-8;
+  }
+  
+  .heading-xl {
+    @apply text-4xl md:text-5xl lg:text-6xl font-semibold text-spa-charcoal leading-tight;
+  }
+  
+  .heading-lg {
+    @apply text-3xl md:text-4xl font-semibold text-spa-charcoal;
+  }
+  
+  .heading-md {
+    @apply text-2xl md:text-3xl font-semibold text-spa-charcoal;
+  }
+  
+  .body-lg {
+    @apply text-xl text-spa-stone;
+  }
+  
+  .body-base {
+    @apply text-base text-spa-stone;
+  }
+  
+  .btn-primary {
+    @apply bg-spa-purple hover:bg-spa-purpleDark text-white transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-spa-charcoal hover:bg-spa-stone text-white transition-colors;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-lg transition-shadow duration-300;
+  }
 }

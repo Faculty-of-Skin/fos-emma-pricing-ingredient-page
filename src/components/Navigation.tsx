@@ -26,22 +26,22 @@ export const Navigation = () => {
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <span className="text-[#8E9196] text-xl font-semibold">SpaSense</span>
+            <span className="text-spa-stone text-xl font-semibold tracking-tight">SpaSense</span>
           </div>
 
           {/* Navigation Links - Centered */}
           <div className="hidden md:flex items-center justify-center flex-1 mx-8">
-            <div className="flex space-x-8">
-              <a href="#pricing" className="text-[#8E9196] hover:text-[#7E69AB] transition-colors">
+            <div className="flex space-x-12">
+              <a href="#pricing" className="text-spa-stone hover:text-spa-purpleDark transition-colors">
                 Pricing
               </a>
-              <a href="#benefits" className="text-[#8E9196] hover:text-[#7E69AB] transition-colors">
+              <a href="#benefits" className="text-spa-stone hover:text-spa-purpleDark transition-colors">
                 Features
               </a>
-              <a href="#faq" className="text-[#8E9196] hover:text-[#7E69AB] transition-colors">
+              <a href="#faq" className="text-spa-stone hover:text-spa-purpleDark transition-colors">
                 FAQ
               </a>
             </div>
@@ -51,7 +51,7 @@ export const Navigation = () => {
           <div className="hidden md:block">
             <Button 
               variant="default" 
-              className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
+              className="btn-primary px-6"
               onClick={handleWaitlistClick}
             >
               Join Waitlist
@@ -62,7 +62,7 @@ export const Navigation = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-[#8E9196] p-2"
+              className="text-spa-stone p-2"
             >
               <Menu size={24} />
             </button>
@@ -71,28 +71,28 @@ export const Navigation = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 animate-fade-down bg-white/95">
+          <div className="md:hidden py-6 px-4 animate-fade-down bg-white/95 space-y-4">
             <a
               href="#pricing"
-              className="block py-2 text-[#8E9196] hover:text-[#7E69AB] transition-colors"
+              className="block py-2 text-spa-stone hover:text-spa-purpleDark transition-colors"
             >
               Pricing
             </a>
             <a
               href="#benefits"
-              className="block py-2 text-[#8E9196] hover:text-[#7E69AB] transition-colors"
+              className="block py-2 text-spa-stone hover:text-spa-purpleDark transition-colors"
             >
               Features
             </a>
             <a
               href="#faq"
-              className="block py-2 text-[#8E9196] hover:text-[#7E69AB] transition-colors"
+              className="block py-2 text-spa-stone hover:text-spa-purpleDark transition-colors"
             >
               FAQ
             </a>
             <Button
               variant="default"
-              className="w-full mt-4 bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
+              className="btn-primary w-full mt-4"
               onClick={handleWaitlistClick}
             >
               Join Waitlist
