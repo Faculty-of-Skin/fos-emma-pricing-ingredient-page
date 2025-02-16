@@ -12,11 +12,11 @@ export const Hero = () => {
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-spa-charcoal leading-tight">
-            Boost Retail Sales by 15-30% While Saving 5+ Hours Per Week
+            The AI Assistant That Books, Engages, & Grows Your Spa Business
           </h1>
           
           <p className="text-xl text-spa-stone max-w-2xl mx-auto">
-            Simplify bookings, automate FAQs, and increase retail revenue—effortlessly with AI automation.
+            Boost retail sales, reduce no-shows, automate client interactions, and enhance your reputation—all while saving 5+ hours per week.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -36,7 +36,7 @@ export const Hero = () => {
             </Button>
           </div>
 
-          <div className="pt-12 flex items-center justify-center space-x-8 text-sm text-spa-stone">
+          <div className="pt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-spa-stone">
             <div className="flex items-center">
               <svg
                 className="w-5 h-5 mr-2"
@@ -68,6 +68,22 @@ export const Hero = () => {
                 />
               </svg>
               No Credit Card Required
+            </div>
+            <div className="flex items-center">
+              <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              Limited to 100 Businesses
             </div>
           </div>
         </div>
