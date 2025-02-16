@@ -51,6 +51,15 @@
   }
 }
 
+/* Glass effect utilities */
+.glass {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20;
+}
+
+.glass-hover {
+  @apply hover:bg-white/20 transition-colors duration-200;
+}
+
 /* Custom scrollbar for modern browsers */
 ::-webkit-scrollbar {
   width: 10px;

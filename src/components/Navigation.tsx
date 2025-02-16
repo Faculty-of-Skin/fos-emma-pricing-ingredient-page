@@ -30,17 +30,15 @@ export const Navigation = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"
+        isScrolled ? "bg-white/10 backdrop-blur-lg border-b border-white/20" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <div className="flex-shrink-0">
             <span className="text-spa-charcoal text-xl font-semibold">Spa Sense</span>
           </div>
 
-          {/* Navigation Links - Centered */}
           <div className="hidden md:flex items-center justify-center flex-1 mx-8">
             <div className="flex space-x-8">
               <button 
@@ -64,18 +62,16 @@ export const Navigation = () => {
             </div>
           </div>
 
-          {/* Join Waitlist Button */}
           <div className="hidden md:block">
             <Button 
               variant="default" 
-              className="bg-spa-charcoal hover:bg-spa-stone text-white"
+              className="bg-spa-charcoal/90 hover:bg-spa-stone/90 text-white backdrop-blur-sm"
               onClick={handleWaitlistClick}
             >
               Join Waitlist
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -86,34 +82,35 @@ export const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 animate-fade-down">
+          <div className="md:hidden py-4 animate-fade-down bg-white/10 backdrop-blur-lg rounded-lg border border-white/20 mt-2">
             <button
               onClick={() => scrollToSection('pricing')}
-              className="block w-full text-left py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+              className="block w-full text-left px-4 py-2 text-spa-charcoal hover:bg-white/10 transition-colors"
             >
               Pricing
             </button>
             <button
               onClick={() => scrollToSection('benefits')}
-              className="block w-full text-left py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+              className="block w-full text-left px-4 py-2 text-spa-charcoal hover:bg-white/10 transition-colors"
             >
               Features
             </button>
             <button
               onClick={() => scrollToSection('faq')}
-              className="block w-full text-left py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+              className="block w-full text-left px-4 py-2 text-spa-charcoal hover:bg-white/10 transition-colors"
             >
               FAQ
             </button>
-            <Button
-              variant="default"
-              className="w-full mt-4 bg-spa-charcoal hover:bg-spa-stone text-white"
-              onClick={handleWaitlistClick}
-            >
-              Join Waitlist
-            </Button>
+            <div className="px-4 pt-2">
+              <Button
+                variant="default"
+                className="w-full bg-spa-charcoal/90 hover:bg-spa-stone/90 text-white backdrop-blur-sm"
+                onClick={handleWaitlistClick}
+              >
+                Join Waitlist
+              </Button>
+            </div>
           </div>
         )}
       </div>

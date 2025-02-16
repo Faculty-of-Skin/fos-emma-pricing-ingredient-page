@@ -1,13 +1,12 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="min-h-screen flex items-center bg-spa-beige pt-16">
+    <section className="min-h-screen flex items-center bg-gradient-to-br from-spa-beige to-white pt-16">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-up">
-          <div className="inline-block px-4 py-1.5 bg-white rounded-full text-sm text-spa-charcoal mb-6">
+          <div className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-lg rounded-full text-sm text-spa-charcoal mb-6 border border-white/20">
             <span role="text" aria-label="Special offer">✨ Limited Time: Join Our Pilot Program</span>
           </div>
           
@@ -22,10 +21,10 @@ export const Hero = () => {
             Boost retail sales, reduce no-shows, automate client interactions, and enhance your reputation.
           </p>
 
-          <div className="max-w-xl mx-auto bg-white rounded-full shadow-lg p-2 flex items-center mt-12">
+          <div className="max-w-xl mx-auto bg-white/10 backdrop-blur-lg rounded-full border border-white/20 p-2 flex items-center mt-12">
             <Button
               size="lg"
-              className="bg-spa-charcoal hover:bg-spa-stone text-white w-full h-12 rounded-full font-medium text-base group"
+              className="bg-spa-charcoal/90 hover:bg-spa-stone/90 text-white w-full h-12 rounded-full font-medium text-base group backdrop-blur-sm"
               onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
               aria-label="Join SpaSense Waitlist"
             >
@@ -38,7 +37,7 @@ export const Hero = () => {
             <p className="text-spa-stone text-sm uppercase tracking-wider mb-8">
               Works with your favorite spa software
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-center justify-center max-w-4xl mx-auto" role="list" aria-label="Supported spa software platforms">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-center justify-center max-w-4xl mx-auto bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-8" role="list" aria-label="Supported spa software platforms">
               <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
                 <img 
                   src="/lovable-uploads/44cb127a-3102-4e33-bf98-e24271681e14.png" 
@@ -72,7 +71,6 @@ export const Hero = () => {
         </div>
       </div>
 
-      {/* Add JSON-LD structured data */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify({
           "@context": "https://schema.org",
