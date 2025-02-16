@@ -1,5 +1,6 @@
 
-import { CalendarDays, Sparkles, Star } from "lucide-react";
+import { CalendarDays, Sparkles, Star, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const steps = [
   {
