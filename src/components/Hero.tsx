@@ -39,7 +39,7 @@ export const Hero = () => {
             <p className="text-spa-stone text-sm uppercase tracking-wider mb-8">
               Works with your favorite spa software
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center justify-center max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-center justify-center max-w-4xl mx-auto">
               <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
                 <img 
                   src="/lovable-uploads/44cb127a-3102-4e33-bf98-e24271681e14.png" 
@@ -49,9 +49,16 @@ export const Hero = () => {
               </div>
               <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
                 <img 
+                  src="/lovable-uploads/d4ffa129-b0aa-44e7-a687-b046e9eecd59.png" 
+                  alt="MINDBODY" 
+                  className="h-8 w-auto opacity-70 hover:opacity-100" 
+                />
+              </div>
+              <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+                <img 
                   src="/lovable-uploads/a79d8272-2c27-4c85-9074-5b475398b218.png" 
                   alt="Mangomint" 
-                  className="h-10 w-auto opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto opacity-70 hover:opacity-100" 
                 />
               </div>
               <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
