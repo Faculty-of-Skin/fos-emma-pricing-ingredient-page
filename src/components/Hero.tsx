@@ -27,13 +27,6 @@ export const Hero = () => {
               Join the Pilot Program
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-spa-stone text-spa-stone hover:bg-spa-stone hover:text-white min-w-[200px]"
-            >
-              Watch Demo
-            </Button>
           </div>
 
           <div className="pt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-spa-stone">

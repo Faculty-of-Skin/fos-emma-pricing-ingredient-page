@@ -1,6 +1,5 @@
 
-import { CalendarDays, Sparkles, Star, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CalendarDays, Sparkles, Star } from "lucide-react";
 
 const steps = [
   {
@@ -50,16 +49,6 @@ export const HowItWorks = () => {
               </p>
             </div>
           ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <Button
-            size="lg"
-            className="bg-spa-charcoal hover:bg-spa-stone text-white min-w-[200px] group"
-          >
-            See How It Works
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
         </div>
       </div>
     </section>
