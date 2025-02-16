@@ -18,29 +18,31 @@ export const TargetAudience = () => {
   ];
 
   return (
-    <section className="py-24 bg-spa-beige">
+    <section className="py-24 bg-brutal-white">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-semibold text-spa-charcoal text-center mb-4">
+          <h2 className="text-3xl md:text-4xl font-semibold text-brutal-black text-center mb-4 font-mono uppercase">
             Who Is This For?
           </h2>
-          <p className="text-xl text-spa-stone text-center mb-12">Perfect for:</p>
+          <p className="text-xl text-brutal-charcoal text-center mb-12 font-mono">
+            Perfect for:
+          </p>
 
           <div className="grid gap-6">
             {targets.map((target, index) => (
               <div 
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+                className="brutal-card"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-6 h-6 bg-spa-charcoal rounded-full flex items-center justify-center mt-1">
-                    <Check className="w-4 h-4 text-white" />
+                  <div className="flex-shrink-0 w-6 h-6 bg-brutal-black flex items-center justify-center mt-1">
+                    <Check className="w-4 h-4 text-brutal-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-spa-charcoal mb-1">
+                    <h3 className="text-xl font-semibold text-brutal-black mb-1 font-mono">
                       {target.title}
                     </h3>
-                    <p className="text-spa-stone">
+                    <p className="text-brutal-charcoal">
                       {target.description}
                     </p>
                   </div>
