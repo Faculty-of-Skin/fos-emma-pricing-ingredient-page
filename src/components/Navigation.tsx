@@ -19,6 +19,14 @@ export const Navigation = () => {
     window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
   };
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -35,15 +43,24 @@ export const Navigation = () => {
           {/* Navigation Links - Centered */}
           <div className="hidden md:flex items-center justify-center flex-1 mx-8">
             <div className="flex space-x-8">
-              <a href="#pricing" className="text-spa-charcoal hover:text-spa-stone transition-colors">
+              <button 
+                onClick={() => scrollToSection('pricing')} 
+                className="text-spa-charcoal hover:text-spa-stone transition-colors"
+              >
                 Pricing
-              </a>
-              <a href="#benefits" className="text-spa-charcoal hover:text-spa-stone transition-colors">
+              </button>
+              <button 
+                onClick={() => scrollToSection('benefits')} 
+                className="text-spa-charcoal hover:text-spa-stone transition-colors"
+              >
                 Features
-              </a>
-              <a href="#faq" className="text-spa-charcoal hover:text-spa-stone transition-colors">
+              </button>
+              <button 
+                onClick={() => scrollToSection('faq')} 
+                className="text-spa-charcoal hover:text-spa-stone transition-colors"
+              >
                 FAQ
-              </a>
+              </button>
             </div>
           </div>
 
@@ -72,24 +89,24 @@ export const Navigation = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 animate-fade-down">
-            <a
-              href="#pricing"
-              className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+            <button
+              onClick={() => scrollToSection('pricing')}
+              className="block w-full text-left py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
             >
               Pricing
-            </a>
-            <a
-              href="#benefits"
-              className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+            </button>
+            <button
+              onClick={() => scrollToSection('benefits')}
+              className="block w-full text-left py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
             >
               Features
-            </a>
-            <a
-              href="#faq"
-              className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+            </button>
+            <button
+              onClick={() => scrollToSection('faq')}
+              className="block w-full text-left py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
             >
               FAQ
-            </a>
+            </button>
             <Button
               variant="default"
               className="w-full mt-4 bg-spa-charcoal hover:bg-spa-stone text-white"
