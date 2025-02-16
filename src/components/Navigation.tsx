@@ -27,20 +27,28 @@ export const Navigation = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Logo */}
           <div className="flex-shrink-0">
             <span className="text-spa-charcoal text-xl font-semibold">SpaSense</span>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#how-it-works" className="text-spa-charcoal hover:text-spa-stone transition-colors">
-              How It Works
-            </a>
-            <a href="#benefits" className="text-spa-charcoal hover:text-spa-stone transition-colors">
-              Benefits
-            </a>
-            <a href="#pricing" className="text-spa-charcoal hover:text-spa-stone transition-colors">
-              Pricing
-            </a>
+          {/* Navigation Links - Centered */}
+          <div className="hidden md:flex items-center justify-center flex-1 mx-8">
+            <div className="flex space-x-8">
+              <a href="#pricing" className="text-spa-charcoal hover:text-spa-stone transition-colors">
+                Pricing
+              </a>
+              <a href="#benefits" className="text-spa-charcoal hover:text-spa-stone transition-colors">
+                Features
+              </a>
+              <a href="#faq" className="text-spa-charcoal hover:text-spa-stone transition-colors">
+                FAQ
+              </a>
+            </div>
+          </div>
+
+          {/* Join Waitlist Button */}
+          <div className="hidden md:block">
             <Button 
               variant="default" 
               className="bg-spa-charcoal hover:bg-spa-stone text-white"
@@ -50,6 +58,7 @@ export const Navigation = () => {
             </Button>
           </div>
 
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -60,25 +69,26 @@ export const Navigation = () => {
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 animate-fade-down">
-            <a
-              href="#how-it-works"
-              className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
-            >
-              How It Works
-            </a>
-            <a
-              href="#benefits"
-              className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
-            >
-              Benefits
-            </a>
             <a
               href="#pricing"
               className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
             >
               Pricing
+            </a>
+            <a
+              href="#benefits"
+              className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#faq"
+              className="block py-2 text-spa-charcoal hover:text-spa-stone transition-colors"
+            >
+              FAQ
             </a>
             <Button
               variant="default"
