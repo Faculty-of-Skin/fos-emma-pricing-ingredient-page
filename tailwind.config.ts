@@ -25,12 +25,12 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        spa: {
-          beige: "#F5F5F3",
-          cream: "#FDF9F4",
-          sand: "#E5E1DB",
-          stone: "#8E9196",
-          charcoal: "#2C2C2C"
+        clay: {
+          sage: "#606C38",
+          forest: "#283618",
+          cream: "#FEFAE0",
+          orange: "#DDA15E",
+          rust: "#BC6C25"
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

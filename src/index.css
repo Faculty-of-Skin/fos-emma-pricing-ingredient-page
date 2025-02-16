@@ -7,32 +7,23 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-
     --radius: 0.5rem;
   }
 }
@@ -41,9 +32,9 @@
   * {
     @apply border-border;
   }
-
+  
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-clay-cream text-clay-forest antialiased;
   }
 
   html {
@@ -51,29 +42,48 @@
   }
 }
 
-/* Glass effect utilities */
-.glass {
-  @apply bg-white/10 backdrop-blur-lg border border-white/20;
+@layer components {
+  .clay-button {
+    @apply relative bg-clay-sage text-clay-cream font-semibold rounded-xl px-6 py-3
+           shadow-[6px_6px_12px_#283618,_-6px_-6px_12px_#606C38]
+           active:shadow-[2px_2px_4px_#283618,_-2px_-2px_4px_#606C38]
+           active:translate-y-0.5
+           transition-all duration-150;
+  }
+
+  .clay-card {
+    @apply bg-clay-orange rounded-2xl p-6
+           shadow-[8px_8px_16px_#BC6C25,_-8px_-8px_16px_#DDA15E]
+           border-4 border-clay-cream/10;
+  }
+
+  .clay-input {
+    @apply bg-clay-cream rounded-xl px-4 py-2
+           shadow-[inset_4px_4px_8px_#BC6C25,_inset_-4px_-4px_8px_#DDA15E]
+           focus:outline-none focus:ring-2 focus:ring-clay-sage;
+  }
+
+  .clay-nav {
+    @apply bg-clay-cream/90 backdrop-blur-sm
+           border-b border-clay-forest/10
+           shadow-[0_4px_12px_rgba(188,108,37,0.1)];
+  }
 }
 
-.glass-hover {
-  @apply hover:bg-white/20 transition-colors duration-200;
-}
-
-/* Custom scrollbar for modern browsers */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #FEFAE0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #DDA15E;
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #BC6C25;
 }
