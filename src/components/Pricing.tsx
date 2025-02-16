@@ -72,10 +72,10 @@ export const Pricing = () => {
     <section id="pricing" className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-semibold text-spa-charcoal mb-4">
+          <h2 className="text-3xl md:text-4xl font-semibold text-clay-forest mb-4">
             Pricing Plans – Flexible & Scalable for Your Spa
           </h2>
-          <p className="text-spa-stone">
+          <p className="text-clay-forest/80">
             Choose a plan that fits your spa's needs. Start with a free trial and upgrade as you grow!
           </p>
         </div>
@@ -86,24 +86,24 @@ export const Pricing = () => {
               key={index}
               className={`relative ${
                 plan.highlight 
-                  ? 'border-2 border-spa-charcoal shadow-lg' 
-                  : 'border border-spa-stone/20'
+                  ? 'border-2 border-clay-forest shadow-lg' 
+                  : 'border border-clay-forest/20'
               }`}
             >
               {plan.highlight && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-spa-charcoal text-white px-4 py-1 rounded-full text-sm">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-clay-forest text-clay-cream px-4 py-1 rounded-full text-sm">
                   Most Popular
                 </div>
               )}
               <CardHeader>
-                <CardTitle className="text-xl font-semibold text-spa-charcoal">
+                <CardTitle className="text-xl font-semibold text-clay-forest">
                   {plan.name}
                 </CardTitle>
                 <div className="mt-2">
-                  <span className="text-3xl font-bold text-spa-charcoal">{plan.price}</span>
-                  <span className="text-spa-stone">/month per location</span>
+                  <span className="text-3xl font-bold text-clay-forest">{plan.price}</span>
+                  <span className="text-clay-forest/80">/month per location</span>
                 </div>
-                <CardDescription className="mt-4 text-spa-stone">
+                <CardDescription className="mt-4 text-clay-forest/80">
                   {plan.description}
                 </CardDescription>
               </CardHeader>
@@ -111,23 +111,19 @@ export const Pricing = () => {
                 <ul className="space-y-3">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-spa-charcoal shrink-0 mt-0.5" />
-                      <span className="text-spa-stone text-sm">{feature}</span>
+                      <Check className="w-5 h-5 text-clay-sage shrink-0 mt-0.5" />
+                      <span className="text-clay-forest/80 text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button 
-                  className={`w-full ${
-                    plan.highlight 
-                      ? 'bg-spa-charcoal hover:bg-spa-stone' 
-                      : 'bg-spa-stone hover:bg-spa-charcoal'
-                  } text-white`}
+                <button 
+                  className={`clay-button w-full`}
                   onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
                 >
                   {plan.cta}
-                </Button>
+                </button>
               </CardFooter>
             </Card>
           ))}
@@ -135,28 +131,27 @@ export const Pricing = () => {
 
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold text-spa-charcoal mb-4">
+            <h3 className="text-xl font-semibold text-clay-forest mb-4">
               All Plans Include:
             </h3>
             <ul className="space-y-3">
               {commonFeatures.map((feature, index) => (
                 <li key={index} className="flex items-center justify-center gap-2">
-                  <Check className="w-5 h-5 text-spa-charcoal" />
-                  <span className="text-spa-stone">{feature}</span>
+                  <Check className="w-5 h-5 text-clay-sage" />
+                  <span className="text-clay-forest/80">{feature}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="text-center">
-            <p className="text-spa-stone mb-6">Start Free & Upgrade Anytime!</p>
-            <Button 
-              size="lg"
-              className="bg-spa-charcoal hover:bg-spa-stone text-white min-w-[250px]"
+            <p className="text-clay-forest/80 mb-6">Start Free & Upgrade Anytime!</p>
+            <button 
+              className="clay-button min-w-[250px]"
               onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
             >
               Join the waitlist
-            </Button>
+            </button>
           </div>
         </div>
       </div>
