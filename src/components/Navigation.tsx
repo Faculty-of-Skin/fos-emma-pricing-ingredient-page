@@ -29,7 +29,7 @@ export const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <span className="text-spa-charcoal text-xl font-semibold">SpaSense</span>
+            <span className="text-spa-charcoal text-xl font-semibold">Spa Sense</span>
           </div>
 
           {/* Navigation Links - Centered */}
