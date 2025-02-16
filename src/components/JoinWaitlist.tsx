@@ -17,7 +17,7 @@ export const JoinWaitlist = () => {
 
   const testimonials = [
     {
-      quote: "This AI assistant has transformed how we engage with clients. Our retail sales have increased by 25%!",
+      quote: "Spa Sense has transformed how we engage with clients. Our retail sales have increased by 25% while saving us time daily",
       author: "Sarah J.",
       role: "Day Spa Owner"
     }
