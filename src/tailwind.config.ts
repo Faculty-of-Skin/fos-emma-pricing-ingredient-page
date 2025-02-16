@@ -30,9 +30,7 @@ export default {
           cream: "#FDF9F4",
           sand: "#E5E1DB",
           stone: "#8E9196",
-          charcoal: "#2C2C2C",
-          purple: "#9b87f5",
-          purpleDark: "#7E69AB"
+          charcoal: "#2C2C2C"
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

@@ -29,19 +29,19 @@ export const Navigation = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <span className="text-spa-stone text-xl font-semibold tracking-tight">SpaSense</span>
+            <span className="text-spa-stone text-xl font-semibold">SpaSense</span>
           </div>
 
           {/* Navigation Links - Centered */}
           <div className="hidden md:flex items-center justify-center flex-1 mx-8">
             <div className="flex space-x-12">
-              <a href="#pricing" className="text-spa-stone hover:text-spa-purpleDark transition-colors">
+              <a href="#pricing" className="text-spa-stone hover:text-spa-charcoal transition-colors">
                 Pricing
               </a>
-              <a href="#benefits" className="text-spa-stone hover:text-spa-purpleDark transition-colors">
+              <a href="#benefits" className="text-spa-stone hover:text-spa-charcoal transition-colors">
                 Features
               </a>
-              <a href="#faq" className="text-spa-stone hover:text-spa-purpleDark transition-colors">
+              <a href="#faq" className="text-spa-stone hover:text-spa-charcoal transition-colors">
                 FAQ
               </a>
             </div>
@@ -51,7 +51,7 @@ export const Navigation = () => {
           <div className="hidden md:block">
             <Button 
               variant="default" 
-              className="btn-primary px-6"
+              className="bg-spa-charcoal hover:bg-spa-stone text-white"
               onClick={handleWaitlistClick}
             >
               Join Waitlist
@@ -71,28 +71,28 @@ export const Navigation = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-6 px-4 animate-fade-down bg-white/95 space-y-4">
+          <div className="md:hidden py-4 px-4 animate-fade-down bg-white/95 space-y-4">
             <a
               href="#pricing"
-              className="block py-2 text-spa-stone hover:text-spa-purpleDark transition-colors"
+              className="block py-2 text-spa-stone hover:text-spa-charcoal transition-colors"
             >
               Pricing
             </a>
             <a
               href="#benefits"
-              className="block py-2 text-spa-stone hover:text-spa-purpleDark transition-colors"
+              className="block py-2 text-spa-stone hover:text-spa-charcoal transition-colors"
             >
               Features
             </a>
             <a
               href="#faq"
-              className="block py-2 text-spa-stone hover:text-spa-purpleDark transition-colors"
+              className="block py-2 text-spa-stone hover:text-spa-charcoal transition-colors"
             >
               FAQ
             </a>
             <Button
               variant="default"
-              className="btn-primary w-full mt-4"
+              className="w-full mt-4 bg-spa-charcoal hover:bg-spa-stone text-white"
               onClick={handleWaitlistClick}
             >
               Join Waitlist
