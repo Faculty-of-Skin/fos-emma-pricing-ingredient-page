@@ -5,6 +5,7 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { Benefits } from "@/components/Benefits";
 import { TargetAudience } from "@/components/TargetAudience";
 import { JoinWaitlist } from "@/components/JoinWaitlist";
+import { FAQ } from "@/components/FAQ";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <HowItWorks />
       <Benefits />
       <TargetAudience />
+      <FAQ />
       <JoinWaitlist />
     </div>
   );
