@@ -28,22 +28,22 @@ export const JoinWaitlist = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <div className="mb-8">
-            <div className="text-spa-stone font-medium mb-4">
+            <div className="text-brutal-black font-medium mb-4 font-mono">
               100+ spa owners have already signed up—don't miss out!
             </div>
-            <h2 className="text-3xl md:text-4xl font-semibold text-spa-charcoal">
+            <h2 className="text-3xl md:text-4xl font-semibold text-brutal-black font-mono uppercase">
               Join the waitlist today!
             </h2>
           </div>
 
           {/* Testimonial Section */}
-          <div className="mb-12 bg-spa-beige rounded-lg p-8">
+          <div className="mb-12 brutal-card">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="mb-4">
-                <p className="text-lg text-spa-charcoal italic mb-4">
+                <p className="text-lg text-brutal-black italic mb-4">
                   "{testimonial.quote}"
                 </p>
-                <div className="text-spa-stone">
+                <div className="text-brutal-charcoal">
                   <span className="font-semibold">{testimonial.author}</span>
                   <span className="mx-2">·</span>
                   <span>{testimonial.role}</span>
@@ -53,40 +53,39 @@ export const JoinWaitlist = () => {
           </div>
           
           <div className="mb-12">
-            <h3 className="text-xl font-semibold text-spa-charcoal mb-6">
+            <h3 className="text-xl font-semibold text-brutal-black mb-6 font-mono uppercase">
               Why Join?
             </h3>
             <div className="space-y-4">
               {benefits.map((benefit, index) => (
                 <div 
                   key={index}
-                  className="flex items-center justify-center gap-2 text-spa-charcoal"
+                  className="brutal-card flex items-center justify-center gap-2"
                 >
-                  <Check className="w-5 h-5 text-spa-charcoal" />
-                  <span>{benefit}</span>
+                  <Check className="w-5 h-5 text-brutal-black" />
+                  <span className="text-brutal-black">{benefit}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <Button
-            size="lg"
-            className="bg-spa-charcoal hover:bg-spa-stone text-white min-w-[250px] mb-12"
+          <button
+            className="brutal-button mb-12"
             onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
           >
             Join the Pilot Program – Apply Now
-          </Button>
+          </button>
 
           {/* Booking Platforms Section */}
-          <div className="border-t border-spa-stone/20 pt-12">
-            <p className="text-sm text-spa-stone mb-6">
+          <div className="brutal-card">
+            <p className="text-sm text-brutal-black mb-6 font-mono uppercase">
               Integrates seamlessly with leading booking platforms
             </p>
             <div className="flex flex-wrap justify-center gap-8">
               {bookingPlatforms.map((platform, index) => (
                 <div 
                   key={index}
-                  className="text-spa-stone font-medium"
+                  className="text-brutal-black font-medium"
                 >
                   {platform}
                 </div>
