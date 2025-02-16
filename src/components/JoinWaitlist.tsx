@@ -29,7 +29,7 @@ export const JoinWaitlist = () => {
         <div className="max-w-3xl mx-auto text-center">
           <div className="mb-8">
             <div className="text-brutal-black font-medium mb-4 font-mono">
-              100+ spa owners have already signed up—don't miss out!
+              Spas Using AI See 15-30% More Retail Sales – Want In?
             </div>
             <h2 className="text-3xl md:text-4xl font-semibold text-brutal-black font-mono uppercase">
               Join the waitlist today!
