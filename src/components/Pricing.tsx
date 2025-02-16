@@ -1,5 +1,4 @@
 
-import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import {
   Card,
@@ -69,85 +68,87 @@ export const Pricing = () => {
   ];
 
   return (
-    <section id="pricing" className="py-24 bg-white">
+    <section id="pricing" className="py-24 bg-brutal-white">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-semibold text-clay-forest mb-4">
-            Pricing Plans – Flexible & Scalable for Your Spa
+          <h2 className="text-3xl md:text-4xl font-bold text-brutal-black mb-4 font-mono uppercase">
+            Pricing Plans – Flexible & Scalable
           </h2>
-          <p className="text-clay-forest/80">
+          <p className="text-brutal-charcoal font-mono">
             Choose a plan that fits your spa's needs. Start with a free trial and upgrade as you grow!
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-16">
           {plans.map((plan, index) => (
-            <Card 
+            <div 
               key={index}
-              className={`relative ${
+              className={`brutal-card ${
                 plan.highlight 
-                  ? 'border-2 border-clay-forest shadow-lg' 
-                  : 'border border-clay-forest/20'
+                  ? 'transform -translate-y-4 border-8' 
+                  : ''
               }`}
             >
               {plan.highlight && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-clay-forest text-clay-cream px-4 py-1 rounded-full text-sm">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-brutal-black text-brutal-white px-4 py-1 font-mono uppercase border-4 border-brutal-black">
                   Most Popular
                 </div>
               )}
-              <CardHeader>
-                <CardTitle className="text-xl font-semibold text-clay-forest">
-                  {plan.name}
-                </CardTitle>
-                <div className="mt-2">
-                  <span className="text-3xl font-bold text-clay-forest">{plan.price}</span>
-                  <span className="text-clay-forest/80">/month per location</span>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-xl font-bold text-brutal-black font-mono uppercase">
+                    {plan.name}
+                  </h3>
+                  <div className="mt-2">
+                    <span className="text-3xl font-bold text-brutal-black">{plan.price}</span>
+                    <span className="text-brutal-charcoal">/month per location</span>
+                  </div>
+                  <p className="mt-4 text-brutal-charcoal">
+                    {plan.description}
+                  </p>
                 </div>
-                <CardDescription className="mt-4 text-clay-forest/80">
-                  {plan.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <ul className="space-y-3">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-clay-sage shrink-0 mt-0.5" />
-                      <span className="text-clay-forest/80 text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <button 
-                  className={`clay-button w-full`}
-                  onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
-                >
-                  {plan.cta}
-                </button>
-              </CardFooter>
-            </Card>
+                <div className="flex-grow">
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <Check className="w-5 h-5 text-brutal-black shrink-0 mt-0.5" />
+                        <span className="text-brutal-charcoal text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <button 
+                    className="brutal-button w-full"
+                    onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
+                  >
+                    {plan.cta}
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
 
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold text-clay-forest mb-4">
+            <h3 className="text-xl font-bold text-brutal-black mb-4 font-mono uppercase">
               All Plans Include:
             </h3>
             <ul className="space-y-3">
               {commonFeatures.map((feature, index) => (
                 <li key={index} className="flex items-center justify-center gap-2">
-                  <Check className="w-5 h-5 text-clay-sage" />
-                  <span className="text-clay-forest/80">{feature}</span>
+                  <Check className="w-5 h-5 text-brutal-black" />
+                  <span className="text-brutal-charcoal">{feature}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="text-center">
-            <p className="text-clay-forest/80 mb-6">Start Free & Upgrade Anytime!</p>
+            <p className="text-brutal-charcoal mb-6">Start Free & Upgrade Anytime!</p>
             <button 
-              className="clay-button min-w-[250px]"
+              className="brutal-button min-w-[250px]"
               onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
             >
               Join the waitlist

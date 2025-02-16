@@ -24,7 +24,7 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --radius: 0rem;
   }
 }
 
@@ -34,7 +34,7 @@
   }
   
   body {
-    @apply bg-clay-cream text-clay-forest antialiased;
+    @apply bg-brutal-white text-brutal-black antialiased;
   }
 
   html {
@@ -43,30 +43,27 @@
 }
 
 @layer components {
-  .clay-button {
-    @apply relative bg-clay-sage text-clay-cream font-semibold rounded-xl px-6 py-3
-           shadow-[6px_6px_12px_#283618,_-6px_-6px_12px_#606C38]
-           active:shadow-[2px_2px_4px_#283618,_-2px_-2px_4px_#606C38]
-           active:translate-y-0.5
-           transition-all duration-150;
+  .brutal-button {
+    @apply relative bg-brutal-black text-brutal-white font-mono uppercase tracking-wider px-6 py-3
+           border-4 border-brutal-black 
+           transform transition-transform duration-100
+           hover:translate-x-1 hover:translate-y-1
+           active:translate-x-0.5 active:translate-y-0.5;
   }
 
-  .clay-card {
-    @apply bg-clay-orange rounded-2xl p-6
-           shadow-[8px_8px_16px_#BC6C25,_-8px_-8px_16px_#DDA15E]
-           border-4 border-clay-cream/10;
+  .brutal-card {
+    @apply bg-brutal-white border-4 border-brutal-black p-6
+           transform transition-transform duration-100
+           hover:translate-x-1 hover:translate-y-1;
   }
 
-  .clay-input {
-    @apply bg-clay-cream rounded-xl px-4 py-2
-           shadow-[inset_4px_4px_8px_#BC6C25,_inset_-4px_-4px_8px_#DDA15E]
-           focus:outline-none focus:ring-2 focus:ring-clay-sage;
+  .brutal-input {
+    @apply bg-brutal-white border-4 border-brutal-black px-4 py-2
+           focus:outline-none focus:ring-2 focus:ring-brutal-charcoal;
   }
 
-  .clay-nav {
-    @apply bg-clay-cream/90 backdrop-blur-sm
-           border-b border-clay-forest/10
-           shadow-[0_4px_12px_rgba(188,108,37,0.1)];
+  .brutal-nav {
+    @apply bg-brutal-white border-b-4 border-brutal-black;
   }
 }
 
@@ -76,14 +73,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #FEFAE0;
+  background: #FFFFFF;
+  border-left: 4px solid #1A1F2C;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #DDA15E;
-  border-radius: 5px;
+  background: #1A1F2C;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #BC6C25;
+  background: #403E43;
 }
