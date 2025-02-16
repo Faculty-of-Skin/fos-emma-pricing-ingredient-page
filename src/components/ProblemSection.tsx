@@ -20,10 +20,6 @@ export const ProblemSection = () => {
           </h2>
           
           <div className="brutal-card mb-8">
-            <p className="text-lg text-brutal-black mb-8">
-              Your staff gets pulled away from sales to handle booking calls, reschedule appointments, and answer the same questions repeatedly.
-            </p>
-
             <div className="space-y-4">
               {problems.map((problem, index) => (
                 <div key={index} className="flex items-start gap-3">
