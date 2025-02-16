@@ -5,7 +5,7 @@ export const ProblemSection = () => {
   const problems = [
     "Wasted Time: Staff spend 30% of their day on administrative tasks",
     "Missed Revenue: 85% of customers never call back when unanswered",
-    "No-Shows: Every empty chair costs you money"
+    "Limited Online Visibility: Happy clients rarely leave reviews without prompting"
   ];
 
   return (
