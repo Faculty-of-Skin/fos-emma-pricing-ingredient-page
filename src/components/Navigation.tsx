@@ -15,6 +15,10 @@ export const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleWaitlistClick = () => {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -37,7 +41,11 @@ export const Navigation = () => {
             <a href="#pricing" className="text-spa-charcoal hover:text-spa-stone transition-colors">
               Pricing
             </a>
-            <Button variant="default" className="bg-spa-charcoal hover:bg-spa-stone text-white">
+            <Button 
+              variant="default" 
+              className="bg-spa-charcoal hover:bg-spa-stone text-white"
+              onClick={handleWaitlistClick}
+            >
               Join Waitlist
             </Button>
           </div>
@@ -75,6 +83,7 @@ export const Navigation = () => {
             <Button
               variant="default"
               className="w-full mt-4 bg-spa-charcoal hover:bg-spa-stone text-white"
+              onClick={handleWaitlistClick}
             >
               Join Waitlist
             </Button>

@@ -23,6 +23,7 @@ export const Hero = () => {
             <Button
               size="lg"
               className="bg-spa-charcoal hover:bg-spa-stone text-white min-w-[200px] group"
+              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
             >
               Join the Pilot Program
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
