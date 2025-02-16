@@ -6,23 +6,28 @@ export const Hero = () => {
   return (
     <section className="min-h-screen flex items-center bg-spa-beige pt-16">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center space-y-8 animate-fade-up">
+        <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-up">
           <div className="inline-block px-4 py-1.5 bg-white rounded-full text-sm text-spa-charcoal mb-6">
             ✨ Limited Time: Join Our Pilot Program
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-spa-charcoal leading-tight">
-            The AI Assistant That Books, Engages, & Grows Your Spa Business
-          </h1>
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold text-spa-charcoal leading-tight">
+              The AI Assistant
+            </h1>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold text-spa-charcoal/80 leading-tight">
+              For Your Spa Business
+            </h1>
+          </div>
           
           <p className="text-xl text-spa-stone max-w-2xl mx-auto">
-            Boost retail sales, reduce no-shows, automate client interactions, and enhance your reputation—all while saving 5+ hours per week.
+            Boost retail sales, reduce no-shows, automate client interactions, and enhance your reputation.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="max-w-xl mx-auto bg-white rounded-full shadow-lg p-2 flex items-center mt-12">
             <Button
               size="lg"
-              className="bg-spa-charcoal hover:bg-spa-stone text-white min-w-[200px] group"
+              className="bg-spa-charcoal hover:bg-spa-stone text-white w-full h-12 rounded-full font-medium text-base group"
               onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
             >
               Join Waitlist
@@ -30,55 +35,12 @@ export const Hero = () => {
             </Button>
           </div>
 
-          <div className="pt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-spa-stone">
-            <div className="flex items-center">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              30-Day Free Trial
-            </div>
-            <div className="flex items-center">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              No Credit Card Required
-            </div>
-            <div className="flex items-center">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              Limited to 100 Businesses
-            </div>
+          <div className="pt-24 grid grid-cols-2 md:grid-cols-5 gap-8 items-center justify-center opacity-70">
+            <img src="/placeholder.svg" alt="Integration 1" className="h-8 w-auto mx-auto" />
+            <img src="/placeholder.svg" alt="Integration 2" className="h-8 w-auto mx-auto" />
+            <img src="/placeholder.svg" alt="Integration 3" className="h-8 w-auto mx-auto" />
+            <img src="/placeholder.svg" alt="Integration 4" className="h-8 w-auto mx-auto" />
+            <img src="/placeholder.svg" alt="Integration 5" className="h-8 w-auto mx-auto" />
           </div>
         </div>
       </div>
