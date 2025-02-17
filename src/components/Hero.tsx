@@ -7,28 +7,44 @@ export const Hero = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-up">
           <div className="inline-block px-4 py-1.5 bg-brutal-black text-brutal-white font-mono uppercase tracking-wider mb-6 border-4 border-brutal-black">
-            <span role="text" aria-label="Special offer">✨ Limited Time: Join Our Pilot Program</span>
+            <span role="text" aria-label="Special offer" className="relative">
+              <span className="absolute -inset-1 bg-[#9b87f5] blur opacity-30"></span>
+              ✨ Limited Time: Join Our Pilot Program
+            </span>
           </div>
           
           <header className="space-y-4">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brutal-black leading-tight font-mono uppercase">
-              The AI Assistant
-              <span className="block">For Your Spa Business</span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brutal-black leading-tight font-mono uppercase relative">
+              <span className="inline-block transform hover:scale-105 transition-transform duration-300">
+                The AI Assistant
+              </span>
+              <span className="block relative">
+                <span className="absolute -inset-1 bg-[#9b87f5] blur opacity-30"></span>
+                For Your Spa Business
+              </span>
+              <div className="absolute -right-4 -top-4 w-20 h-20 border-4 border-brutal-black rotate-12 bg-[#9b87f5] opacity-20"></div>
+              <div className="absolute -left-4 -bottom-4 w-16 h-16 border-4 border-brutal-black -rotate-12 bg-[#D946EF] opacity-20"></div>
             </h1>
           </header>
           
-          <p className="text-xl text-brutal-charcoal max-w-2xl mx-auto font-mono">
-            Boost retail sales, reduce no-shows, automate client interactions, and enhance your reputation.
+          <p className="text-xl text-brutal-charcoal max-w-2xl mx-auto font-mono relative">
+            <span className="relative z-10">
+              Boost retail sales, reduce no-shows, automate client interactions, and enhance your reputation.
+            </span>
+            <svg className="absolute -right-8 top-0 text-[#9b87f5] opacity-20" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="16" stroke="currentColor" strokeWidth="4"/>
+            </svg>
           </p>
 
           <div className="max-w-xl mx-auto p-2">
             <button
               onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
               aria-label="Join SpaSense Waitlist"
-              className="brutal-button w-full h-14 flex items-center justify-center gap-2"
+              className="brutal-button w-full h-14 flex items-center justify-center gap-2 relative group"
             >
-              Join Waitlist
-              <ArrowRight className="w-5 h-5" />
+              <span className="relative z-10">Join Waitlist</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <div className="absolute inset-0 bg-[#9b87f5] opacity-0 group-hover:opacity-20 transition-opacity"></div>
             </button>
           </div>
 
