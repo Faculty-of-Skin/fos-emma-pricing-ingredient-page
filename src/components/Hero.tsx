@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
@@ -55,30 +56,30 @@ export const Hero = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-center justify-center">
                 <div className="flex items-center justify-center h-16">
                   <img 
-                    src="/lovable-uploads/66a6a905-50a4-496e-8a39-eb7e19d58178.png" 
+                    src="/lovable-uploads/914a0018-31ba-4882-8d5a-f97c77921a0a.png" 
                     alt="Vagaro spa management software" 
-                    className="h-14 w-auto object-contain" 
+                    className="h-8 w-auto object-contain" 
                   />
                 </div>
                 <div className="flex items-center justify-center h-16">
                   <img 
-                    src="/lovable-uploads/22be9c95-0307-451b-86cf-0af775239198.png" 
-                    alt="MINDBODY spa management platform" 
-                    className="h-14 w-auto object-contain" 
-                  />
-                </div>
-                <div className="flex items-center justify-center h-16">
-                  <img 
-                    src="/lovable-uploads/c13d39fd-c905-47bf-851e-c83cb104ef06.png" 
-                    alt="Mangomint spa business software" 
-                    className="h-14 w-auto object-contain" 
-                  />
-                </div>
-                <div className="flex items-center justify-center h-16">
-                  <img 
-                    src="/lovable-uploads/6f9c012f-bbfe-4c22-913a-41d535d5f740.png" 
+                    src="/lovable-uploads/984b6e2f-88fb-4f13-8fe1-53f5df90ba86.png" 
                     alt="Fresha spa booking system" 
-                    className="h-14 w-auto object-contain" 
+                    className="h-8 w-auto object-contain" 
+                  />
+                </div>
+                <div className="flex items-center justify-center h-16">
+                  <img 
+                    src="/lovable-uploads/e7d663d7-1652-4978-8d2e-fbd5afac95b5.png" 
+                    alt="Mangomint spa business software" 
+                    className="h-8 w-auto object-contain" 
+                  />
+                </div>
+                <div className="flex items-center justify-center h-16">
+                  <img 
+                    src="/lovable-uploads/53c24c90-400a-44f6-a9bc-2205d1721e88.png" 
+                    alt="MINDBODY spa management platform" 
+                    className="h-8 w-auto object-contain" 
                   />
                 </div>
               </div>
