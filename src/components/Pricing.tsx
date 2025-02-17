@@ -71,11 +71,11 @@ export const Pricing = () => {
     <section id="pricing" className="py-24 bg-brutal-white">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-brutal-black mb-4 font-mono uppercase">
-            Pricing Plans – Flexible & Scalable
+          <h2 className="text-4xl md:text-5xl font-black text-brutal-black mb-4 font-mono uppercase tracking-tight">
+            Pricing Plans
           </h2>
-          <p className="text-brutal-charcoal font-mono">
-            Choose a plan that fits your spa's needs. Start with a free trial and upgrade as you grow!
+          <p className="text-lg text-brutal-charcoal font-mono uppercase tracking-wide">
+            Choose a plan that fits your spa's needs
           </p>
         </div>
 
@@ -90,36 +90,38 @@ export const Pricing = () => {
               }`}
             >
               {plan.highlight && (
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-brutal-black text-brutal-white px-4 py-1 font-mono uppercase border-4 border-brutal-black">
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-brutal-black text-brutal-white px-4 py-1 font-mono uppercase border-4 border-brutal-black font-bold tracking-widest text-sm">
                   Most Popular
                 </div>
               )}
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-brutal-black font-mono uppercase">
+                  <h3 className="text-2xl font-black text-brutal-black font-mono uppercase tracking-tight">
                     {plan.name}
                   </h3>
-                  <div className="mt-2">
-                    <span className="text-3xl font-bold text-brutal-black">{plan.price}</span>
-                    <span className="text-brutal-charcoal">/month per location</span>
+                  <div className="mt-4">
+                    <span className="text-4xl font-black text-brutal-black tracking-tight">{plan.price}</span>
+                    <span className="text-brutal-charcoal font-mono uppercase text-sm tracking-wide">/month per location</span>
                   </div>
-                  <p className="mt-4 text-brutal-charcoal">
+                  <p className="mt-4 text-brutal-charcoal font-mono uppercase text-sm tracking-wide">
                     {plan.description}
                   </p>
                 </div>
                 <div className="flex-grow">
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
+                      <li key={idx} className="flex items-start gap-3">
                         <Check className="w-5 h-5 text-brutal-black shrink-0 mt-0.5" />
-                        <span className="text-brutal-charcoal text-sm">{feature}</span>
+                        <span className="text-brutal-charcoal font-mono text-sm tracking-wide">
+                          {feature}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div>
                   <button 
-                    className="brutal-button w-full"
+                    className="brutal-button w-full font-black tracking-widest text-sm"
                     onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
                   >
                     {plan.cta}
@@ -132,23 +134,23 @@ export const Pricing = () => {
 
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            <h3 className="text-xl font-bold text-brutal-black mb-4 font-mono uppercase">
+            <h3 className="text-2xl font-black text-brutal-black mb-6 font-mono uppercase tracking-tight">
               All Plans Include:
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {commonFeatures.map((feature, index) => (
-                <li key={index} className="flex items-center justify-center gap-2">
+                <li key={index} className="flex items-center justify-center gap-3">
                   <Check className="w-5 h-5 text-brutal-black" />
-                  <span className="text-brutal-charcoal">{feature}</span>
+                  <span className="text-brutal-charcoal font-mono uppercase text-sm tracking-wide">{feature}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="text-center">
-            <p className="text-brutal-charcoal mb-6">Start Free & Upgrade Anytime!</p>
+            <p className="text-brutal-charcoal font-mono uppercase tracking-wide mb-6">Start Free & Upgrade Anytime!</p>
             <button 
-              className="brutal-button min-w-[250px]"
+              className="brutal-button min-w-[250px] font-black tracking-widest text-sm"
               onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
             >
               Join the waitlist
