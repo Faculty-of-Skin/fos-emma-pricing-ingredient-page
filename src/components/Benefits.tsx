@@ -1,6 +1,5 @@
 
-import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, Square, Triangle, Circle } from "lucide-react";
 
 export const Benefits = () => {
   const benefits = [
@@ -12,11 +11,25 @@ export const Benefits = () => {
   ];
 
   return (
-    <section id="benefits" className="py-24 bg-white">
+    <section id="benefits" className="py-24 bg-white relative">
+      {/* Geometric Pattern Decorations */}
+      <div className="absolute top-10 right-10 -rotate-12">
+        <Triangle className="w-16 h-16 text-brutal-black" fill="currentColor" strokeWidth={4} />
+      </div>
+      <div className="absolute bottom-10 left-10 rotate-45">
+        <Square className="w-24 h-24 text-brutal-black" fill="none" strokeWidth={4} />
+      </div>
+      <div className="absolute top-1/2 right-20 transform -translate-y-1/2">
+        <Circle className="w-20 h-20 text-brutal-black" fill="none" strokeWidth={4} />
+      </div>
+
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-semibold text-brutal-black text-center mb-12 font-mono uppercase">
+          <h2 className="text-3xl md:text-4xl font-semibold text-brutal-black text-center mb-12 font-mono uppercase relative">
             Why Spas Love SpaSense
+            <div className="absolute -right-8 top-0">
+              <Square className="w-8 h-8 text-brutal-black rotate-12" fill="currentColor" />
+            </div>
           </h2>
 
           <div className="space-y-6">
@@ -33,7 +46,10 @@ export const Benefits = () => {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-12 text-center relative">
+            <div className="absolute -left-12 top-1/2 transform -translate-y-1/2">
+              <Triangle className="w-10 h-10 text-brutal-black" fill="none" strokeWidth={4} />
+            </div>
             <button
               className="brutal-button"
               onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}

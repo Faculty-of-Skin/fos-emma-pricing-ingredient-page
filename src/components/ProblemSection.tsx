@@ -1,5 +1,5 @@
 
-import { CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle, Square, Triangle } from "lucide-react";
 
 export const ProblemSection = () => {
   const problems = [
@@ -9,11 +9,22 @@ export const ProblemSection = () => {
   ];
 
   return (
-    <section className="py-24 bg-brutal-white">
+    <section className="py-24 bg-brutal-white relative">
+      {/* Geometric Pattern Decorations */}
+      <div className="absolute top-20 left-10">
+        <Square className="w-16 h-16 text-brutal-black" fill="none" strokeWidth={4} />
+      </div>
+      <div className="absolute bottom-20 right-10 rotate-45">
+        <Triangle className="w-20 h-20 text-brutal-black" fill="currentColor" />
+      </div>
+
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-semibold text-brutal-black text-center mb-8 font-mono uppercase">
+          <h2 className="text-3xl md:text-4xl font-semibold text-brutal-black text-center mb-8 font-mono uppercase relative">
             Your front desk staff is overwhelmed with repetitive questions instead of focusing on sales.
+            <div className="absolute -left-8 top-0">
+              <Square className="w-8 h-8 text-brutal-black -rotate-12" fill="currentColor" />
+            </div>
           </h2>
           
           <div className="brutal-card mb-8">
