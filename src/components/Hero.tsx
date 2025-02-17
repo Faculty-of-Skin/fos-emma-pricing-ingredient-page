@@ -8,7 +8,7 @@ export const Hero = () => {
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-up">
           <div className="inline-block px-4 py-1.5 bg-brutal-black text-brutal-white font-mono uppercase tracking-wider mb-6 border-4 border-brutal-black">
             <span role="text" aria-label="Special offer" className="relative">
-              <span className="absolute -inset-1 bg-[#9b87f5] blur opacity-30"></span>
+              <span className="absolute -inset-1 bg-brutal-dark blur opacity-30"></span>
               ✨ Limited Time: Join Our Pilot Program
             </span>
           </div>
@@ -19,11 +19,11 @@ export const Hero = () => {
                 The AI Assistant
               </span>
               <span className="block relative">
-                <span className="absolute -inset-1 bg-[#9b87f5] blur opacity-30"></span>
+                <span className="absolute -inset-1 bg-brutal-gray blur opacity-30"></span>
                 For Your Spa Business
               </span>
-              <div className="absolute -right-4 -top-4 w-20 h-20 border-4 border-brutal-black rotate-12 bg-[#9b87f5] opacity-20"></div>
-              <div className="absolute -left-4 -bottom-4 w-16 h-16 border-4 border-brutal-black -rotate-12 bg-[#D946EF] opacity-20"></div>
+              <div className="absolute -right-4 -top-4 w-20 h-20 border-4 border-brutal-black rotate-12 bg-brutal-dark opacity-20"></div>
+              <div className="absolute -left-4 -bottom-4 w-16 h-16 border-4 border-brutal-black -rotate-12 bg-brutal-gray opacity-20"></div>
             </h1>
           </header>
           
@@ -31,7 +31,7 @@ export const Hero = () => {
             <span className="relative z-10">
               Boost retail sales, reduce no-shows, automate client interactions, and enhance your reputation.
             </span>
-            <svg className="absolute -right-8 top-0 text-[#9b87f5] opacity-20" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="absolute -right-8 top-0 text-brutal-dark opacity-20" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="20" cy="20" r="16" stroke="currentColor" strokeWidth="4"/>
             </svg>
           </p>
@@ -44,7 +44,7 @@ export const Hero = () => {
             >
               <span className="relative z-10">Join Waitlist</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              <div className="absolute inset-0 bg-[#9b87f5] opacity-0 group-hover:opacity-20 transition-opacity"></div>
+              <div className="absolute inset-0 bg-brutal-dark opacity-0 group-hover:opacity-20 transition-opacity"></div>
             </button>
           </div>
 
