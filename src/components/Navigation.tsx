@@ -39,16 +39,16 @@ export const Navigation = () => {
           <div className="hidden md:flex items-center justify-center flex-1 mx-8">
             <div className="flex space-x-8">
               <button 
-                onClick={() => scrollToSection('pricing')} 
-                className="text-brutal-black hover:text-brutal-charcoal transition-colors font-mono uppercase"
-              >
-                Pricing
-              </button>
-              <button 
                 onClick={() => scrollToSection('benefits')} 
                 className="text-brutal-black hover:text-brutal-charcoal transition-colors font-mono uppercase"
               >
                 Features
+              </button>
+              <button 
+                onClick={() => scrollToSection('pricing')} 
+                className="text-brutal-black hover:text-brutal-charcoal transition-colors font-mono uppercase"
+              >
+                Pricing
               </button>
               <button 
                 onClick={() => scrollToSection('faq')} 
@@ -81,16 +81,16 @@ export const Navigation = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 animate-fade-down bg-brutal-white border-4 border-brutal-black mt-2">
             <button
-              onClick={() => scrollToSection('pricing')}
-              className="block w-full text-left px-4 py-2 text-brutal-black hover:bg-brutal-black hover:text-brutal-white transition-colors font-mono uppercase"
-            >
-              Pricing
-            </button>
-            <button
               onClick={() => scrollToSection('benefits')}
               className="block w-full text-left px-4 py-2 text-brutal-black hover:bg-brutal-black hover:text-brutal-white transition-colors font-mono uppercase"
             >
               Features
+            </button>
+            <button
+              onClick={() => scrollToSection('pricing')}
+              className="block w-full text-left px-4 py-2 text-brutal-black hover:bg-brutal-black hover:text-brutal-white transition-colors font-mono uppercase"
+            >
+              Pricing
             </button>
             <button
               onClick={() => scrollToSection('faq')}
