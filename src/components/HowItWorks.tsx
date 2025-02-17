@@ -24,10 +24,10 @@ export const HowItWorks = () => {
     <section id="how-it-works" className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-semibold text-spa-charcoal mb-4">
+          <h2 className="text-4xl md:text-5xl font-black text-brutal-black mb-4 font-mono uppercase tracking-tight">
             How It Works
           </h2>
-          <p className="text-spa-stone max-w-2xl mx-auto">
+          <p className="text-lg text-brutal-charcoal font-mono uppercase tracking-wide">
             Our AI-powered platform streamlines your spa operations in three simple steps
           </p>
         </div>
@@ -36,15 +36,15 @@ export const HowItWorks = () => {
           {steps.map((step, index) => (
             <div
               key={index}
-              className="p-8 rounded-2xl bg-spa-beige hover:bg-spa-cream transition-colors duration-300"
+              className="brutal-card hover:bg-spa-cream transition-colors duration-300"
             >
-              <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-6 shadow-sm">
-                <step.icon className="w-7 h-7 text-spa-charcoal" />
+              <div className="w-16 h-16 bg-white rounded-none border-4 border-brutal-black flex items-center justify-center mb-6">
+                <step.icon className="w-8 h-8 text-brutal-black" />
               </div>
-              <h3 className="text-xl font-semibold text-spa-charcoal mb-3">
+              <h3 className="text-2xl font-black text-brutal-black mb-4 font-mono uppercase tracking-tight">
                 {step.title}
               </h3>
-              <p className="text-spa-stone">
+              <p className="text-brutal-charcoal font-mono tracking-wide">
                 {step.description}
               </p>
             </div>
