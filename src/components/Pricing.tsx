@@ -71,9 +71,8 @@ export const Pricing = () => {
   ];
 
   const calculateYearlyPrice = (monthlyPrice: number) => {
-    const yearlyPrice = monthlyPrice * 12;
-    const discount = yearlyPrice * 0.25;
-    return Math.round(yearlyPrice - discount);
+    // Calculate the monthly price with 25% discount when paying yearly
+    return Math.round(monthlyPrice * 0.75);
   };
 
   const formatPrice = (price: number) => {
@@ -141,7 +140,12 @@ export const Pricing = () => {
                       }
                     </span>
                     <span className="text-brutal-charcoal font-mono uppercase text-sm tracking-wide">
-                      {isYearly ? '/year' : '/month'} per location
+                      /month per location
+                      {isYearly && (
+                        <span className="block text-xs text-brutal-charcoal">
+                          billed annually
+                        </span>
+                      )}
                     </span>
                   </div>
                   <p className="mt-4 text-brutal-charcoal font-mono uppercase text-sm tracking-wide">
