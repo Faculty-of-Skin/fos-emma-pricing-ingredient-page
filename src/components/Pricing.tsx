@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { Check } from "lucide-react";
 import {
   Card,
@@ -10,10 +11,12 @@ import {
 } from "@/components/ui/card";
 
 export const Pricing = () => {
+  const [isYearly, setIsYearly] = useState(false);
+
   const plans = [
     {
       name: "Free Plan",
-      price: "$0",
+      monthlyPrice: 0,
       description: "Get started with AI automation at no cost!",
       features: [
         "Limited access to AI chatbot & automated booking",
@@ -25,7 +28,7 @@ export const Pricing = () => {
     },
     {
       name: "Basic Plan",
-      price: "$49",
+      monthlyPrice: 49,
       description: "AI Automation for Daily Spa Operations",
       features: [
         "AI Chatbot – Handles common client questions 24/7",
@@ -37,7 +40,7 @@ export const Pricing = () => {
     },
     {
       name: "Standard Plan",
-      price: "$99",
+      monthlyPrice: 99,
       description: "Increase Revenue & Reduce No-Shows",
       features: [
         "Everything in Basic, PLUS:",
@@ -49,7 +52,7 @@ export const Pricing = () => {
     },
     {
       name: "Premium Plan",
-      price: "$199",
+      monthlyPrice: 199,
       description: "For Spas Focused on Reputation & Growth",
       features: [
         "Everything in Standard, PLUS:",
@@ -67,6 +70,17 @@ export const Pricing = () => {
     "Ongoing updates & support"
   ];
 
+  const calculateYearlyPrice = (monthlyPrice: number) => {
+    const yearlyPrice = monthlyPrice * 12;
+    const discount = yearlyPrice * 0.25;
+    return Math.round(yearlyPrice - discount);
+  };
+
+  const formatPrice = (price: number) => {
+    if (price === 0) return "$0";
+    return `$${price}`;
+  };
+
   return (
     <section id="pricing" className="py-24 bg-brutal-white">
       <div className="container mx-auto px-4">
@@ -74,9 +88,29 @@ export const Pricing = () => {
           <h2 className="text-4xl md:text-5xl font-black text-brutal-black mb-4 font-mono uppercase tracking-tight">
             Pricing Plans
           </h2>
-          <p className="text-lg text-brutal-charcoal font-mono uppercase tracking-wide">
+          <p className="text-lg text-brutal-charcoal font-mono uppercase tracking-wide mb-8">
             Choose a plan that fits your spa's needs
           </p>
+
+          <div className="inline-flex items-center gap-4 p-2 bg-brutal-white border-4 border-brutal-black">
+            <button
+              onClick={() => setIsYearly(false)}
+              className={`px-4 py-2 font-mono uppercase text-sm font-bold transition-colors ${
+                !isYearly ? 'bg-brutal-black text-brutal-white' : 'text-brutal-black'
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setIsYearly(true)}
+              className={`px-4 py-2 font-mono uppercase text-sm font-bold transition-colors ${
+                isYearly ? 'bg-brutal-black text-brutal-white' : 'text-brutal-black'
+              }`}
+            >
+              Yearly
+              <span className="ml-2 text-xs bg-brutal-pink px-2 py-1">25% OFF</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-16">
@@ -100,8 +134,15 @@ export const Pricing = () => {
                     {plan.name}
                   </h3>
                   <div className="mt-4">
-                    <span className="text-4xl font-black text-brutal-black tracking-tight">{plan.price}</span>
-                    <span className="text-brutal-charcoal font-mono uppercase text-sm tracking-wide">/month per location</span>
+                    <span className="text-4xl font-black text-brutal-black tracking-tight">
+                      {isYearly 
+                        ? formatPrice(calculateYearlyPrice(plan.monthlyPrice))
+                        : formatPrice(plan.monthlyPrice)
+                      }
+                    </span>
+                    <span className="text-brutal-charcoal font-mono uppercase text-sm tracking-wide">
+                      {isYearly ? '/year' : '/month'} per location
+                    </span>
                   </div>
                   <p className="mt-4 text-brutal-charcoal font-mono uppercase text-sm tracking-wide">
                     {plan.description}
