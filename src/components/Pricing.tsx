@@ -85,7 +85,7 @@ export const Pricing = () => {
               key={index}
               className={`brutal-card ${
                 plan.highlight 
-                  ? 'transform -translate-y-4 border-8' 
+                  ? 'transform -translate-y-4 border-8 pt-8' 
                   : ''
               }`}
             >
