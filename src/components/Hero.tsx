@@ -1,19 +1,9 @@
-import { ArrowRight, Triangle, Square, Circle } from "lucide-react";
+
+import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="min-h-screen flex items-center bg-brutal-white pt-16 relative overflow-hidden">
-      {/* Geometric Pattern Decorations */}
-      <div className="absolute top-20 right-10 rotate-45">
-        <Triangle className="w-16 h-16 text-brutal-black" fill="currentColor" />
-      </div>
-      <div className="absolute bottom-20 left-10">
-        <Square className="w-20 h-20 text-brutal-black" fill="none" strokeWidth={4} />
-      </div>
-      <div className="absolute top-40 left-20">
-        <Circle className="w-12 h-12 text-brutal-black" fill="none" strokeWidth={4} />
-      </div>
-
+    <section className="min-h-screen flex items-center bg-brutal-white pt-16">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-up">
           <div className="inline-block px-4 py-1.5 bg-brutal-black text-brutal-white font-mono uppercase tracking-wider mb-6 border-4 border-brutal-black">
