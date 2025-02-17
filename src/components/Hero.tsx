@@ -56,30 +56,30 @@ export const Hero = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-center justify-center">
                 <div className="flex items-center justify-center">
                   <img 
-                    src="/lovable-uploads/44cb127a-3102-4e33-bf98-e24271681e14.png" 
+                    src="/lovable-uploads/66a6a905-50a4-496e-8a39-eb7e19d58178.png" 
                     alt="Vagaro spa management software" 
-                    className="h-12 w-auto contrast-200" 
+                    className="h-20 w-auto" 
                   />
                 </div>
                 <div className="flex items-center justify-center">
                   <img 
-                    src="/lovable-uploads/d4ffa129-b0aa-44e7-a687-b046e9eecd59.png" 
+                    src="/lovable-uploads/22be9c95-0307-451b-86cf-0af775239198.png" 
                     alt="MINDBODY spa management platform" 
-                    className="h-8 w-auto contrast-200" 
+                    className="h-12 w-auto" 
                   />
                 </div>
                 <div className="flex items-center justify-center">
                   <img 
-                    src="/lovable-uploads/a79d8272-2c27-4c85-9074-5b475398b218.png" 
+                    src="/lovable-uploads/c13d39fd-c905-47bf-851e-c83cb104ef06.png" 
                     alt="Mangomint spa business software" 
-                    className="h-16 w-auto contrast-200" 
+                    className="h-12 w-auto" 
                   />
                 </div>
                 <div className="flex items-center justify-center">
                   <img 
-                    src="/lovable-uploads/2e8d7e13-e806-49be-af90-ea8c2af91109.png" 
+                    src="/lovable-uploads/6f9c012f-bbfe-4c22-913a-41d535d5f740.png" 
                     alt="Fresha spa booking system" 
-                    className="h-8 w-auto contrast-200" 
+                    className="h-16 w-auto" 
                   />
                 </div>
               </div>
