@@ -63,7 +63,7 @@ export const Hero = () => {
                 </div>
                 <div className="flex items-center justify-center h-16">
                   <img 
-                    src="/lovable-uploads/984b6e2f-88fb-4f13-8fe1-53f5df90ba86.png" 
+                    src="/lovable-uploads/4e8f1b0e-d148-4ce6-b43c-79631a6ad14f.png" 
                     alt="Fresha spa booking system" 
                     className="h-8 w-auto object-contain" 
                   />
