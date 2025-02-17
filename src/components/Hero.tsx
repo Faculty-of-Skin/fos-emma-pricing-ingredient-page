@@ -1,4 +1,3 @@
-
 import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
@@ -54,32 +53,32 @@ export const Hero = () => {
             </p>
             <div className="brutal-card" role="list" aria-label="Supported spa software platforms">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-center justify-center">
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center h-16">
                   <img 
                     src="/lovable-uploads/66a6a905-50a4-496e-8a39-eb7e19d58178.png" 
                     alt="Vagaro spa management software" 
-                    className="h-20 w-auto" 
+                    className="h-14 w-auto object-contain" 
                   />
                 </div>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center h-16">
                   <img 
                     src="/lovable-uploads/22be9c95-0307-451b-86cf-0af775239198.png" 
                     alt="MINDBODY spa management platform" 
-                    className="h-12 w-auto" 
+                    className="h-14 w-auto object-contain" 
                   />
                 </div>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center h-16">
                   <img 
                     src="/lovable-uploads/c13d39fd-c905-47bf-851e-c83cb104ef06.png" 
                     alt="Mangomint spa business software" 
-                    className="h-12 w-auto" 
+                    className="h-14 w-auto object-contain" 
                   />
                 </div>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center h-16">
                   <img 
                     src="/lovable-uploads/6f9c012f-bbfe-4c22-913a-41d535d5f740.png" 
                     alt="Fresha spa booking system" 
-                    className="h-16 w-auto" 
+                    className="h-14 w-auto object-contain" 
                   />
                 </div>
               </div>
