@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Menu } from "lucide-react";
+import { Menu, HelpCircle } from "lucide-react";
 
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,6 +16,10 @@ export const Navigation = () => {
 
   const handleWaitlistClick = () => {
     window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
+  };
+
+  const handleQuestionsClick = () => {
+    window.open('https://meetings.hubspot.com/faculty-of-skin/spa-sense', '_blank');
   };
 
   const scrollToSection = (id: string) => {
@@ -59,12 +63,18 @@ export const Navigation = () => {
             </div>
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
             <button 
               className="brutal-button"
               onClick={handleWaitlistClick}
             >
               Join Waitlist
+            </button>
+            <button 
+              className="brutal-button flex items-center gap-2"
+              onClick={handleQuestionsClick}
+            >
+              Have Questions? <HelpCircle className="w-4 h-4" />
             </button>
           </div>
 
@@ -98,12 +108,18 @@ export const Navigation = () => {
             >
               FAQ
             </button>
-            <div className="px-4 pt-2">
+            <div className="px-4 pt-2 space-y-2">
               <button
                 className="brutal-button w-full"
                 onClick={handleWaitlistClick}
               >
                 Join Waitlist
+              </button>
+              <button 
+                className="brutal-button w-full flex items-center justify-center gap-2"
+                onClick={handleQuestionsClick}
+              >
+                Have Questions? <HelpCircle className="w-4 h-4" />
               </button>
             </div>
           </div>
