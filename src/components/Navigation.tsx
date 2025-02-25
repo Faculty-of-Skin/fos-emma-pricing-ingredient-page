@@ -74,7 +74,7 @@ export const Navigation = () => {
               className="brutal-button flex items-center gap-2"
               onClick={handleQuestionsClick}
             >
-              Have Questions? <HelpCircle className="w-4 h-4" />
+              Have Questions <HelpCircle className="w-4 h-4" />
             </button>
           </div>
 
@@ -119,7 +119,7 @@ export const Navigation = () => {
                 className="brutal-button w-full flex items-center justify-center gap-2"
                 onClick={handleQuestionsClick}
               >
-                Have Questions? <HelpCircle className="w-4 h-4" />
+                Have Questions <HelpCircle className="w-4 h-4" />
               </button>
             </div>
           </div>
