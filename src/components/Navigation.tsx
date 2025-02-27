@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Menu, HelpCircle } from "lucide-react";
 
@@ -74,7 +73,7 @@ export const Navigation = () => {
               className="brutal-button flex items-center gap-2"
               onClick={handleQuestionsClick}
             >
-              Have Questions <HelpCircle className="w-4 h-4" />
+              Meet with us <HelpCircle className="w-4 h-4" />
             </button>
           </div>
 
@@ -119,7 +118,7 @@ export const Navigation = () => {
                 className="brutal-button w-full flex items-center justify-center gap-2"
                 onClick={handleQuestionsClick}
               >
-                Have Questions <HelpCircle className="w-4 h-4" />
+                Meet with us <HelpCircle className="w-4 h-4" />
               </button>
             </div>
           </div>
