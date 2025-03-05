@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,7 +24,7 @@ const App = () => {
       if (widgetRef.current) {
         // Create the widget in the ref container
         const widget = document.createElement('elevenlabs-convai');
-        widget.setAttribute('agent-id', 'IDKXPTvUc2MkwLOMo00M');
+        widget.setAttribute('agent-id', 'TF7GzxMCWFgRDzORCsZ1');
         widgetRef.current.appendChild(widget);
       }
     };
