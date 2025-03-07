@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Check } from "lucide-react";
 import {
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/card";
 
 export const Pricing = () => {
-  const [isYearly, setIsYearly] = useState(false);
+  const [isYearly, setIsYearly] = useState(true);
 
   const plans = [
     {
