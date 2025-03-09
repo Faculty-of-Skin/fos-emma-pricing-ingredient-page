@@ -82,7 +82,7 @@ export const Hero = () => {
                   type="url"
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
-                  placeholder="example.com"
+                  placeholder="enter your website URL"
                   className="w-full pl-2 pr-4 py-3 focus:outline-none text-brutal-charcoal font-mono text-lg border-none"
                   aria-label="Enter your website URL"
                 />
