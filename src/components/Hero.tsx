@@ -1,9 +1,28 @@
 
 import { ArrowRight, Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const Hero = () => {
   const [websiteUrl, setWebsiteUrl] = useState("");
+  const [isGlowing, setIsGlowing] = useState(true);
+  
+  // Effect to create the flashing/glowing animation
+  useEffect(() => {
+    // Only animate for the first 10 seconds to avoid being too distracting
+    const glowInterval = setInterval(() => {
+      setIsGlowing(prev => !prev);
+    }, 1500);
+    
+    const stopGlowing = setTimeout(() => {
+      clearInterval(glowInterval);
+      setIsGlowing(false);
+    }, 10000);
+    
+    return () => {
+      clearInterval(glowInterval);
+      clearTimeout(stopGlowing);
+    };
+  }, []);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,10 +66,17 @@ export const Hero = () => {
           </p>
 
           <div className="max-w-xl mx-auto p-2">
-            <form onSubmit={handleSubmit} className="flex relative w-full">
-              <div className="w-full flex items-center rounded-md bg-white shadow-lg border-4 border-brutal-black overflow-hidden">
+            <form 
+              onSubmit={handleSubmit} 
+              className={`flex relative w-full ${isGlowing ? 'animate-pulse' : ''}`}
+            >
+              <div 
+                className={`w-full flex items-center rounded-md bg-white shadow-lg border-4 border-brutal-black overflow-hidden transition-all duration-300 ${
+                  isGlowing ? 'shadow-[0_0_15px_rgba(221,161,94,0.7)]' : ''
+                }`}
+              >
                 <div className="pl-4">
-                  <Search className="h-5 w-5 text-brutal-charcoal" />
+                  <Search className={`h-5 w-5 text-brutal-charcoal ${isGlowing ? 'animate-pulse' : ''}`} />
                 </div>
                 <input
                   type="url"
@@ -62,7 +88,9 @@ export const Hero = () => {
                 />
                 <button
                   type="submit"
-                  className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-3 px-6 font-mono uppercase text-sm md:text-base"
+                  className={`bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-3 px-6 font-mono uppercase text-sm md:text-base ${
+                    isGlowing ? 'animate-pulse bg-brutal-gray' : ''
+                  }`}
                   aria-label="Analyze website"
                 >
                   GO
