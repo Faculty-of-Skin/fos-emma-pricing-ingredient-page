@@ -1,4 +1,3 @@
-
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -49,8 +48,8 @@ export const WebsiteSubmissionForm = ({ className }: WebsiteSubmissionFormProps)
     setIsSubmitting(true);
     
     try {
-      // Use the provided n8n webhook URL
-      const webhookUrl = "https://facultyofskin.app.n8n.cloud/webhook-test/d154bcba-c78a-405d-a00a-e190a3d4642f";
+      // Use the updated n8n webhook URL
+      const webhookUrl = "https://facultyofskin.app.n8n.cloud/webhook-test/80c7e3a9-3bfd-49e2-a9b3-5b3805f0b3c8";
       
       const response = await fetch(webhookUrl, {
         method: "POST",
