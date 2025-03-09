@@ -88,7 +88,7 @@ export const Hero = () => {
                 />
                 <button
                   type="submit"
-                  className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-4 px-6 font-mono uppercase text-sm md:text-base flex items-center justify-center min-w-[60px] mr-4 my-1"
+                  className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-2 px-4 font-mono uppercase text-sm md:text-base flex items-center justify-center min-w-[40px] mr-4 my-1"
                   aria-label="Analyze website"
                 >
                   GO
