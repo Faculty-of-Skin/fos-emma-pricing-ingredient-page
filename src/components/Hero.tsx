@@ -1,10 +1,13 @@
 
 import { ArrowRight, Search } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export const Hero = () => {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [isGlowing, setIsGlowing] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   
   // Effect to create the flashing/glowing animation
   useEffect(() => {
@@ -24,10 +27,75 @@ export const Hero = () => {
     };
   }, []);
   
-  const handleSubmit = (e: React.FormEvent) => {
+  // Validate URL
+  const isValidUrl = (urlString: string): boolean => {
+    try {
+      new URL(urlString);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (websiteUrl) {
-      window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
+    
+    // Validate URL
+    if (!websiteUrl) {
+      toast({
+        title: "Error",
+        description: "Please enter a website URL",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!isValidUrl(websiteUrl)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid URL (include https://)",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Set loading state
+    setIsSubmitting(true);
+    
+    try {
+      // Replace with your actual n8n webhook URL
+      const webhookUrl = "https://your-n8n-webhook-url";
+      
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          websiteUrl,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+      
+      if (response.ok) {
+        toast({
+          title: "Success!",
+          description: "Your website has been submitted for analysis.",
+        });
+        // Clear form after successful submission
+        setWebsiteUrl("");
+      } else {
+        throw new Error("Failed to submit form");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your website. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -89,10 +157,11 @@ export const Hero = () => {
                   />
                   <button
                     type="submit"
-                    className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-2 px-4 font-mono uppercase text-sm md:text-base flex items-center justify-center min-w-[40px] mr-4 my-1"
+                    disabled={isSubmitting}
+                    className={`bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-2 px-4 font-mono uppercase text-sm md:text-base flex items-center justify-center min-w-[40px] mr-4 my-1 ${isSubmitting ? 'opacity-70' : ''}`}
                     aria-label="Analyze website"
                   >
-                    GO
+                    {isSubmitting ? "..." : "GO"}
                   </button>
                 </div>
               </div>
