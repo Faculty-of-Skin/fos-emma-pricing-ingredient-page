@@ -88,9 +88,7 @@ export const Hero = () => {
                 />
                 <button
                   type="submit"
-                  className={`bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-3 px-6 font-mono uppercase text-sm md:text-base ${
-                    isGlowing ? 'animate-pulse bg-brutal-gray' : ''
-                  }`}
+                  className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-3 px-6 font-mono uppercase text-sm md:text-base"
                   aria-label="Analyze website"
                 >
                   GO
