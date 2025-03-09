@@ -1,7 +1,17 @@
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
+import { useState } from "react";
 
 export const Hero = () => {
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (websiteUrl) {
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
+    }
+  };
+
   return (
     <section className="min-h-screen flex items-center bg-brutal-white pt-16">
       <div className="container mx-auto px-4">
@@ -37,15 +47,28 @@ export const Hero = () => {
           </p>
 
           <div className="max-w-xl mx-auto p-2">
-            <button
-              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
-              aria-label="Join SpaSense Waitlist"
-              className="brutal-button w-full h-14 flex items-center justify-center gap-2 relative group"
-            >
-              <span className="relative z-10">Join Waitlist</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              <div className="absolute inset-0 bg-brutal-dark opacity-0 group-hover:opacity-20 transition-opacity"></div>
-            </button>
+            <form onSubmit={handleSubmit} className="flex relative w-full">
+              <div className="w-full flex items-center rounded-md bg-white shadow-lg border-4 border-brutal-black overflow-hidden">
+                <div className="pl-4">
+                  <Search className="h-5 w-5 text-brutal-charcoal" />
+                </div>
+                <input
+                  type="url"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  placeholder="example.com"
+                  className="w-full pl-2 pr-4 py-3 focus:outline-none text-brutal-charcoal font-mono text-lg border-none"
+                  aria-label="Enter your website URL"
+                />
+                <button
+                  type="submit"
+                  className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-3 px-6 font-mono uppercase text-sm md:text-base"
+                  aria-label="Analyze website"
+                >
+                  GO
+                </button>
+              </div>
+            </form>
           </div>
 
           <div className="text-center mt-20">
