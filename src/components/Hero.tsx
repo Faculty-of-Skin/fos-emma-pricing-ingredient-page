@@ -68,31 +68,33 @@ export const Hero = () => {
           <div className="max-w-2xl mx-auto p-2">
             <form 
               onSubmit={handleSubmit} 
-              className={`flex relative w-full ${isGlowing ? 'animate-pulse' : ''}`}
+              className="flex relative w-full"
             >
-              <div 
-                className={`w-full flex items-center rounded-md bg-white shadow-lg border-4 border-brutal-black overflow-hidden transition-all duration-300 ${
-                  isGlowing ? 'shadow-[0_0_15px_rgba(221,161,94,0.7)]' : ''
-                }`}
-              >
-                <div className="pl-4">
-                  <Search className={`h-5 w-5 text-brutal-charcoal ${isGlowing ? 'animate-pulse' : ''}`} />
+              <div className="relative w-full">
+                {/* Glow effect behind the input box */}
+                {isGlowing && (
+                  <div className="absolute inset-0 bg-[#dda15e] blur-md opacity-50 animate-pulse"></div>
+                )}
+                <div className="w-full flex items-center rounded-md bg-white shadow-lg border-4 border-brutal-black overflow-hidden transition-all duration-300 relative z-10">
+                  <div className="pl-4">
+                    <Search className="h-5 w-5 text-brutal-charcoal" />
+                  </div>
+                  <input
+                    type="url"
+                    value={websiteUrl}
+                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                    placeholder="enter your website URL"
+                    className="w-full pl-2 pr-4 py-3 focus:outline-none text-brutal-charcoal font-mono text-lg border-none"
+                    aria-label="Enter your website URL"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-2 px-4 font-mono uppercase text-sm md:text-base flex items-center justify-center min-w-[40px] mr-4 my-1"
+                    aria-label="Analyze website"
+                  >
+                    GO
+                  </button>
                 </div>
-                <input
-                  type="url"
-                  value={websiteUrl}
-                  onChange={(e) => setWebsiteUrl(e.target.value)}
-                  placeholder="enter your website URL"
-                  className="w-full pl-2 pr-4 py-3 focus:outline-none text-brutal-charcoal font-mono text-lg border-none"
-                  aria-label="Enter your website URL"
-                />
-                <button
-                  type="submit"
-                  className="bg-brutal-dark hover:bg-brutal-black transition-colors text-white font-bold py-2 px-4 font-mono uppercase text-sm md:text-base flex items-center justify-center min-w-[40px] mr-4 my-1"
-                  aria-label="Analyze website"
-                >
-                  GO
-                </button>
               </div>
             </form>
           </div>
