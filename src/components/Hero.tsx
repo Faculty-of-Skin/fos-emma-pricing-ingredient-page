@@ -63,8 +63,8 @@ export const Hero = () => {
     setIsSubmitting(true);
     
     try {
-      // Replace with your actual n8n webhook URL
-      const webhookUrl = "https://your-n8n-webhook-url";
+      // Use the provided n8n webhook URL
+      const webhookUrl = "https://facultyofskin.app.n8n.cloud/webhook-test/d154bcba-c78a-405d-a00a-e190a3d4642f";
       
       const response = await fetch(webhookUrl, {
         method: "POST",
