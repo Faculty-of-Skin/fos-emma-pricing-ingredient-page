@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Explicitly specify build configuration to use npm-compatible settings
+  // Explicitly specify build configuration for Netlify compatibility
   build: {
     outDir: "dist",
     target: "es2015",
