@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
@@ -22,6 +21,13 @@ export const JoinWaitlist = () => {
       role: "Day Spa Owner"
     }
   ];
+
+  const handleWaitlistClick = () => {
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead');
+    }
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
+  };
 
   return (
     <section className="py-24 bg-white">
@@ -71,7 +77,7 @@ export const JoinWaitlist = () => {
 
           <button
             className="brutal-button mb-12"
-            onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
+            onClick={handleWaitlistClick}
           >
             Join the Pilot Program – Apply Now
           </button>
