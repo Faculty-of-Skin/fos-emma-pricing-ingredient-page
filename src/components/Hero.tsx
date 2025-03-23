@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { WebsiteSubmissionForm } from "./hero/WebsiteSubmissionForm";
+import WebsiteSubmissionForm from "./hero/WebsiteSubmissionForm";
 import { PartnerLogos } from "./hero/PartnerLogos";
 import { HeroHeader } from "./hero/HeroHeader";
 import { PromoBanner } from "./hero/PromoBanner";
