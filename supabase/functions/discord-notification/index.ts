@@ -18,31 +18,71 @@ serve(async (req) => {
     
     // Get the Discord webhook URL from environment variables
     const discordWebhookUrl = Deno.env.get("DISCORD_WEBHOOK_URL");
+    console.log("Discord webhook configured:", discordWebhookUrl ? "Yes (starts with: " + discordWebhookUrl.substring(0, 15) + "...)" : "No");
     
     // If just checking configuration
     if (requestData.action === "check-config") {
       console.log("Checking Discord webhook configuration");
-      console.log("Discord webhook URL configured:", discordWebhookUrl ? "Yes" : "No");
       
-      // You can even try to validate the webhook URL by making a GET request
+      if (!discordWebhookUrl) {
+        console.error("Discord webhook URL not set in environment variables");
+        return new Response(
+          JSON.stringify({ 
+            webhookConfigured: false,
+            webhookValid: false,
+            message: "DISCORD_WEBHOOK_URL is not set in the environment"
+          }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      // Validate the webhook URL
       let webhookValid = false;
+      let validationMessage = "";
       
-      if (discordWebhookUrl) {
-        try {
+      try {
+        if (!discordWebhookUrl.startsWith("https://discord.com/api/webhooks/")) {
+          validationMessage = "URL doesn't start with https://discord.com/api/webhooks/";
+        } else {
+          // Try to make a GET request to the webhook URL
+          console.log("Attempting to validate webhook URL");
           const checkResponse = await fetch(discordWebhookUrl, {
             method: "GET"
           });
-          webhookValid = checkResponse.status !== 404; // Discord returns 401 for valid webhooks (unauthorized)
+          
           console.log("Webhook validation check status:", checkResponse.status);
-        } catch (error) {
-          console.error("Error validating webhook:", error);
+          console.log("Webhook validation response headers:", JSON.stringify([...checkResponse.headers]));
+          
+          // Discord returns 401 for valid but unauthorized webhooks, 404 for invalid ones
+          if (checkResponse.status === 401) {
+            webhookValid = true;
+            validationMessage = "Webhook URL validated successfully";
+          } else if (checkResponse.status === 404) {
+            validationMessage = "Webhook URL returned 404 Not Found - it may be invalid or expired";
+          } else {
+            validationMessage = `Webhook validation returned unexpected status: ${checkResponse.status}`;
+          }
+          
+          // Try to parse response for additional info
+          try {
+            const responseText = await checkResponse.text();
+            console.log("Webhook validation response:", responseText.substring(0, 200));
+          } catch (e) {
+            console.error("Could not read response text:", e);
+          }
         }
+      } catch (error) {
+        console.error("Error validating webhook:", error);
+        validationMessage = `Error validating webhook: ${error.message}`;
       }
       
       return new Response(
         JSON.stringify({ 
-          webhookConfigured: !!discordWebhookUrl,
-          webhookValid: webhookValid
+          webhookConfigured: true,
+          webhookValid: webhookValid,
+          message: validationMessage,
+          urlLength: discordWebhookUrl.length,
+          urlPrefix: discordWebhookUrl.substring(0, 30) + "..."
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -62,12 +102,13 @@ serve(async (req) => {
         );
       }
       
-      console.log("Discord webhook URL configured:", discordWebhookUrl ? "Yes" : "No");
-      
       if (!discordWebhookUrl) {
         console.error("Discord webhook URL not set in environment variables");
         return new Response(
-          JSON.stringify({ error: "Webhook URL not configured" }),
+          JSON.stringify({ 
+            error: "Webhook URL not configured",
+            details: "The DISCORD_WEBHOOK_URL environment variable is not set"
+          }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
@@ -102,28 +143,47 @@ serve(async (req) => {
       console.log("Sending notification to Discord with message:", JSON.stringify(message));
 
       // Send the notification to Discord
-      const discordResponse = await fetch(discordWebhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(message)
-      });
+      try {
+        const discordResponse = await fetch(discordWebhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(message)
+        });
 
-      console.log("Discord API response status:", discordResponse.status);
+        console.log("Discord API response status:", discordResponse.status);
 
-      if (!discordResponse.ok) {
-        const errorText = await discordResponse.text();
-        console.error("Discord API error:", errorText);
-        throw new Error(`Discord API error: ${discordResponse.status} ${errorText}`);
+        if (!discordResponse.ok) {
+          const errorText = await discordResponse.text();
+          console.error("Discord API error:", errorText);
+          
+          return new Response(
+            JSON.stringify({ 
+              error: "Discord API error", 
+              status: discordResponse.status,
+              details: errorText
+            }),
+            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+
+        console.log("Discord notification sent successfully");
+
+        return new Response(
+          JSON.stringify({ success: true }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch (fetchError) {
+        console.error("Error fetching Discord API:", fetchError);
+        return new Response(
+          JSON.stringify({ 
+            error: "Error sending to Discord", 
+            details: fetchError.message 
+          }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
-
-      console.log("Discord notification sent successfully");
-
-      return new Response(
-        JSON.stringify({ success: true }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
     }
     
     // If no action specified or unknown action

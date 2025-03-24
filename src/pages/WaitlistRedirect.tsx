@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 
 const WaitlistRedirect = () => {
   const [isNotifying, setIsNotifying] = useState(true);
+  const [webhookStatus, setWebhookStatus] = useState("");
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   
@@ -43,11 +44,38 @@ const WaitlistRedirect = () => {
           body: { action: "check-config" }
         });
         
-        if (configError || !configCheck?.webhookConfigured) {
+        console.log("Webhook config check response:", configCheck);
+        
+        if (configError) {
+          console.error("Error checking webhook configuration:", configError);
+          setWebhookStatus(`Error checking webhook: ${configError.message}`);
+          toast({
+            title: "Webhook configuration error",
+            description: `Error checking webhook configuration: ${configError.message}`,
+            variant: "destructive",
+          });
+          setIsNotifying(false);
+          return;
+        }
+        
+        if (!configCheck?.webhookConfigured) {
           console.error("Discord webhook not properly configured:", configCheck);
+          setWebhookStatus(`Webhook not configured: ${JSON.stringify(configCheck)}`);
           toast({
             title: "Webhook configuration error",
             description: "Discord webhook is not properly configured",
+            variant: "destructive",
+          });
+          setIsNotifying(false);
+          return;
+        }
+        
+        if (!configCheck?.webhookValid) {
+          console.error("Discord webhook URL is invalid:", configCheck);
+          setWebhookStatus(`Webhook not valid: ${JSON.stringify(configCheck)}`);
+          toast({
+            title: "Webhook configuration error",
+            description: "Discord webhook URL is invalid",
             variant: "destructive",
           });
           setIsNotifying(false);
@@ -63,6 +91,7 @@ const WaitlistRedirect = () => {
         
         if (error) {
           console.error("Error from edge function:", error);
+          setWebhookStatus(`Edge function error: ${error.message}`);
           toast({
             title: "Notification failed",
             description: "Could not send Discord notification: " + error.message,
@@ -70,6 +99,7 @@ const WaitlistRedirect = () => {
           });
         } else {
           console.log("Discord notification response:", data);
+          setWebhookStatus("Notification sent successfully");
           toast({
             title: "Notification sent",
             description: "Discord notification was sent successfully",
@@ -77,6 +107,7 @@ const WaitlistRedirect = () => {
         }
       } catch (error) {
         console.error("Error sending Discord notification:", error);
+        setWebhookStatus(`Unexpected error: ${error.message}`);
         toast({
           title: "Notification error",
           description: error.message || "An unexpected error occurred",
@@ -98,7 +129,7 @@ const WaitlistRedirect = () => {
     // Redirect to Google Form after a delay
     const timer = setTimeout(() => {
       window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform';
-    }, 5000); // Increased delay to ensure notification is sent
+    }, 8000); // Increased delay to ensure notification is sent and error is shown
     
     return () => clearTimeout(timer);
   }, [searchParams, toast]);
@@ -111,6 +142,11 @@ const WaitlistRedirect = () => {
         {isNotifying && (
           <div className="text-sm text-brutal-gray">
             Sending notification...
+          </div>
+        )}
+        {webhookStatus && (
+          <div className="text-sm mt-2 p-2 bg-gray-100 text-brutal-gray rounded-md">
+            <strong>Debug info:</strong> {webhookStatus}
           </div>
         )}
       </div>
