@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 export interface WebsiteSubmissionFormProps {
   className?: string;
@@ -10,7 +10,7 @@ export const WebsiteSubmissionForm = ({ className }: WebsiteSubmissionFormProps)
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGlowing, setIsGlowing] = useState(true);
-  const { toast } = useToast();
+  const navigate = useNavigate();
   
   // Validate URL
   const isValidUrl = (urlString: string): boolean => {
@@ -27,61 +27,21 @@ export const WebsiteSubmissionForm = ({ className }: WebsiteSubmissionFormProps)
     
     // Validate URL
     if (!websiteUrl) {
-      toast({
-        title: "Error",
-        description: "Please enter a website URL",
-        variant: "destructive",
-      });
       return;
     }
     
     if (!isValidUrl(websiteUrl)) {
-      toast({
-        title: "Error",
-        description: "Please enter a valid URL (include https://)",
-        variant: "destructive",
-      });
       return;
     }
     
     // Set loading state
     setIsSubmitting(true);
-    
-    try {
-      // Use the updated n8n webhook URL
-      const webhookUrl = "https://facultyofskin.app.n8n.cloud/webhook-test/80c7e3a9-3bfd-49e2-a9b3-5b3805f0b3c8";
-      
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          websiteUrl,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-      
-      if (response.ok) {
-        toast({
-          title: "Success!",
-          description: "Your website has been submitted for analysis.",
-        });
-        // Clear form after successful submission
-        setWebsiteUrl("");
-      } else {
-        throw new Error("Failed to submit form");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Submission Failed",
-        description: "There was an error submitting your website. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  
+    // Redirect to the AgentPage with the website URL and parsed data
+    navigate('/agent', { state: { websiteUrl } });
+    // Clear form after successful submission
+    setWebsiteUrl("");
+
   };
 
   return (
@@ -121,3 +81,5 @@ export const WebsiteSubmissionForm = ({ className }: WebsiteSubmissionFormProps)
     </div>
   );
 };
+
+export default WebsiteSubmissionForm;
