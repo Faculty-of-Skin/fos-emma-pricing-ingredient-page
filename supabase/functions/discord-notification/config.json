@@ -1,0 +1,6 @@
+
+{
+  "name": "discord-notification",
+  "version": "1.0",
+  "description": "Sends a notification to Discord when a new user joins the waitlist"
+}
