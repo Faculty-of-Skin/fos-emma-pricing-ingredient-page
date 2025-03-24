@@ -10,9 +10,16 @@ import AgentPage from './pages/AgentPage';
 import WaitlistRedirect from './pages/WaitlistRedirect';
 import JoinWaitlist from './pages/JoinWaitlist';
 
-const queryClient = new QueryClient();
-
 const App = () => {
+  // Create a client inside the component to ensure proper React context
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        retry: 1,
+      },
+    },
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
