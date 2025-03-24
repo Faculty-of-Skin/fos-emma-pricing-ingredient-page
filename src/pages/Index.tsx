@@ -1,3 +1,4 @@
+
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { ProblemSection } from "@/components/ProblemSection";
@@ -42,8 +43,25 @@ const Index = () => {
         // Create the widget instance
         const widget = document.createElement('elevenlabs-convai');
         widget.setAttribute('agent-id', 'TF7GzxMCWFgRDzORCsZ1');
+        // Add a custom attribute to hide the powered by text
+        widget.setAttribute('hide-footer', 'true');
         widgetRef.current.appendChild(widget);
         setIsWidgetLoaded(true);
+        
+        // Add custom CSS to hide the powered by text
+        const style = document.createElement('style');
+        style.textContent = `
+          elevenlabs-convai::part(footer),
+          elevenlabs-convai .el-convai-footer,
+          elevenlabs-convai [class*="footer"],
+          elevenlabs-convai [id*="footer"] {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            opacity: 0 !important;
+          }
+        `;
+        document.head.appendChild(style);
       }
     }
 
