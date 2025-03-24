@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 export const JoinWaitlist = () => {
+  const navigate = useNavigate();
+  
   const benefits = [
     "30-day free trial – See the impact firsthand.",
     "Be the first to access AI-powered automation for spa businesses.",
@@ -23,10 +26,7 @@ export const JoinWaitlist = () => {
   ];
 
   const handleWaitlistClick = () => {
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Lead');
-    }
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
+    navigate('/waitlist-redirect');
   };
 
   return (

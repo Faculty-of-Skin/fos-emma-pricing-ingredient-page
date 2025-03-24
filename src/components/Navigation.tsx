@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Menu, HelpCircle } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,7 +16,7 @@ export const Navigation = () => {
   }, []);
 
   const handleWaitlistClick = () => {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank');
+    navigate('/waitlist-redirect');
   };
 
   const handleQuestionsClick = () => {
