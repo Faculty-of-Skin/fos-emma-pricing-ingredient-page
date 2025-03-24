@@ -55,9 +55,9 @@ const JoinWaitlist = () => {
       // Save to localStorage as a backup
       localStorage.setItem("waitlistEmail", email);
       
-      // Redirect after a short delay
+      // Redirect after a short delay with email as a URL parameter
       setTimeout(() => {
-        navigate("/waitlist-redirect");
+        navigate(`/waitlist-redirect?email=${encodeURIComponent(email)}`);
       }, 1500);
     } catch (error) {
       console.error("Error saving email:", error);

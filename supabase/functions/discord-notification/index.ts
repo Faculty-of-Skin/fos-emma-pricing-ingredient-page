@@ -13,86 +13,126 @@ serve(async (req) => {
   }
 
   try {
-    const { email } = await req.json();
+    const requestData = await req.json();
+    console.log("Received request with data:", JSON.stringify(requestData));
     
-    console.log("Received request to send Discord notification for email:", email);
-    
-    if (!email) {
-      console.error("Email is missing in the request");
-      return new Response(
-        JSON.stringify({ error: "Email is required" }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // This would be your Discord webhook URL
-    // You should set this as a secret in your Supabase project
+    // Get the Discord webhook URL from environment variables
     const discordWebhookUrl = Deno.env.get("DISCORD_WEBHOOK_URL");
     
-    console.log("Discord webhook URL configured:", discordWebhookUrl ? "Yes" : "No");
-    
-    if (!discordWebhookUrl) {
-      console.error("Discord webhook URL not set in environment variables");
+    // If just checking configuration
+    if (requestData.action === "check-config") {
+      console.log("Checking Discord webhook configuration");
+      console.log("Discord webhook URL configured:", discordWebhookUrl ? "Yes" : "No");
+      
+      // You can even try to validate the webhook URL by making a GET request
+      let webhookValid = false;
+      
+      if (discordWebhookUrl) {
+        try {
+          const checkResponse = await fetch(discordWebhookUrl, {
+            method: "GET"
+          });
+          webhookValid = checkResponse.status !== 404; // Discord returns 401 for valid webhooks (unauthorized)
+          console.log("Webhook validation check status:", checkResponse.status);
+        } catch (error) {
+          console.error("Error validating webhook:", error);
+        }
+      }
+      
       return new Response(
-        JSON.stringify({ error: "Webhook URL not configured" }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ 
+          webhookConfigured: !!discordWebhookUrl,
+          webhookValid: webhookValid
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+    
+    // For sending notifications
+    if (requestData.action === "send-notification") {
+      const { email } = requestData;
+      
+      console.log("Processing notification request for email:", email);
+      
+      if (!email) {
+        console.error("Email is missing in the request");
+        return new Response(
+          JSON.stringify({ error: "Email is required" }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      console.log("Discord webhook URL configured:", discordWebhookUrl ? "Yes" : "No");
+      
+      if (!discordWebhookUrl) {
+        console.error("Discord webhook URL not set in environment variables");
+        return new Response(
+          JSON.stringify({ error: "Webhook URL not configured" }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
 
-    // Prepare the message to send to Discord
-    const message = {
-      content: `New waitlist sign-up: ${email}`,
-      embeds: [
-        {
-          title: "New Waitlist Registration",
-          description: `A new user has joined the waitlist!`,
-          color: 5814783, // A nice green color
-          fields: [
-            {
-              name: "Email",
-              value: email,
-              inline: true
-            },
-            {
-              name: "Time",
-              value: new Date().toISOString(),
-              inline: true
+      // Prepare the message to send to Discord
+      const message = {
+        content: `New waitlist sign-up: ${email}`,
+        embeds: [
+          {
+            title: "New Waitlist Registration",
+            description: `A new user has joined the waitlist!`,
+            color: 5814783, // A nice green color
+            fields: [
+              {
+                name: "Email",
+                value: email,
+                inline: true
+              },
+              {
+                name: "Time",
+                value: new Date().toISOString(),
+                inline: true
+              }
+            ],
+            footer: {
+              text: "Spa Sense Waitlist Notification"
             }
-          ],
-          footer: {
-            text: "Spa Sense Waitlist Notification"
           }
-        }
-      ]
-    };
+        ]
+      };
 
-    console.log("Sending notification to Discord...");
+      console.log("Sending notification to Discord with message:", JSON.stringify(message));
 
-    // Send the notification to Discord
-    const discordResponse = await fetch(discordWebhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(message)
-    });
+      // Send the notification to Discord
+      const discordResponse = await fetch(discordWebhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(message)
+      });
 
-    console.log("Discord API response status:", discordResponse.status);
+      console.log("Discord API response status:", discordResponse.status);
 
-    if (!discordResponse.ok) {
-      const errorText = await discordResponse.text();
-      console.error("Discord API error:", errorText);
-      throw new Error(`Discord API error: ${discordResponse.status} ${errorText}`);
+      if (!discordResponse.ok) {
+        const errorText = await discordResponse.text();
+        console.error("Discord API error:", errorText);
+        throw new Error(`Discord API error: ${discordResponse.status} ${errorText}`);
+      }
+
+      console.log("Discord notification sent successfully");
+
+      return new Response(
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
-
-    console.log("Discord notification sent successfully");
-
+    
+    // If no action specified or unknown action
     return new Response(
-      JSON.stringify({ success: true }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: "Invalid action specified" }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error("Error sending Discord notification:", error);
+    console.error("Error in discord-notification function:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
