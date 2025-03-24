@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
+import { supabase } from "@/integrations/supabase/client";
 
 const JoinWaitlist = () => {
   const [email, setEmail] = useState("");
@@ -27,20 +28,39 @@ const JoinWaitlist = () => {
     setIsSubmitting(true);
     
     try {
-      // Store the email in localStorage for now (we'll use Supabase later)
-      localStorage.setItem("waitlistEmail", email);
+      // Store the email in Supabase
+      const { error } = await supabase
+        .from('waitlist_emails')
+        .insert({ email: email.toLowerCase().trim() });
+
+      if (error) {
+        // Check if it's a duplicate email
+        if (error.code === '23505') {
+          // This is still a success case - they're already on the waitlist
+          toast({
+            title: "You're already on our waitlist!",
+            description: "Redirecting you to complete your registration.",
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        // Show success toast
+        toast({
+          title: "Thank you!",
+          description: "Your email has been received. Redirecting you to complete registration.",
+        });
+      }
       
-      // Show success toast
-      toast({
-        title: "Thank you!",
-        description: "Your email has been received. Redirecting you to complete registration.",
-      });
+      // Save to localStorage as a backup
+      localStorage.setItem("waitlistEmail", email);
       
       // Redirect after a short delay
       setTimeout(() => {
         navigate("/waitlist-redirect");
       }, 1500);
     } catch (error) {
+      console.error("Error saving email:", error);
       toast({
         title: "Something went wrong",
         description: "Please try again later",
