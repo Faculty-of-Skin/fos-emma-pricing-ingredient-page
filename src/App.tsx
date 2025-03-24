@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AgentPage from './pages/AgentPage';
 import WaitlistRedirect from './pages/WaitlistRedirect';
+import JoinWaitlist from './pages/JoinWaitlist';
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/agent" element={<AgentPage />} />
+            <Route path="/join-waitlist" element={<JoinWaitlist />} />
             <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -17,7 +17,7 @@ export const Navigation = () => {
   }, []);
 
   const handleWaitlistClick = () => {
-    navigate('/waitlist-redirect');
+    navigate('/join-waitlist');
   };
 
   const scrollToSection = (id: string) => {

@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +27,7 @@ export const JoinWaitlist = () => {
   ];
 
   const handleWaitlistClick = () => {
-    navigate('/waitlist-redirect');
+    navigate('/join-waitlist');
   };
 
   return (
