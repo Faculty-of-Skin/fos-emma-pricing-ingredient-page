@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { Menu, HelpCircle } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 export const Navigation = () => {
@@ -17,10 +18,6 @@ export const Navigation = () => {
 
   const handleWaitlistClick = () => {
     navigate('/waitlist-redirect');
-  };
-
-  const handleQuestionsClick = () => {
-    window.open('https://meetings.hubspot.com/faculty-of-skin/spa-sense', '_blank');
   };
 
   const scrollToSection = (id: string) => {
@@ -64,18 +61,12 @@ export const Navigation = () => {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center">
             <button 
               className="brutal-button"
               onClick={handleWaitlistClick}
             >
               Join Waitlist
-            </button>
-            <button 
-              className="brutal-button flex items-center gap-2"
-              onClick={handleQuestionsClick}
-            >
-              Meet with us <HelpCircle className="w-4 h-4" />
             </button>
           </div>
 
@@ -109,18 +100,12 @@ export const Navigation = () => {
             >
               FAQ
             </button>
-            <div className="px-4 pt-2 space-y-2">
+            <div className="px-4 pt-2">
               <button
                 className="brutal-button w-full"
                 onClick={handleWaitlistClick}
               >
                 Join Waitlist
-              </button>
-              <button 
-                className="brutal-button w-full flex items-center justify-center gap-2"
-                onClick={handleQuestionsClick}
-              >
-                Meet with us <HelpCircle className="w-4 h-4" />
               </button>
             </div>
           </div>
