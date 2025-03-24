@@ -167,7 +167,7 @@ const AgentPage: React.FC = () => {
       setValidationError(""); // Clear any previous errors
       
       // Here you would typically send the notification data to your backend
-      const response = await fetch(`https://facultyofskin.app.n8n.cloud/webhook/92f6986f-94e5-45dc-b063-3563fc42b3533`, {
+      const response = await fetch(`https://facultyofskin.app.n8n.cloud/webhook/92f6986f-94e5-45dc-b063-3563fc42b353`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
