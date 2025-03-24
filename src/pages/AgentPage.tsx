@@ -56,6 +56,7 @@ const AgentPage: React.FC = () => {
   const [showNotifyDialog, setShowNotifyDialog] = useState<boolean>(false);
   const [notifyEmail, setNotifyEmail] = useState<string>("");
   const [notifyPhone, setNotifyPhone] = useState<string>("");
+  const [notifyFirstName, setNotifyFirstName] = useState<string>("");
   const [notificationSubmitted, setNotificationSubmitted] = useState<boolean>(false);
   const [validationError, setValidationError] = useState<string>("");
   
@@ -139,18 +140,6 @@ const AgentPage: React.FC = () => {
     }
   }, [spaWebsiteDetails, companySummary]);
 
-  // Pre-fill contact info when spa details are loaded
-  useEffect(() => {
-    if (spaWebsiteDetails.contactInfo) {
-      if (spaWebsiteDetails.contactInfo.email) {
-        setNotifyEmail(spaWebsiteDetails.contactInfo.email);
-      }
-      if (spaWebsiteDetails.contactInfo.phone) {
-        setNotifyPhone(spaWebsiteDetails.contactInfo.phone);
-      }
-    }
-  }, [spaWebsiteDetails.contactInfo]);
-
   const handleNotifySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -175,6 +164,7 @@ const AgentPage: React.FC = () => {
         body: JSON.stringify({
           email: notifyEmail,
           phone: notifyPhone,
+          firstName: notifyFirstName,
           businessName: spaWebsiteDetails.businessName,
         }),
       });
@@ -390,6 +380,19 @@ const AgentPage: React.FC = () => {
               <form onSubmit={handleNotifySubmit} className="space-y-4">
                 <div>
                   <label className="text-brutal-dark font-bold mb-2 flex items-center">
+                    <span className="mr-2">�</span> First Name
+                  </label>
+                  <input
+                    type="text"
+                    value={notifyFirstName}
+                    onChange={(e) => setNotifyFirstName(e.target.value)}
+                    className="w-full p-2 border-2 border-brutal-black rounded-md focus:outline-none focus:ring-2 focus:ring-brutal-pink"
+                    placeholder="Your first name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-brutal-dark font-bold mb-2 flex items-center">
                     <Mail className="h-4 w-4 mr-2" /> Email
                   </label>
                   <input
@@ -397,7 +400,7 @@ const AgentPage: React.FC = () => {
                     value={notifyEmail}
                     onChange={(e) => setNotifyEmail(e.target.value)}
                     className="w-full p-2 border-2 border-brutal-black rounded-md focus:outline-none focus:ring-2 focus:ring-brutal-pink"
-                    placeholder="your@email.com"
+                    placeholder={`name@${spaWebsiteDetails.businessName}.com`}
                   />
                 </div>
                 
