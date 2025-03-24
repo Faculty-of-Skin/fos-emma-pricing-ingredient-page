@@ -1,8 +1,8 @@
+
 import { useEffect, useState } from "react";
 import WebsiteSubmissionForm from "./hero/WebsiteSubmissionForm";
 import { PartnerLogos } from "./hero/PartnerLogos";
 import { HeroHeader } from "./hero/HeroHeader";
-import { PromoBanner } from "./hero/PromoBanner";
 import { HeroDescription } from "./hero/HeroDescription";
 import { SchemaMarkup } from "./hero/SchemaMarkup";
 
@@ -31,8 +31,6 @@ export const Hero = () => {
     <section className="min-h-screen flex items-center bg-brutal-white pt-16">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-up">
-          <PromoBanner />
-          
           <HeroHeader />
           
           <HeroDescription />
@@ -47,3 +45,4 @@ export const Hero = () => {
     </section>
   );
 };
+
