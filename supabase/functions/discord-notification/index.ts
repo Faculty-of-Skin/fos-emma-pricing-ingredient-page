@@ -18,7 +18,10 @@ serve(async (req) => {
     
     // Get the Discord webhook URL from environment variables
     const discordWebhookUrl = Deno.env.get("DISCORD_WEBHOOK_URL");
-    console.log("Discord webhook configured:", discordWebhookUrl ? "Yes (starts with: " + discordWebhookUrl.substring(0, 15) + "...)" : "No");
+    
+    // Log the environment variables for debugging (don't log the full webhook URL for security)
+    console.log("Environment variables present:", Object.keys(Deno.env.toObject()).join(", "));
+    console.log("Discord webhook configured:", discordWebhookUrl ? `Yes (${discordWebhookUrl.length} chars)` : "No");
     
     // If just checking configuration
     if (requestData.action === "check-config") {
@@ -31,6 +34,7 @@ serve(async (req) => {
             webhookConfigured: false,
             webhookValid: false,
             message: "DISCORD_WEBHOOK_URL is not set in the environment",
+            envVars: Object.keys(Deno.env.toObject()),
             timestamp: new Date().toISOString()
           }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -52,7 +56,6 @@ serve(async (req) => {
           });
           
           console.log("Webhook validation check status:", checkResponse.status);
-          console.log("Webhook validation response headers:", JSON.stringify([...checkResponse.headers]));
           
           // Discord returns 401 for valid but unauthorized webhooks, 404 for invalid ones
           if (checkResponse.status === 401 || checkResponse.status === 200) {
@@ -109,7 +112,8 @@ serve(async (req) => {
         return new Response(
           JSON.stringify({ 
             error: "Webhook URL not configured",
-            details: "The DISCORD_WEBHOOK_URL environment variable is not set"
+            details: "The DISCORD_WEBHOOK_URL environment variable is not set",
+            envVars: Object.keys(Deno.env.toObject())
           }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );

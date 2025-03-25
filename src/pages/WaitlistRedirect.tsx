@@ -18,10 +18,10 @@ const WaitlistRedirect = () => {
   const [searchParams] = useSearchParams();
   
   useEffect(() => {
-    // Add a small delay before first attempt to ensure edge function is ready
+    // Add a delay before first attempt to ensure edge function is ready
     const initialDelay = setTimeout(() => {
       sendDiscordNotification();
-    }, 2000);
+    }, 3000); // Increased to 3 seconds for better edge function warmup
     
     return () => clearTimeout(initialDelay);
   }, []);
@@ -51,7 +51,8 @@ const WaitlistRedirect = () => {
         return;
       }
       
-      const timestamp = Date.now(); // Add unique timestamp to avoid caching
+      // Add unique timestamp to prevent caching
+      const timestamp = Date.now();
       
       // First check the configuration
       const { data: configCheck, error: configError } = await supabase.functions.invoke("discord-notification", {
@@ -172,6 +173,7 @@ const WaitlistRedirect = () => {
 
   const retryNotification = () => {
     setIsNotifying(true);
+    setRetryCount(0); // Reset retry count for a fresh attempt
     sendDiscordNotification();
   };
 
