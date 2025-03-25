@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useSearchParams } from "react-router-dom";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 const WaitlistRedirect = () => {
   const [isNotifying, setIsNotifying] = useState(true);
   const [webhookStatus, setWebhookStatus] = useState("");
+  const [isWebhookConfigured, setIsWebhookConfigured] = useState(true);
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   
@@ -61,6 +64,7 @@ const WaitlistRedirect = () => {
         if (!configCheck?.webhookConfigured) {
           console.error("Discord webhook not properly configured:", configCheck);
           setWebhookStatus(`Webhook not configured: ${JSON.stringify(configCheck)}`);
+          setIsWebhookConfigured(false);
           toast({
             title: "Webhook configuration error",
             description: "Discord webhook is not properly configured",
@@ -126,24 +130,56 @@ const WaitlistRedirect = () => {
     // Send Discord notification
     sendDiscordNotification();
     
-    // Redirect to Google Form after a delay
-    const timer = setTimeout(() => {
-      window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform';
-    }, 8000); // Increased delay to ensure notification is sent and error is shown
+    // Redirect to Google Form after a delay (only if webhook is configured)
+    let timer: number;
+    if (isWebhookConfigured) {
+      timer = window.setTimeout(() => {
+        window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform';
+      }, 8000); // Increased delay to ensure notification is sent and error is shown
+    }
     
-    return () => clearTimeout(timer);
-  }, [searchParams, toast]);
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [searchParams, toast, isWebhookConfigured]);
+
+  const continueToForm = () => {
+    window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform';
+  };
 
   return (
-    <div className="h-screen w-screen bg-brutal-white flex items-center justify-center">
-      <div className="text-center brutal-card p-8 max-w-md">
-        <h1 className="text-2xl font-mono uppercase mb-4">Redirecting...</h1>
-        <p className="mb-4">Please wait while we redirect you to our registration form.</p>
-        {isNotifying && (
+    <div className="h-screen w-screen bg-brutal-white flex items-center justify-center p-4">
+      <div className="text-center brutal-card p-8 max-w-md w-full">
+        <h1 className="text-2xl font-mono uppercase mb-4">
+          {isWebhookConfigured ? "Redirecting..." : "Configuration Required"}
+        </h1>
+        
+        {isWebhookConfigured ? (
+          <p className="mb-4">Please wait while we redirect you to our registration form.</p>
+        ) : (
+          <Alert variant="destructive" className="mb-4 text-left">
+            <AlertTitle>Discord Webhook Not Configured</AlertTitle>
+            <AlertDescription>
+              The Discord webhook URL is not set in the Supabase environment variables. 
+              Please add the DISCORD_WEBHOOK_URL secret in your Supabase project settings.
+            </AlertDescription>
+          </Alert>
+        )}
+        
+        {isNotifying && isWebhookConfigured && (
           <div className="text-sm text-brutal-gray">
             Sending notification...
           </div>
         )}
+        
+        {!isWebhookConfigured && (
+          <div className="mt-4">
+            <Button onClick={continueToForm} className="brutal-button">
+              Continue to Registration Form
+            </Button>
+          </div>
+        )}
+        
         {webhookStatus && (
           <div className="text-sm mt-2 p-2 bg-gray-100 text-brutal-gray rounded-md">
             <strong>Debug info:</strong> {webhookStatus}
