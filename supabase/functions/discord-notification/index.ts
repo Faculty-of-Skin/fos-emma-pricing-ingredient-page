@@ -55,7 +55,7 @@ serve(async (req) => {
           console.log("Webhook validation response headers:", JSON.stringify([...checkResponse.headers]));
           
           // Discord returns 401 for valid but unauthorized webhooks, 404 for invalid ones
-          if (checkResponse.status === 401) {
+          if (checkResponse.status === 401 || checkResponse.status === 200) {
             webhookValid = true;
             validationMessage = "Webhook URL validated successfully";
           } else if (checkResponse.status === 404) {
@@ -143,6 +143,7 @@ serve(async (req) => {
       };
 
       console.log("Sending notification to Discord with message:", JSON.stringify(message));
+      console.log("Using webhook URL starting with:", discordWebhookUrl.substring(0, 15) + "...");
 
       // Send the notification to Discord
       try {
