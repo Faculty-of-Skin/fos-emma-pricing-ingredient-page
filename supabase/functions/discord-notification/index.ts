@@ -30,7 +30,8 @@ serve(async (req) => {
           JSON.stringify({ 
             webhookConfigured: false,
             webhookValid: false,
-            message: "DISCORD_WEBHOOK_URL is not set in the environment"
+            message: "DISCORD_WEBHOOK_URL is not set in the environment",
+            timestamp: new Date().toISOString()
           }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
@@ -82,7 +83,8 @@ serve(async (req) => {
           webhookValid: webhookValid,
           message: validationMessage,
           urlLength: discordWebhookUrl.length,
-          urlPrefix: discordWebhookUrl.substring(0, 30) + "..."
+          urlPrefix: discordWebhookUrl.substring(0, 30) + "...",
+          timestamp: new Date().toISOString()
         }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -171,7 +173,11 @@ serve(async (req) => {
         console.log("Discord notification sent successfully");
 
         return new Response(
-          JSON.stringify({ success: true }),
+          JSON.stringify({ 
+            success: true,
+            message: "Discord notification sent successfully",
+            timestamp: new Date().toISOString()
+          }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       } catch (fetchError) {
