@@ -1,5 +1,7 @@
+
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -11,6 +13,11 @@ import {
 
 export const Pricing = () => {
   const [isYearly, setIsYearly] = useState(true);
+  const navigate = useNavigate();
+  
+  const handleWaitlistClick = () => {
+    navigate('/join-waitlist');
+  };
 
   const plans = [
     {
@@ -166,7 +173,7 @@ export const Pricing = () => {
                 <div>
                   <button 
                     className="brutal-button w-full font-black tracking-widest text-sm"
-                    onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
+                    onClick={handleWaitlistClick}
                   >
                     {plan.cta}
                   </button>
@@ -195,7 +202,7 @@ export const Pricing = () => {
             <p className="text-brutal-charcoal font-mono uppercase tracking-wide mb-6">Start Free & Upgrade Anytime!</p>
             <button 
               className="brutal-button min-w-[250px] font-black tracking-widest text-sm"
-              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
+              onClick={handleWaitlistClick}
             >
               Join the waitlist
             </button>

@@ -6,8 +6,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const FAQ = () => {
+  const navigate = useNavigate();
+  
+  const handleWaitlistClick = () => {
+    navigate('/join-waitlist');
+  };
+  
   const faqs = [
     {
       question: "Does this replace my booking system?",
@@ -51,7 +58,7 @@ export const FAQ = () => {
           <div className="text-center">
             <button
               className="clay-button min-w-[300px]"
-              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
+              onClick={handleWaitlistClick}
             >
               Join the Waitlist – Limited Spots Available
             </button>

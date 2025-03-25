@@ -1,8 +1,11 @@
 
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const Benefits = () => {
+  const navigate = useNavigate();
+  
   const benefits = [
     "Fewer No-Shows, More Bookings – Automated reminders reduce cancellations.",
     "Higher Retail Sales – AI suggests products based on treatments.",
@@ -10,6 +13,10 @@ export const Benefits = () => {
     "Stronger Online Reputation – Automated review collection boosts rankings.",
     "Seamless Integration – Works with Mindbody, Phorest, Fresha, and other platforms.",
   ];
+
+  const handleWaitlistClick = () => {
+    navigate('/join-waitlist');
+  };
 
   return (
     <section id="benefits" className="py-24 bg-white">
@@ -36,7 +43,7 @@ export const Benefits = () => {
           <div className="mt-12 text-center">
             <button
               className="brutal-button"
-              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform', '_blank')}
+              onClick={handleWaitlistClick}
             >
               Get Early Access – Sign Up Now
             </button>
