@@ -1,16 +1,13 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useSearchParams } from "react-router-dom";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const WaitlistRedirect = () => {
   const [isNotifying, setIsNotifying] = useState(true);
   const [webhookStatus, setWebhookStatus] = useState("");
-  const [isWebhookConfigured, setIsWebhookConfigured] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
   const [showDebugInfo, setShowDebugInfo] = useState(false);
   const [debugDetails, setDebugDetails] = useState<any>(null);
@@ -42,11 +39,6 @@ const WaitlistRedirect = () => {
       
       if (!email) {
         console.error("No email found in localStorage or URL parameters");
-        toast({
-          title: "Notification error",
-          description: "Could not find your email to send notification",
-          variant: "destructive",
-        });
         setIsNotifying(false);
         return;
       }
@@ -65,47 +57,20 @@ const WaitlistRedirect = () => {
       console.log("Webhook config check response:", configCheck);
       setDebugDetails(configCheck);
       
-      if (configError) {
-        console.error("Error checking webhook configuration:", configError);
-        setWebhookStatus(`Error checking webhook: ${configError.message}`);
-        toast({
-          title: "Webhook configuration error",
-          description: `Error checking webhook configuration: ${configError.message}`,
-          variant: "destructive",
-        });
+      if (configError || !configCheck?.webhookConfigured || !configCheck?.webhookValid) {
+        console.error("Issue with webhook configuration:", configError || configCheck);
+        setWebhookStatus("Configuration issue");
         
-        if (retryCount < 3) {
+        // Still try to send if possible
+        if (retryCount < 2) {
           // Retry after a short delay
           setRetryCount(prev => prev + 1);
           setTimeout(() => sendDiscordNotification(), 3000);
           return;
         }
         
-        setIsNotifying(false);
-        return;
-      }
-      
-      if (!configCheck?.webhookConfigured) {
-        console.error("Discord webhook not properly configured:", configCheck);
-        setWebhookStatus(`Webhook not configured: ${JSON.stringify(configCheck)}`);
-        setIsWebhookConfigured(false);
-        toast({
-          title: "Webhook configuration error",
-          description: "Discord webhook is not properly configured",
-          variant: "destructive",
-        });
-        setIsNotifying(false);
-        return;
-      }
-      
-      if (!configCheck?.webhookValid) {
-        console.error("Discord webhook URL is invalid:", configCheck);
-        setWebhookStatus(`Webhook not valid: ${JSON.stringify(configCheck)}`);
-        toast({
-          title: "Webhook configuration error",
-          description: `Discord webhook URL is invalid: ${configCheck.message}`,
-          variant: "destructive",
-        });
+        // After retries, proceed anyway without showing error to user
+        console.log("Proceeding to form despite webhook issues");
         setIsNotifying(false);
         return;
       }
@@ -122,30 +87,32 @@ const WaitlistRedirect = () => {
       
       if (error) {
         console.error("Error from edge function:", error);
-        setWebhookStatus(`Edge function error: ${error.message}`);
-        toast({
-          title: "Notification failed",
-          description: "Could not send Discord notification: " + error.message,
-          variant: "destructive",
-        });
+        setWebhookStatus(`Error occurred`);
+        
+        // Try again once
+        if (retryCount < 1) {
+          setRetryCount(prev => prev + 1);
+          setTimeout(() => sendDiscordNotification(), 2000);
+          return;
+        }
+        
+        // After retry, just proceed without showing error to user
+        console.log("Proceeding to form despite notification error");
         setIsNotifying(false);
       } else {
         console.log("Discord notification response:", data);
         setWebhookStatus("Notification sent successfully");
         toast({
-          title: "Notification sent",
-          description: "Discord notification was sent successfully",
+          title: "Success",
+          description: "Your registration is being processed",
         });
         setIsNotifying(false);
       }
     } catch (error: any) {
       console.error("Error sending Discord notification:", error);
-      setWebhookStatus(`Unexpected error: ${error.message}`);
-      toast({
-        title: "Notification error",
-        description: error.message || "An unexpected error occurred",
-        variant: "destructive",
-      });
+      setWebhookStatus(`Error occurred`);
+      
+      // Just proceed without showing error to user
       setIsNotifying(false);
     }
   };
@@ -156,7 +123,7 @@ const WaitlistRedirect = () => {
   
   useEffect(() => {
     let timer: number;
-    if (!isNotifying && isWebhookConfigured) {
+    if (!isNotifying) {
       timer = window.setTimeout(() => {
         window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform';
       }, 10000);
@@ -165,7 +132,7 @@ const WaitlistRedirect = () => {
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [isNotifying, isWebhookConfigured]);
+  }, [isNotifying]);
 
   const continueToForm = () => {
     window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform';
@@ -185,47 +152,18 @@ const WaitlistRedirect = () => {
     <div className="h-screen w-screen bg-brutal-white flex items-center justify-center p-4">
       <div className="text-center brutal-card p-8 max-w-md w-full">
         <h1 className="text-2xl font-mono uppercase mb-4">
-          {isWebhookConfigured ? "Redirecting..." : "Configuration Required"}
+          Redirecting...
         </h1>
         
-        {isWebhookConfigured ? (
-          <p className="mb-4">Please wait while we redirect you to our registration form.</p>
-        ) : (
-          <Alert variant="destructive" className="mb-4 text-left">
-            <AlertTitle>Discord Webhook Not Configured</AlertTitle>
-            <AlertDescription>
-              The Discord webhook URL is not set in the Supabase environment variables. 
-              Please add the DISCORD_WEBHOOK_URL secret in your Supabase project settings.
-            </AlertDescription>
-          </Alert>
-        )}
+        <p className="mb-4">Please wait while we redirect you to our registration form.</p>
         
-        {isNotifying && isWebhookConfigured && (
+        {isNotifying && (
           <div className="text-sm text-brutal-gray">
-            Sending notification... {retryCount > 0 ? `(Retry attempt: ${retryCount})` : ''}
+            Processing your registration...
           </div>
         )}
         
-        {!isNotifying && !isWebhookConfigured && (
-          <div className="mt-4">
-            <Button onClick={continueToForm} className="brutal-button">
-              Continue to Registration Form
-            </Button>
-          </div>
-        )}
-        
-        {!isNotifying && isWebhookConfigured && webhookStatus !== "Notification sent successfully" && (
-          <div className="mt-4">
-            <Button onClick={retryNotification} className="brutal-button mr-2">
-              Retry Notification
-            </Button>
-            <Button onClick={continueToForm} className="brutal-button mt-2 md:mt-0">
-              Continue to Form
-            </Button>
-          </div>
-        )}
-        
-        {!isNotifying && isWebhookConfigured && webhookStatus === "Notification sent successfully" && (
+        {!isNotifying && webhookStatus === "Notification sent successfully" && (
           <div className="mt-4">
             <p className="text-green-600 mb-4">✓ Notification sent successfully!</p>
             <Button onClick={continueToForm} className="brutal-button">
@@ -234,18 +172,29 @@ const WaitlistRedirect = () => {
           </div>
         )}
         
-        <div className="mt-4">
-          <Button onClick={toggleDebugInfo} variant="ghost" size="sm">
-            {showDebugInfo ? "Hide Debug Info" : "Show Debug Info"}
-          </Button>
-        </div>
+        {!isNotifying && webhookStatus !== "Notification sent successfully" && (
+          <div className="mt-4">
+            <Button onClick={continueToForm} className="brutal-button">
+              Continue to Registration Form
+            </Button>
+          </div>
+        )}
+        
+        {/* Keep debug dialog but hide the button by default */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mt-4">
+            <Button onClick={toggleDebugInfo} variant="ghost" size="sm">
+              {showDebugInfo ? "Hide Debug Info" : "Show Debug Info"}
+            </Button>
+          </div>
+        )}
         
         <Dialog open={showDebugInfo} onOpenChange={setShowDebugInfo}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Debug Information</DialogTitle>
               <DialogDescription>
-                Technical details about the Discord webhook configuration.
+                Technical details for administrators.
               </DialogDescription>
             </DialogHeader>
             <div className="text-left mt-4 overflow-auto max-h-[400px]">
