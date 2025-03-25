@@ -80,7 +80,7 @@ export const JoinWaitlist = () => {
             className="brutal-button mb-12"
             onClick={handleWaitlistClick}
           >
-            Join the Pilot Program – Apply Now
+            JOIN WAITLIST NOW
           </button>
 
           {/* Booking Platforms Section */}
@@ -104,3 +104,4 @@ export const JoinWaitlist = () => {
     </section>
   );
 };
+
