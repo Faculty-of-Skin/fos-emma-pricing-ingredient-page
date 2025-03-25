@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -16,15 +15,12 @@ const WaitlistRedirect = () => {
   useEffect(() => {
     const sendDiscordNotification = async () => {
       try {
-        // Try to get the email from localStorage or URL parameters
         let email = localStorage.getItem("waitlistEmail");
         
-        // If email is not in localStorage, try to get it from URL parameters
         if (!email) {
           email = searchParams.get("email");
           
           if (email) {
-            // Store it in localStorage for future reference
             localStorage.setItem("waitlistEmail", email);
           }
         }
@@ -42,9 +38,8 @@ const WaitlistRedirect = () => {
           return;
         }
         
-        // Check if webhook URL is configured
         const { data: configCheck, error: configError } = await supabase.functions.invoke("discord-notification", {
-          body: { action: "check-config" }
+          body: { action: "check-config", timestamp: Date.now() }
         });
         
         console.log("Webhook config check response:", configCheck);
@@ -88,7 +83,6 @@ const WaitlistRedirect = () => {
         
         console.log("Discord webhook is configured, sending notification...");
         
-        // Send notification to Discord via our edge function
         const { data, error } = await supabase.functions.invoke("discord-notification", {
           body: { email, action: "send-notification" }
         });
@@ -122,20 +116,17 @@ const WaitlistRedirect = () => {
       }
     };
 
-    // Track the conversion with Facebook Pixel
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'Lead');
     }
     
-    // Send Discord notification
     sendDiscordNotification();
     
-    // Redirect to Google Form after a delay (only if webhook is configured)
     let timer: number;
     if (isWebhookConfigured) {
       timer = window.setTimeout(() => {
         window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSfv8jr6Z5cb-URGZbI8w1-q8uHAXDxH6tTEVRXwQMl4hmvnBw/viewform';
-      }, 8000); // Increased delay to ensure notification is sent and error is shown
+      }, 8000);
     }
     
     return () => {
