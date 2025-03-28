@@ -10,12 +10,12 @@ export const UnlockPricingSection = () => {
   };
   
   return (
-    <section className="py-8">
+    <section className="py-4">
       <div className="container mx-auto px-4">
-        <div className="brutal-card mb-10 bg-brutal-black text-brutal-white p-8">
+        <div className="brutal-card mb-6 bg-brutal-black text-brutal-white p-6">
           <div className="text-center">
-            <h2 className="text-2xl font-black font-mono uppercase mb-4">Unlock Full Pricing Details</h2>
-            <p className="font-mono mb-6 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-black font-mono uppercase mb-3">Unlock Full Pricing Details</h2>
+            <p className="font-mono mb-4 max-w-2xl mx-auto">
               For comprehensive pricing information, including exclusive rates for importers and distributors, please Log In.
               Detailed insights into cost structures and bulk purchasing options are available upon login.
             </p>

@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCurrency } from "@/context/CurrencyContext";
 
@@ -7,17 +6,17 @@ export const BottlesSection = () => {
   const bottlePrice = convertPrice(5); // Price in EUR
 
   return (
-    <section className="py-8">
+    <section className="py-4">
       <div className="container mx-auto px-4">
-        <div className="brutal-card mb-10">
-          <div className="text-center mb-6">
+        <div className="brutal-card mb-6">
+          <div className="text-center mb-4">
             <h2 className="text-2xl font-black text-brutal-black font-mono uppercase">Reusable/Refillable Bottles</h2>
             <p className="text-brutal-charcoal font-mono mt-2">
               Dedicated to Sustainability and Operational Efficiency
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 mt-8">
+          <div className="grid grid-cols-1 gap-4 mt-6">
             <Card className="border-2 border-brutal-black">
               <CardHeader>
                 <CardTitle className="font-mono text-brutal-black">Sustainable Bottles</CardTitle>
