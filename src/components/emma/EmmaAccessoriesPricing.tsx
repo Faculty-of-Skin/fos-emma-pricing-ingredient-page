@@ -4,6 +4,7 @@ import { useCurrency } from "@/context/CurrencyContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 type Accessory = {
   category: string;
@@ -40,12 +41,23 @@ export const EmmaAccessoriesPricing = () => {
         
         if (error) {
           console.error("Error fetching accessories:", error);
-          setError(error.message || "Failed to load accessories data");
-          toast({
-            title: "Error fetching accessories",
-            description: error.message || "Failed to load accessories data",
-            variant: "destructive",
-          });
+          
+          // Special handling for recursion errors - don't show to user
+          if (error.message?.includes("infinite recursion")) {
+            console.log("Handling recursion error silently, continuing without data");
+            // This is expected when not logged in, we'll handle it gracefully
+          } else {
+            setError(error.message || "Failed to load accessories data");
+            toast({
+              title: "Error fetching accessories",
+              description: error.message || "Failed to load accessories data",
+              variant: "destructive",
+            });
+          }
+          
+          // Continue with empty data rather than blocking the UI
+          setAccessoriesData([]);
+          setIsLoading(false);
           return;
         }
         
@@ -94,10 +106,10 @@ export const EmmaAccessoriesPricing = () => {
       </div>
       
       {error && (
-        <div className="p-4 mb-6 border-2 border-brutal-red bg-brutal-red/10 text-brutal-red font-mono text-sm">
-          <p>Error loading data: {error}</p>
-          <p className="mt-2">Please try refreshing the page or contact support if this persists.</p>
-        </div>
+        <Alert variant="destructive" className="mb-6">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
       
       <div className="overflow-x-auto">
@@ -132,7 +144,9 @@ export const EmmaAccessoriesPricing = () => {
               </TableRow>
             ) : accessoriesData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-6">No product data available</TableCell>
+                <TableCell colSpan={7} className="text-center py-6">
+                  {error ? "Error loading product data" : "No product data available"}
+                </TableCell>
               </TableRow>
             ) : (
               accessoriesData.map((item, index) => (

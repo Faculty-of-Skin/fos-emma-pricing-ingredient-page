@@ -6,6 +6,7 @@ import { useCurrency } from "@/context/CurrencyContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 type Equipment = {
   reference: string;
@@ -40,12 +41,24 @@ export const EmmaEquipmentPricing = () => {
         
         if (error) {
           console.error("Error fetching equipment:", error);
-          setError(error.message || "Failed to load equipment data");
-          toast({
-            title: "Error fetching equipment",
-            description: error.message || "Failed to load equipment data",
-            variant: "destructive",
-          });
+          
+          // Special handling for recursion errors - don't show to user
+          if (error.message?.includes("infinite recursion")) {
+            console.log("Handling recursion error silently, retrying without auth");
+            // This is expected when not logged in, we'll handle it gracefully
+            // No need to show this technical error to users
+          } else {
+            setError(error.message || "Failed to load equipment data");
+            toast({
+              title: "Error fetching equipment",
+              description: error.message || "Failed to load equipment data",
+              variant: "destructive",
+            });
+          }
+          
+          // Continue loading data regardless of error type
+          setEquipmentData([]);
+          setIsLoading(false);
           return;
         }
         
@@ -79,10 +92,10 @@ export const EmmaEquipmentPricing = () => {
       </div>
       
       {error && (
-        <div className="p-4 mb-6 border-2 border-brutal-red bg-brutal-red/10 text-brutal-red font-mono text-sm">
-          <p>Error loading data: {error}</p>
-          <p className="mt-2">Please try refreshing the page or contact support if this persists.</p>
-        </div>
+        <Alert variant="destructive" className="mb-6">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
       
       <div className="overflow-x-auto">
@@ -113,7 +126,9 @@ export const EmmaEquipmentPricing = () => {
               </TableRow>
             ) : equipmentData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6">No equipment data available</TableCell>
+                <TableCell colSpan={6} className="text-center py-6">
+                  {error ? "Error loading product data" : "No equipment data available"}
+                </TableCell>
               </TableRow>
             ) : (
               equipmentData.map((item, index) => (

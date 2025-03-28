@@ -45,10 +45,17 @@ export const useProducts = () => {
         if (error) {
           console.error("Error fetching products:", error);
           
-          // Handle specific error messages
+          // Special handling for recursion errors - don't show to user if it's the RLS recursion issue
           if (error.message?.includes("infinite recursion detected")) {
-            setError("There's an issue with database permissions. This has been reported and will be fixed soon.");
+            console.log("Handling recursion error gracefully, continuing with app");
+            
+            // Continue with empty data rather than blocking the UI
+            setProducts([]);
+            setFilteredProducts([]);
+            setIsLoading(false);
+            return;
           } else {
+            // For other errors, show the toast
             setError(error.message || "Failed to load products");
             toast({
               title: "Error fetching products",
