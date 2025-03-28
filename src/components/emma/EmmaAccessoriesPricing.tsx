@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
 
 type Accessory = {
   category: string;
@@ -29,10 +30,12 @@ export const EmmaAccessoriesPricing = () => {
   useEffect(() => {
     const fetchAccessories = async () => {
       try {
+        setIsLoading(true);
         setError(null);
         console.log("Fetching accessories data...");
         
-        const { data, error } = await supabase
+        // Try with Supabase client first
+        let { data, error } = await supabase
           .from("products")
           .select("*")
           .in("category", ['Accessories', 'Face capsule', 'Body capsule', 'Marketing item'])
@@ -41,31 +44,52 @@ export const EmmaAccessoriesPricing = () => {
         
         if (error) {
           console.error("Error fetching accessories:", error);
+          console.log("Full error object:", JSON.stringify(error));
           
-          // Special handling for recursion errors - don't show to user
-          if (error.message?.includes("infinite recursion")) {
-            console.log("Handling recursion error silently, continuing without data");
-            // This is expected when not logged in, we'll handle it gracefully
-          } else {
-            setError(error.message || "Failed to load accessories data");
+          // Try with direct fetch as a fallback
+          console.log("Retrying with direct fetch...");
+          
+          try {
+            const response = await fetch(
+              `${supabase.supabaseUrl}/rest/v1/products?category=in.(Accessories,Face capsule,Body capsule,Marketing item)&select=*&order=category.asc,reference.asc`, 
+              {
+                headers: {
+                  'apikey': supabase.supabaseKey,
+                  'Content-Type': 'application/json'
+                }
+              }
+            );
+            
+            if (response.ok) {
+              const directData = await response.json();
+              console.log("Direct fetch successful, retrieved:", directData.length || 0, "items");
+              setAccessoriesData(directData || []);
+              setIsLoading(false);
+              return;
+            } else {
+              console.error("Direct fetch also failed:", await response.text());
+            }
+          } catch (fetchError) {
+            console.error("Error with direct fetch:", fetchError);
+          }
+          
+          // If both approaches fail, show a user-friendly error
+          if (!error.message?.includes("infinite recursion")) {
+            setError("Unable to load accessories data. Please try again later.");
             toast({
               title: "Error fetching accessories",
-              description: error.message || "Failed to load accessories data",
+              description: "Unable to load accessories data. Please try again later.",
               variant: "destructive",
             });
           }
-          
-          // Continue with empty data rather than blocking the UI
           setAccessoriesData([]);
-          setIsLoading(false);
-          return;
+        } else {
+          console.log("Accessories data retrieved:", data?.length || 0, "items");
+          setAccessoriesData(data || []);
         }
-        
-        console.log("Accessories data retrieved:", data?.length || 0, "items");
-        setAccessoriesData(data || []);
       } catch (error: any) {
         console.error("Failed to fetch accessories data:", error);
-        setError(error.message || "An unexpected error occurred");
+        setError("An unexpected error occurred. Please try again later.");
       } finally {
         setIsLoading(false);
       }
@@ -140,12 +164,28 @@ export const EmmaAccessoriesPricing = () => {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-6">Loading product data...</TableCell>
+                <TableCell colSpan={7} className="text-center py-6">
+                  <div className="flex justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  </div>
+                  <div className="mt-2">Loading product data...</div>
+                </TableCell>
               </TableRow>
             ) : accessoriesData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-6">
-                  {error ? "Error loading product data" : "No product data available"}
+                  <div className="text-brutal-charcoal">
+                    No product data available
+                    <div className="mt-2 text-sm">
+                      This could be due to a temporary issue with the data connection.
+                      <button 
+                        onClick={() => window.location.reload()} 
+                        className="ml-2 underline text-primary hover:text-primary/80"
+                      >
+                        Refresh
+                      </button>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (

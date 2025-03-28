@@ -34,7 +34,8 @@ export const EmmaEquipmentPricing = () => {
         setError(null);
         console.log("Fetching equipment data...");
         
-        const { data, error } = await supabase
+        // First try with the Supabase client
+        let { data, error } = await supabase
           .from("products")
           .select("*")
           .eq("category", "Equipment")
@@ -42,26 +43,52 @@ export const EmmaEquipmentPricing = () => {
         
         if (error) {
           console.error("Error fetching equipment:", error);
+          console.log("Full error object:", JSON.stringify(error));
           
-          // Special handling for recursion errors - don't show to user
-          if (error.message?.includes("infinite recursion")) {
-            console.log("Handling recursion error silently");
-            // Continue silently without showing error to the user
-          } else {
-            setError(error.message || "Failed to load equipment data");
+          // Try with direct fetch as a fallback
+          console.log("Retrying with direct fetch...");
+          
+          try {
+            const response = await fetch(
+              `${supabase.supabaseUrl}/rest/v1/products?category=eq.Equipment&select=*&order=reference.asc`, 
+              {
+                headers: {
+                  'apikey': supabase.supabaseKey,
+                  'Content-Type': 'application/json'
+                }
+              }
+            );
+            
+            if (response.ok) {
+              const directData = await response.json();
+              console.log("Direct fetch successful, retrieved:", directData.length || 0, "items");
+              setEquipmentData(directData || []);
+              setIsLoading(false);
+              return;
+            } else {
+              console.error("Direct fetch also failed:", await response.text());
+            }
+          } catch (fetchError) {
+            console.error("Error with direct fetch:", fetchError);
+          }
+          
+          // If both approaches fail, show a user-friendly error
+          if (!error.message?.includes("infinite recursion")) {
+            setError("Unable to load equipment data. Please try again later.");
             toast({
               title: "Error fetching equipment",
-              description: error.message || "Failed to load equipment data",
+              description: "Unable to load equipment data. Please try again later.",
               variant: "destructive",
             });
           }
+          setEquipmentData([]);
         } else {
           console.log("Equipment data retrieved:", data?.length || 0, "items");
           setEquipmentData(data || []);
         }
       } catch (error: any) {
         console.error("Failed to fetch equipment data:", error);
-        setError(error.message || "An unexpected error occurred");
+        setError("An unexpected error occurred. Please try again later.");
       } finally {
         setIsLoading(false);
       }
@@ -127,7 +154,18 @@ export const EmmaEquipmentPricing = () => {
             ) : equipmentData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-6">
-                  {error ? "Error loading product data" : "No equipment data available"}
+                  <div className="text-brutal-charcoal">
+                    No equipment data available
+                    <div className="mt-2 text-sm">
+                      This could be due to a temporary issue with the data connection.
+                      <button 
+                        onClick={() => window.location.reload()} 
+                        className="ml-2 underline text-primary hover:text-primary/80"
+                      >
+                        Refresh
+                      </button>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (

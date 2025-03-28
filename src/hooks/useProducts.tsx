@@ -37,7 +37,8 @@ export const useProducts = () => {
         setError(null);
         console.log("Fetching products data...");
         
-        const { data, error } = await supabase
+        // First try with anonymous auth (public access)
+        let { data, error } = await supabase
           .from("products")
           .select("*")
           .order("category", { ascending: true })
@@ -46,15 +47,44 @@ export const useProducts = () => {
         if (error) {
           console.error("Error fetching products:", error);
           
-          // Special handling for recursion errors - don't show to user
-          if (error.message?.includes("infinite recursion")) {
-            console.log("Handling recursion error silently");
-            // Continue silently without showing error to the user
-          } else {
-            setError(error.message || "Failed to load products");
+          // For debugging, log the full error
+          console.log("Full error object:", JSON.stringify(error));
+          
+          // Try the request again without any additional headers/auth
+          console.log("Retrying with direct fetch...");
+          
+          try {
+            const response = await fetch(`${supabase.supabaseUrl}/rest/v1/products?select=*&order=category.asc,reference.asc`, {
+              headers: {
+                'apikey': supabase.supabaseKey,
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (response.ok) {
+              const directData = await response.json();
+              console.log("Direct fetch successful, retrieved:", directData.length || 0, "items");
+              setProducts(directData || []);
+              setFilteredProducts(directData || []);
+              setIsLoading(false);
+              return;
+            } else {
+              console.error("Direct fetch also failed:", await response.text());
+            }
+          } catch (fetchError) {
+            console.error("Error with direct fetch:", fetchError);
+          }
+          
+          // If both attempts fail, just continue with empty data
+          setProducts([]);
+          setFilteredProducts([]);
+          
+          // Only show user-friendly errors, not technical ones
+          if (!error.message?.includes("infinite recursion")) {
+            setError("Unable to load product data. Please try again later.");
             toast({
               title: "Error fetching products",
-              description: error.message || "Failed to load products",
+              description: "Unable to load product data. Please try again later.",
               variant: "destructive",
             });
           }
@@ -65,7 +95,7 @@ export const useProducts = () => {
         }
       } catch (error: any) {
         console.error("Error fetching products:", error);
-        setError(error.message || "An unexpected error occurred");
+        setError("An unexpected error occurred. Please try again later.");
       } finally {
         setIsLoading(false);
       }
