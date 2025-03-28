@@ -32,6 +32,11 @@ export const ROICalculator = () => {
   const annualProfit = annualRevenue - annualOperationalCost;
   const monthlyProfit = annualProfit / 12;
   
+  // Format numbers with commas for thousands
+  const formatNumber = (num: number): string => {
+    return new Intl.NumberFormat().format(Math.round(num));
+  };
+  
   return (
     <section className="py-2">
       <div className="container mx-auto px-4">
@@ -142,7 +147,7 @@ export const ROICalculator = () => {
                       {formatPrice(monthlyRevenue)}
                     </p>
                     <p className="text-xs text-brutal-charcoal mt-1 font-mono">
-                      Based on {monthlyTreatments.toFixed(0)} treatments per month
+                      Based on {formatNumber(monthlyTreatments)} treatments per month
                     </p>
                   </div>
                   
@@ -152,7 +157,7 @@ export const ROICalculator = () => {
                       {formatPrice(annualRevenue)}
                     </p>
                     <p className="text-xs text-brutal-charcoal mt-1 font-mono">
-                      Based on {yearlyTreatments.toFixed(0)} treatments per year
+                      Based on {formatNumber(yearlyTreatments)} treatments per year
                     </p>
                   </div>
                   
