@@ -8,6 +8,7 @@ import { EquipmentSection } from "@/components/emma/EquipmentSection";
 import { BottlesSection } from "@/components/emma/BottlesSection";
 import { CapsulesSection } from "@/components/emma/CapsulesSection";
 import { TreatmentSetSection } from "@/components/emma/TreatmentSetSection";
+import { ROICalculator } from "@/components/emma/ROICalculator";
 import { UnlockPricingSection } from "@/components/emma/UnlockPricingSection";
 import { WhyChooseUsSection } from "@/components/emma/WhyChooseUsSection";
 import { ContactSection } from "@/components/emma/ContactSection";
@@ -34,6 +35,7 @@ const Index = () => {
       <BottlesSection />
       <CapsulesSection />
       <TreatmentSetSection />
+      <ROICalculator />
       <UnlockPricingSection />
       <WhyChooseUsSection />
       <ContactSection />
