@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Info } from "lucide-react";
+import { Info, Loader2 } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,6 +30,7 @@ export const EmmaEquipmentPricing = () => {
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
+        setIsLoading(true);
         setError(null);
         console.log("Fetching equipment data...");
         
@@ -44,9 +45,8 @@ export const EmmaEquipmentPricing = () => {
           
           // Special handling for recursion errors - don't show to user
           if (error.message?.includes("infinite recursion")) {
-            console.log("Handling recursion error silently, retrying without auth");
-            // This is expected when not logged in, we'll handle it gracefully
-            // No need to show this technical error to users
+            console.log("Handling recursion error silently");
+            // Continue silently without showing error to the user
           } else {
             setError(error.message || "Failed to load equipment data");
             toast({
@@ -55,15 +55,10 @@ export const EmmaEquipmentPricing = () => {
               variant: "destructive",
             });
           }
-          
-          // Continue loading data regardless of error type
-          setEquipmentData([]);
-          setIsLoading(false);
-          return;
+        } else {
+          console.log("Equipment data retrieved:", data?.length || 0, "items");
+          setEquipmentData(data || []);
         }
-        
-        console.log("Equipment data retrieved:", data?.length || 0, "items");
-        setEquipmentData(data || []);
       } catch (error: any) {
         console.error("Failed to fetch equipment data:", error);
         setError(error.message || "An unexpected error occurred");
@@ -122,7 +117,12 @@ export const EmmaEquipmentPricing = () => {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6">Loading equipment data...</TableCell>
+                <TableCell colSpan={6} className="text-center py-6">
+                  <div className="flex justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  </div>
+                  <div className="mt-2">Loading equipment data...</div>
+                </TableCell>
               </TableRow>
             ) : equipmentData.length === 0 ? (
               <TableRow>

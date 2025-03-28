@@ -33,6 +33,7 @@ export const useProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setIsLoading(true);
         setError(null);
         console.log("Fetching products data...");
         
@@ -45,17 +46,11 @@ export const useProducts = () => {
         if (error) {
           console.error("Error fetching products:", error);
           
-          // Special handling for recursion errors - don't show to user if it's the RLS recursion issue
-          if (error.message?.includes("infinite recursion detected")) {
-            console.log("Handling recursion error gracefully, continuing with app");
-            
-            // Continue with empty data rather than blocking the UI
-            setProducts([]);
-            setFilteredProducts([]);
-            setIsLoading(false);
-            return;
+          // Special handling for recursion errors - don't show to user
+          if (error.message?.includes("infinite recursion")) {
+            console.log("Handling recursion error silently");
+            // Continue silently without showing error to the user
           } else {
-            // For other errors, show the toast
             setError(error.message || "Failed to load products");
             toast({
               title: "Error fetching products",
@@ -63,12 +58,11 @@ export const useProducts = () => {
               variant: "destructive",
             });
           }
-          return;
+        } else {
+          console.log("Products data retrieved:", data?.length || 0, "items");
+          setProducts(data || []);
+          setFilteredProducts(data || []);
         }
-        
-        console.log("Products data retrieved:", data?.length || 0, "items");
-        setProducts(data || []);
-        setFilteredProducts(data || []);
       } catch (error: any) {
         console.error("Error fetching products:", error);
         setError(error.message || "An unexpected error occurred");
