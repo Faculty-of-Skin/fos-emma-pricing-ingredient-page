@@ -34,7 +34,7 @@
   }
   
   body {
-    @apply bg-white text-brutal-black antialiased;
+    @apply bg-brutal-white text-brutal-black antialiased;
   }
 
   html {
@@ -44,19 +44,22 @@
 
 @layer components {
   .brutal-button {
-    @apply relative bg-brutal-white text-brutal-black font-mono uppercase tracking-wider px-6 py-3
-           border-4 border-brutal-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
+    @apply relative bg-brutal-black text-brutal-white font-mono uppercase tracking-wider px-6 py-3
+           border-4 border-brutal-black 
            transform transition-transform duration-100
-           hover:bg-white active:shadow-none active:translate-x-[3px] active:translate-y-[3px];
+           hover:translate-x-1 hover:translate-y-1
+           active:translate-x-0.5 active:translate-y-0.5
+           hover:bg-brutal-dark;
   }
 
   .brutal-card {
-    @apply bg-white border-4 border-brutal-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-           p-6;
+    @apply bg-brutal-white border-4 border-brutal-black p-6
+           transform transition-transform duration-100
+           hover:translate-x-1 hover:translate-y-1;
   }
 
   .brutal-input {
-    @apply bg-white border-4 border-brutal-black px-4 py-2
+    @apply bg-brutal-white border-4 border-brutal-black px-4 py-2
            focus:outline-none focus:ring-2 focus:ring-brutal-charcoal;
   }
 
@@ -67,36 +70,18 @@
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #C0C0C0;
-  border-left: 2px solid #C0C0C0;
-  border-right: 2px solid #C0C0C0;
+  background: #FFFFFF;
+  border-left: 4px solid #1A1F2C;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #808080;
-  border: 2px outset #FFFFFF;
+  background: #1A1F2C;
 }
 
-::-webkit-scrollbar-corner {
-  background: #C0C0C0;
-}
-
-/* MS Windows 3.1 inspired styling */
-.ms-window {
-  @apply bg-brutal-white border-4 border-t-white border-l-white border-r-brutal-black border-b-brutal-black;
-}
-
-.ms-window-title {
-  @apply bg-brutal-charcoal text-white font-bold px-2 py-1 flex justify-between items-center;
-}
-
-.ms-button {
-  @apply bg-brutal-white border-4 border-t-white border-l-white border-r-brutal-black border-b-brutal-black
-         active:border-t-brutal-black active:border-l-brutal-black active:border-r-white active:border-b-white
-         px-4 py-1 min-w-[75px] text-center font-bold;
+::-webkit-scrollbar-thumb:hover {
+  background: #403E43;
 }
