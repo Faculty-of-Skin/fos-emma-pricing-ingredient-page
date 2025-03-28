@@ -1,13 +1,17 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// Get the base URL and API key in a safe way
+// Use hardcoded values from the client since the methods don't exist
+const SUPABASE_URL = "https://igftaultyeudvtytgyrg.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlnZnRhdWx0eWV1ZHZ0eXRneXJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxNDA5NDcsImV4cCI6MjA1ODcxNjk0N30.LEwv_bkuEkt4tWzL7eaCm9JXu4qM_ByH95QKBJ5udFo";
+
+// Get the base URL and API key
 export const getSupabaseUrl = () => {
-  return supabase.getUrl();
+  return SUPABASE_URL;
 };
 
 export const getPublicApiKey = () => {
-  return supabase.getPublicKey();
+  return SUPABASE_KEY;
 };
 
 // Fetch products with direct fetch as a fallback when Supabase client fails
