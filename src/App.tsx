@@ -9,6 +9,7 @@ import { CurrencyProvider } from "./context/CurrencyContext";
 import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
 
 // Pages
+import PricingPage from './pages/PricingPage';
 import EmmaPricing from './pages/EmmaPricing';
 import JoinWaitlist from './pages/JoinWaitlist';
 import WaitlistRedirect from './pages/WaitlistRedirect';
@@ -39,7 +40,8 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 {/* Public routes */}
-                <Route path="/" element={<EmmaPricing />} />
+                <Route path="/" element={<PricingPage />} />
+                <Route path="/emma-pricing" element={<EmmaPricing />} />
                 <Route path="/join-waitlist" element={<JoinWaitlist />} />
                 <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
                 <Route path="/auth" element={<Auth />} />

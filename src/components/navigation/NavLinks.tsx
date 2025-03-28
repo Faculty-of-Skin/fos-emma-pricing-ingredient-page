@@ -1,31 +1,54 @@
 
-import React from "react";
+import { useLocation } from 'react-router-dom';
 
-interface NavLinksProps {
+type NavLinksProps = {
   scrollToSection: (id: string) => void;
-}
+};
 
 export const NavLinks = ({ scrollToSection }: NavLinksProps) => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  // Links for the home/pricing page
+  const homeLinks = [
+    { label: "Features", action: () => scrollToSection("features") },
+    { label: "How It Works", action: () => scrollToSection("how-it-works") },
+    { label: "Benefits", action: () => scrollToSection("benefits") },
+    { label: "For Spas", action: () => scrollToSection("for-spas") },
+    { label: "Emma Pricing", href: "/emma-pricing" },
+    { label: "FAQ", action: () => scrollToSection("faq") },
+  ];
+
+  // Links for other pages
+  const otherLinks = [
+    { label: "Pricing", href: "/" },
+    { label: "Emma Pricing", href: "/emma-pricing" },
+    { label: "Join Waitlist", href: "/join-waitlist" }
+  ];
+
+  const links = isHomePage ? homeLinks : otherLinks;
+
   return (
-    <div className="flex space-x-8">
-      <button 
-        onClick={() => scrollToSection('benefits')} 
-        className="text-brutal-black hover:text-brutal-charcoal transition-colors font-mono uppercase"
-      >
-        Features
-      </button>
-      <button 
-        onClick={() => scrollToSection('pricing')} 
-        className="text-brutal-black hover:text-brutal-charcoal transition-colors font-mono uppercase"
-      >
-        Pricing
-      </button>
-      <button 
-        onClick={() => scrollToSection('faq')} 
-        className="text-brutal-black hover:text-brutal-charcoal transition-colors font-mono uppercase"
-      >
-        FAQ
-      </button>
-    </div>
+    <ul className="flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 w-full md:w-auto font-mono uppercase text-sm">
+      {links.map((link, index) => (
+        <li key={index}>
+          {link.href ? (
+            <a
+              href={link.href}
+              className="text-brutal-black hover:text-brutal-pink transition-colors"
+            >
+              {link.label}
+            </a>
+          ) : (
+            <button
+              onClick={link.action}
+              className="text-brutal-black hover:text-brutal-pink transition-colors"
+            >
+              {link.label}
+            </button>
+          )}
+        </li>
+      ))}
+    </ul>
   );
 };
