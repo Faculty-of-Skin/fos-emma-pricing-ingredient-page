@@ -1,0 +1,101 @@
+
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+type Product = {
+  id: string;
+  reference: string;
+  description: string;
+  category: string;
+  importer_price: number;
+  distributor_price: number;
+  beauty_institute_price: number;
+  final_consumer_price: number | null;
+  importer_moq: number;
+  distributor_moq: number;
+  beauty_institute_moq: number;
+  created_at: string;
+};
+
+export const useProducts = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const { toast } = useToast();
+
+  // Get unique categories for filter
+  const categories = ["all", ...new Set(products.map(product => product.category))].sort();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setError(null);
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .order("category", { ascending: true })
+          .order("reference", { ascending: true });
+
+        if (error) throw error;
+        setProducts(data || []);
+        setFilteredProducts(data || []);
+      } catch (error: any) {
+        console.error("Error fetching products:", error);
+        
+        // Handle recursive policy error specifically
+        if (error.message?.includes("infinite recursion detected")) {
+          setError("There's an issue with access permissions. Please try refreshing the page or contact support if the issue persists.");
+        } else {
+          setError(error.message || "Failed to load products");
+          toast({
+            title: "Error fetching products",
+            description: error.message || "Failed to load products",
+            variant: "destructive",
+          });
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [toast]);
+
+  // Filter products based on category and search query
+  useEffect(() => {
+    let result = products;
+    
+    // Apply category filter
+    if (categoryFilter !== "all") {
+      result = result.filter(product => product.category === categoryFilter);
+    }
+    
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        product => 
+          product.reference.toLowerCase().includes(query) || 
+          product.description.toLowerCase().includes(query)
+      );
+    }
+    
+    setFilteredProducts(result);
+  }, [categoryFilter, searchQuery, products]);
+
+  return {
+    products,
+    filteredProducts,
+    isLoading,
+    error,
+    categoryFilter,
+    setCategoryFilter,
+    searchQuery,
+    setSearchQuery,
+    categories
+  };
+};
