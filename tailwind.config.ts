@@ -26,11 +26,11 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         brutal: {
-          black: "#151013", // Licorice
-          white: "#e0dbdc", // Platinum
-          gray: "#dad1cf", // Timberwolf
-          charcoal: "#b59c94", // Rosy Brown
-          dark: "#8e4830"  // Chestnut
+          black: "#8e4830", // Chestnut - now the primary dark color
+          white: "#dad1cf", // Timberwolf - now the background color
+          gray: "#e0dbdc", // Platinum - now the secondary/gray color
+          charcoal: "#151013", // Licorice - now the accent dark color
+          dark: "#b59c94"  // Rosy Brown - now the medium accent color
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
