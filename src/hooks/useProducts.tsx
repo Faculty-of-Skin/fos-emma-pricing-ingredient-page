@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { fetchProductsWithDirectFetch } from "@/utils/supabaseUtils";
 
 type Product = {
   id: string;
@@ -37,7 +38,7 @@ export const useProducts = () => {
         setError(null);
         console.log("Fetching products data...");
         
-        // First try with anonymous auth (public access)
+        // First try with the Supabase client
         let { data, error } = await supabase
           .from("products")
           .select("*")
@@ -50,43 +51,32 @@ export const useProducts = () => {
           // For debugging, log the full error
           console.log("Full error object:", JSON.stringify(error));
           
-          // Try the request again without any additional headers/auth
+          // Try the request again with direct fetch method
           console.log("Retrying with direct fetch...");
           
-          try {
-            const response = await fetch(`${supabase.supabaseUrl}/rest/v1/products?select=*&order=category.asc,reference.asc`, {
-              headers: {
-                'apikey': supabase.supabaseKey,
-                'Content-Type': 'application/json'
-              }
-            });
+          const result = await fetchProductsWithDirectFetch({
+            orderBy: ["category.asc", "reference.asc"]
+          });
+          
+          if (result.error) {
+            console.error("Direct fetch also failed:", result.error);
+            // If both attempts fail, just continue with empty data
+            setProducts([]);
+            setFilteredProducts([]);
             
-            if (response.ok) {
-              const directData = await response.json();
-              console.log("Direct fetch successful, retrieved:", directData.length || 0, "items");
-              setProducts(directData || []);
-              setFilteredProducts(directData || []);
-              setIsLoading(false);
-              return;
-            } else {
-              console.error("Direct fetch also failed:", await response.text());
+            // Only show user-friendly errors, not technical ones
+            if (!error.message?.includes("infinite recursion")) {
+              setError("Unable to load product data. Please try again later.");
+              toast({
+                title: "Error fetching products",
+                description: "Unable to load product data. Please try again later.",
+                variant: "destructive",
+              });
             }
-          } catch (fetchError) {
-            console.error("Error with direct fetch:", fetchError);
-          }
-          
-          // If both attempts fail, just continue with empty data
-          setProducts([]);
-          setFilteredProducts([]);
-          
-          // Only show user-friendly errors, not technical ones
-          if (!error.message?.includes("infinite recursion")) {
-            setError("Unable to load product data. Please try again later.");
-            toast({
-              title: "Error fetching products",
-              description: "Unable to load product data. Please try again later.",
-              variant: "destructive",
-            });
+          } else {
+            console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
+            setProducts(result.data || []);
+            setFilteredProducts(result.data || []);
           }
         } else {
           console.log("Products data retrieved:", data?.length || 0, "items");

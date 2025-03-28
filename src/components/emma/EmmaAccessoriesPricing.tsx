@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, RefreshCcw } from "lucide-react";
+import { fetchProductsWithDirectFetch } from "@/utils/supabaseUtils";
+import { Button } from "@/components/ui/button";
 
 type Accessory = {
   category: string;
@@ -27,52 +29,36 @@ export const EmmaAccessoriesPricing = () => {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   
-  useEffect(() => {
-    const fetchAccessories = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        console.log("Fetching accessories data...");
+  const fetchAccessories = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      console.log("Fetching accessories data...");
+      
+      const categories = ['Accessories', 'Face capsule', 'Body capsule', 'Marketing item'];
+      
+      // Try with Supabase client first
+      let { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .in("category", categories)
+        .order("category")
+        .order("reference");
+      
+      if (error) {
+        console.error("Error fetching accessories:", error);
+        console.log("Full error object:", JSON.stringify(error));
         
-        // Try with Supabase client first
-        let { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .in("category", ['Accessories', 'Face capsule', 'Body capsule', 'Marketing item'])
-          .order("category")
-          .order("reference");
+        // Try with direct fetch as a fallback
+        console.log("Retrying with direct fetch...");
         
-        if (error) {
-          console.error("Error fetching accessories:", error);
-          console.log("Full error object:", JSON.stringify(error));
-          
-          // Try with direct fetch as a fallback
-          console.log("Retrying with direct fetch...");
-          
-          try {
-            const response = await fetch(
-              `${supabase.supabaseUrl}/rest/v1/products?category=in.(Accessories,Face capsule,Body capsule,Marketing item)&select=*&order=category.asc,reference.asc`, 
-              {
-                headers: {
-                  'apikey': supabase.supabaseKey,
-                  'Content-Type': 'application/json'
-                }
-              }
-            );
-            
-            if (response.ok) {
-              const directData = await response.json();
-              console.log("Direct fetch successful, retrieved:", directData.length || 0, "items");
-              setAccessoriesData(directData || []);
-              setIsLoading(false);
-              return;
-            } else {
-              console.error("Direct fetch also failed:", await response.text());
-            }
-          } catch (fetchError) {
-            console.error("Error with direct fetch:", fetchError);
-          }
-          
+        const result = await fetchProductsWithDirectFetch({
+          category: categories,
+          orderBy: ["category.asc", "reference.asc"]
+        });
+        
+        if (result.error) {
+          console.error("Direct fetch also failed:", result.error);
           // If both approaches fail, show a user-friendly error
           if (!error.message?.includes("infinite recursion")) {
             setError("Unable to load accessories data. Please try again later.");
@@ -84,17 +70,22 @@ export const EmmaAccessoriesPricing = () => {
           }
           setAccessoriesData([]);
         } else {
-          console.log("Accessories data retrieved:", data?.length || 0, "items");
-          setAccessoriesData(data || []);
+          console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
+          setAccessoriesData(result.data || []);
         }
-      } catch (error: any) {
-        console.error("Failed to fetch accessories data:", error);
-        setError("An unexpected error occurred. Please try again later.");
-      } finally {
-        setIsLoading(false);
+      } else {
+        console.log("Accessories data retrieved:", data?.length || 0, "items");
+        setAccessoriesData(data || []);
       }
-    };
-    
+    } catch (error: any) {
+      console.error("Failed to fetch accessories data:", error);
+      setError("An unexpected error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     fetchAccessories();
   }, [toast]);
   
@@ -122,6 +113,14 @@ export const EmmaAccessoriesPricing = () => {
   
   const volumeData = calculateVolumeData();
 
+  const handleRefresh = () => {
+    fetchAccessories();
+    toast({
+      title: "Refreshing data",
+      description: "Attempting to retrieve the latest accessories data.",
+    });
+  };
+
   return (
     <div className="brutal-card">
       <div className="text-center mb-8">
@@ -131,7 +130,9 @@ export const EmmaAccessoriesPricing = () => {
       
       {error && (
         <Alert variant="destructive" className="mb-6">
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle className="flex items-center gap-2">
+            Error <Button variant="ghost" size="sm" onClick={handleRefresh} className="p-1 h-6 w-6 ml-2"><RefreshCcw className="h-4 w-4" /></Button>
+          </AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -178,12 +179,13 @@ export const EmmaAccessoriesPricing = () => {
                     No product data available
                     <div className="mt-2 text-sm">
                       This could be due to a temporary issue with the data connection.
-                      <button 
-                        onClick={() => window.location.reload()} 
-                        className="ml-2 underline text-primary hover:text-primary/80"
+                      <Button 
+                        onClick={handleRefresh} 
+                        variant="ghost"
+                        className="ml-2 text-primary hover:text-primary/80"
                       >
-                        Refresh
-                      </button>
+                        <RefreshCcw className="h-4 w-4 mr-1" /> Refresh
+                      </Button>
                     </div>
                   </div>
                 </TableCell>
