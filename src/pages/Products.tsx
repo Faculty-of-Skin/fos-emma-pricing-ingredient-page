@@ -12,7 +12,7 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, Filter, Search } from "lucide-react";
+import { Loader2, Plus, Filter, Search, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useCurrency } from "@/context/CurrencyContext";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type Product = {
   id: string;
@@ -43,6 +44,7 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const { isAdmin } = useAuth();
@@ -55,6 +57,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setError(null);
         const { data, error } = await supabase
           .from("products")
           .select("*")
@@ -65,11 +68,19 @@ const Products = () => {
         setProducts(data || []);
         setFilteredProducts(data || []);
       } catch (error: any) {
-        toast({
-          title: "Error fetching products",
-          description: error.message || "Failed to load products",
-          variant: "destructive",
-        });
+        console.error("Error fetching products:", error);
+        
+        // Handle recursive policy error specifically
+        if (error.message?.includes("infinite recursion detected")) {
+          setError("There's an issue with access permissions. Please try refreshing the page or contact support if the issue persists.");
+        } else {
+          setError(error.message || "Failed to load products");
+          toast({
+            title: "Error fetching products",
+            description: error.message || "Failed to load products",
+            variant: "destructive",
+          });
+        }
       } finally {
         setIsLoading(false);
       }
@@ -99,6 +110,32 @@ const Products = () => {
     
     setFilteredProducts(result);
   }, [categoryFilter, searchQuery, products]);
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="container mx-auto p-6">
+          <Alert variant="destructive" className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+          
+          <div className="brutal-card p-8 text-center">
+            <p className="text-brutal-gray mb-4">
+              We're having trouble retrieving product data. This may be due to a temporary issue with access permissions.
+            </p>
+            <Button 
+              className="brutal-button" 
+              onClick={() => window.location.reload()}
+            >
+              Refresh Page
+            </Button>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
