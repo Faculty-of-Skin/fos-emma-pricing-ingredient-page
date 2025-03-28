@@ -26,10 +26,6 @@ export const Navigation = () => {
   const handleDashboardClick = () => {
     navigate('/dashboard');
   };
-  
-  const handleEmmaClick = () => {
-    navigate('/emma-pricing');
-  };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -56,12 +52,6 @@ export const Navigation = () => {
                 className="font-mono uppercase text-sm text-brutal-black hover:text-brutal-dark cursor-pointer"
               >
                 Product Pricing
-              </a>
-              <a 
-                onClick={handleEmmaClick} 
-                className="font-mono uppercase text-sm text-brutal-black hover:text-brutal-dark cursor-pointer"
-              >
-                Emma Pricing
               </a>
               <NavLinks scrollToSection={scrollToSection} />
             </div>

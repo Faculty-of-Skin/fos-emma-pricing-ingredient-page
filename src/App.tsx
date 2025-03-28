@@ -10,7 +10,6 @@ import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
 
 // Pages
 import PublicPricing from './pages/PublicPricing';
-import EmmaPricing from './pages/EmmaPricing';
 import JoinWaitlist from './pages/JoinWaitlist';
 import WaitlistRedirect from './pages/WaitlistRedirect';
 import Auth from './pages/Auth';
@@ -41,7 +40,6 @@ const App = () => {
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<PublicPricing />} />
-                <Route path="/emma-pricing" element={<EmmaPricing />} />
                 <Route path="/join-waitlist" element={<JoinWaitlist />} />
                 <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
                 <Route path="/auth" element={<Auth />} />

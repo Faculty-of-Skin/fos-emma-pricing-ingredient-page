@@ -34,12 +34,6 @@ export const MobileMenu = ({
             Product Pricing
           </a>
           <a 
-            onClick={() => navigate('/emma-pricing')} 
-            className="block py-2 font-mono uppercase text-brutal-black hover:text-brutal-dark cursor-pointer"
-          >
-            Emma Pricing
-          </a>
-          <a 
             onClick={() => scrollToSection('pricing')} 
             className="block py-2 font-mono uppercase text-brutal-black hover:text-brutal-dark"
           >
