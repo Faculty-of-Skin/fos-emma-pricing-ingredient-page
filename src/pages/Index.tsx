@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Index = () => {
-  const { formatPrice, setCurrency } = useCurrency();
+  const { formatPrice, convertPrice, setCurrency } = useCurrency();
   const navigate = useNavigate();
 
   // Set default currency to EUR when page loads
@@ -72,7 +72,7 @@ const Index = () => {
                   <CardTitle className="font-mono text-brutal-black">Emuage Machine Pack</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(1150)}</p>
+                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(1150))}</p>
                   <CardDescription className="font-mono">
                     Equip your institute with the latest in skincare technology, designed for bespoke beauty experiences.
                   </CardDescription>
@@ -84,7 +84,7 @@ const Index = () => {
                   <CardTitle className="font-mono text-brutal-black">Calibration Kit</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(14)}</p>
+                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(14))}</p>
                   <CardDescription className="font-mono">
                     Essential for ensuring your equipment operates with precision and accuracy.
                   </CardDescription>
@@ -96,7 +96,7 @@ const Index = () => {
                   <CardTitle className="font-mono text-brutal-black">Thermal Printer</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(150)}</p>
+                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(150))}</p>
                   <CardDescription className="font-mono">
                     Streamline your operations with on-site printing for client treatment plans and receipts.
                   </CardDescription>
@@ -108,7 +108,7 @@ const Index = () => {
                   <CardTitle className="font-mono text-brutal-black">Chowis DermoSmart</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(621)}</p>
+                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(621))}</p>
                   <CardDescription className="font-mono">
                     An advanced diagnostic tool that enhances treatment personalization and effectiveness.
                   </CardDescription>
@@ -164,7 +164,7 @@ const Index = () => {
                   <CardTitle className="font-mono text-brutal-black">Texture Capsules</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(5.86)}</p>
+                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(5.86))}</p>
                   <CardDescription className="font-mono">
                     Average price per capsule
                   </CardDescription>
@@ -176,7 +176,7 @@ const Index = () => {
                   <CardTitle className="font-mono text-brutal-black">Active Capsules</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(5.56)}</p>
+                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(5.56))}</p>
                   <CardDescription className="font-mono">
                     Average price per capsule
                   </CardDescription>
@@ -188,7 +188,7 @@ const Index = () => {
                   <CardTitle className="font-mono text-brutal-black">Perfume Capsules</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(3.38)}</p>
+                  <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(3.38))}</p>
                   <CardDescription className="font-mono">
                     Average price per capsule
                   </CardDescription>
@@ -212,7 +212,7 @@ const Index = () => {
               <p className="text-brutal-charcoal font-mono mb-3">
                 Includes: One Texture Capsule, One Active Capsule, One Perfume Capsule, and One Reusable Bottle
               </p>
-              <p className="text-2xl font-bold font-mono text-brutal-black">{formatPrice(19.80)}</p>
+              <p className="text-2xl font-bold font-mono text-brutal-black">{formatPrice(convertPrice(19.80))}</p>
               <p className="text-brutal-charcoal font-mono mt-2">Beauty Institute Price</p>
             </div>
           </div>
