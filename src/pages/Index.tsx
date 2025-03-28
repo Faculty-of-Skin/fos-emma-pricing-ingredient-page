@@ -11,6 +11,7 @@ import { TreatmentSetSection } from "@/components/emma/TreatmentSetSection";
 import { UnlockPricingSection } from "@/components/emma/UnlockPricingSection";
 import { WhyChooseUsSection } from "@/components/emma/WhyChooseUsSection";
 import { ContactSection } from "@/components/emma/ContactSection";
+import { FloatingCurrencySelector } from "@/components/emma/FloatingCurrencySelector";
 
 const Index = () => {
   const { setCurrency } = useCurrency();
@@ -23,6 +24,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-brutal-white">
       <Navigation />
+      <FloatingCurrencySelector />
       
       <PricingHeader />
       
