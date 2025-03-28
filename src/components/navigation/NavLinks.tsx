@@ -7,10 +7,10 @@ type NavLinksProps = {
 
 export const NavLinks = ({ scrollToSection }: NavLinksProps) => {
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const isHomePage = location.pathname === '/pricing';
 
-  // Links for the home/pricing page
-  const homeLinks = [
+  // Links for the pricing page
+  const pricingLinks = [
     { label: "Features", action: () => scrollToSection("features") },
     { label: "How It Works", action: () => scrollToSection("how-it-works") },
     { label: "Benefits", action: () => scrollToSection("benefits") },
@@ -21,12 +21,13 @@ export const NavLinks = ({ scrollToSection }: NavLinksProps) => {
 
   // Links for other pages
   const otherLinks = [
-    { label: "Pricing", href: "/" },
+    { label: "Home", href: "/" },
+    { label: "Pricing", href: "/pricing" },
     { label: "Emma Pricing", href: "/emma-pricing" },
     { label: "Join Waitlist", href: "/join-waitlist" }
   ];
 
-  const links = isHomePage ? homeLinks : otherLinks;
+  const links = isHomePage ? pricingLinks : otherLinks;
 
   return (
     <ul className="flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 w-full md:w-auto font-mono uppercase text-sm">
