@@ -13,9 +13,9 @@ const Index = () => {
   const { formatPrice, convertPrice, setCurrency } = useCurrency();
   const navigate = useNavigate();
 
-  // Set default currency to EUR when page loads
+  // Set default currency to USD when page loads
   useEffect(() => {
-    setCurrency("EUR");
+    setCurrency("USD");
   }, [setCurrency]);
 
   const handleLoginClick = () => {
