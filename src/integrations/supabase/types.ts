@@ -9,6 +9,114 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      forecasts: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          products: Json
+          total_cost: number
+          total_profit: number
+          total_revenue: number
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          products: Json
+          total_cost: number
+          total_profit: number
+          total_revenue: number
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          products?: Json
+          total_cost?: number
+          total_profit?: number
+          total_revenue?: number
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          beauty_institute_moq: number
+          beauty_institute_price: number
+          category: string
+          created_at: string
+          description: string
+          distributor_moq: number
+          distributor_price: number
+          final_consumer_price: number | null
+          id: string
+          importer_moq: number
+          importer_price: number
+          reference: string
+          updated_at: string
+        }
+        Insert: {
+          beauty_institute_moq: number
+          beauty_institute_price: number
+          category: string
+          created_at?: string
+          description: string
+          distributor_moq: number
+          distributor_price: number
+          final_consumer_price?: number | null
+          id?: string
+          importer_moq: number
+          importer_price: number
+          reference: string
+          updated_at?: string
+        }
+        Update: {
+          beauty_institute_moq?: number
+          beauty_institute_price?: number
+          category?: string
+          created_at?: string
+          description?: string
+          distributor_moq?: number
+          distributor_price?: number
+          final_consumer_price?: number | null
+          id?: string
+          importer_moq?: number
+          importer_price?: number
+          reference?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       waitlist_emails: {
         Row: {
           created_at: string
@@ -35,7 +143,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: "admin" | "customer"
     }
     CompositeTypes: {
       [_ in never]: never

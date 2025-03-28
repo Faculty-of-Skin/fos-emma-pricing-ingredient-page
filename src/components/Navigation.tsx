@@ -7,14 +7,24 @@ import { MobileMenu } from "./navigation/MobileMenu";
 import { NavButton } from "./navigation/NavButton";
 import { MobileMenuToggle } from "./navigation/MobileMenuToggle";
 import { useScrollEffect } from "@/hooks/useScrollEffect";
+import { useAuth } from "@/context/AuthContext";
 
 export const Navigation = () => {
   const isScrolled = useScrollEffect(10);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleWaitlistClick = () => {
     navigate('/join-waitlist');
+  };
+
+  const handleLoginClick = () => {
+    navigate('/auth');
+  };
+
+  const handleDashboardClick = () => {
+    navigate('/dashboard');
   };
 
   const scrollToSection = (id: string) => {
@@ -39,10 +49,21 @@ export const Navigation = () => {
             <NavLinks scrollToSection={scrollToSection} />
           </div>
 
-          <div className="hidden md:flex items-center">
-            <NavButton onClick={handleWaitlistClick}>
-              Join Waitlist
-            </NavButton>
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <NavButton onClick={handleDashboardClick}>
+                Dashboard
+              </NavButton>
+            ) : (
+              <>
+                <NavButton onClick={handleLoginClick} variant="outline">
+                  Login
+                </NavButton>
+                <NavButton onClick={handleWaitlistClick}>
+                  Join Waitlist
+                </NavButton>
+              </>
+            )}
           </div>
 
           <div className="md:hidden">
@@ -54,6 +75,9 @@ export const Navigation = () => {
           isOpen={isMobileMenuOpen} 
           scrollToSection={scrollToSection} 
           handleWaitlistClick={handleWaitlistClick} 
+          showDashboard={!!user}
+          handleDashboardClick={handleDashboardClick}
+          handleLoginClick={handleLoginClick}
         />
       </div>
     </nav>
