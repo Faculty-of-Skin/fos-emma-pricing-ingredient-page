@@ -26,11 +26,11 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         brutal: {
-          black: "#283618", // Dark Forest Green
-          white: "#FEFAE0", // Off-White
-          gray: "#DDA15E", // Mustard Yellow
-          charcoal: "#606C38", // Dark Olive Green
-          dark: "#BC6C25" // Burnt Orange
+          black: "#5D4037", // Warm Brown
+          white: "#F5F5F0", // Cream/Ivory
+          gray: "#D7CCC8", // Warm Light Gray
+          charcoal: "#8D6E63", // Medium Brown
+          dark: "#C77D63" // Copper/Rose Gold
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

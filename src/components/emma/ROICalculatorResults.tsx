@@ -70,13 +70,13 @@ export const ROICalculatorResultsSection = ({ results }: ROICalculatorResultsPro
           
           <button 
             onClick={() => setShowDetails(!showDetails)}
-            className="brutal-button w-full bg-brutal-black text-brutal-white p-4 font-mono text-center"
+            className="brutal-button w-full bg-brutal-dark text-brutal-white p-4 font-mono text-center border-brutal-dark"
           >
-            SHOW CALCULATION DETAILS
+            {showDetails ? "HIDE DETAILS" : "SHOW CALCULATION DETAILS"}
           </button>
           
           {showDetails && (
-            <div className="mt-4 p-4 bg-brutal-black/5 rounded-md">
+            <div className="mt-4 p-4 bg-brutal-gray/30 rounded-md">
               <h4 className="font-mono text-brutal-black font-medium mb-2">Calculation Details</h4>
               <ul className="space-y-2 text-sm font-mono text-brutal-charcoal">
                 <li>• Daily capacity per machine: {12} treatments</li>
