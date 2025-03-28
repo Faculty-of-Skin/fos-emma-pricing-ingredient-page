@@ -4,11 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import AgentPage from './pages/AgentPage';
-import WaitlistRedirect from './pages/WaitlistRedirect';
-import JoinWaitlist from './pages/JoinWaitlist';
 import EmmaPricing from './pages/EmmaPricing';
 
 const App = () => {
@@ -29,12 +24,8 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/agent" element={<AgentPage />} />
-            <Route path="/join-waitlist" element={<JoinWaitlist />} />
-            <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
-            <Route path="/emma-pricing" element={<EmmaPricing />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<EmmaPricing />} />
+            <Route path="*" element={<EmmaPricing />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
