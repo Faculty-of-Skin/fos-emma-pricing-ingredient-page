@@ -10,6 +10,7 @@ import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
 
 // Pages
 import EmmaPricing from './pages/EmmaPricing';
+import PublicPricing from './pages/PublicPricing';
 import JoinWaitlist from './pages/JoinWaitlist';
 import WaitlistRedirect from './pages/WaitlistRedirect';
 import Auth from './pages/Auth';
@@ -39,7 +40,8 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 {/* Public routes */}
-                <Route path="/" element={<EmmaPricing />} />
+                <Route path="/" element={<PublicPricing />} />
+                <Route path="/emma-pricing" element={<EmmaPricing />} />
                 <Route path="/join-waitlist" element={<JoinWaitlist />} />
                 <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
                 <Route path="/auth" element={<Auth />} />
@@ -57,7 +59,7 @@ const App = () => {
                 </Route>
                 
                 {/* Fallback route */}
-                <Route path="*" element={<EmmaPricing />} />
+                <Route path="*" element={<PublicPricing />} />
               </Routes>
             </BrowserRouter>
           </CurrencyProvider>

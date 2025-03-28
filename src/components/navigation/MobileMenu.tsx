@@ -1,56 +1,59 @@
 
 import { NavButton } from "./NavButton";
+import { useNavigate } from "react-router-dom";
 
 interface MobileMenuProps {
   isOpen: boolean;
   scrollToSection: (id: string) => void;
   handleWaitlistClick: () => void;
-  handleLoginClick: () => void;
-  handleDashboardClick: () => void;
   showDashboard: boolean;
+  handleDashboardClick: () => void;
+  handleLoginClick: () => void;
 }
 
 export const MobileMenu = ({ 
   isOpen, 
   scrollToSection, 
-  handleWaitlistClick,
-  handleLoginClick,
+  handleWaitlistClick, 
+  showDashboard,
   handleDashboardClick,
-  showDashboard
+  handleLoginClick
 }: MobileMenuProps) => {
+  const navigate = useNavigate();
+  
+  if (!isOpen) return null;
+
   return (
-    <div 
-      className={`md:hidden transition-all duration-300 overflow-hidden ${
-        isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-      }`}
-    >
-      <div className="py-4 flex flex-col space-y-2 pb-6">
-        <button 
-          onClick={() => scrollToSection('features')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
-        >
-          Features
-        </button>
-        <button 
-          onClick={() => scrollToSection('how-it-works')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
-        >
-          How It Works
-        </button>
-        <button 
-          onClick={() => scrollToSection('pricing')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
-        >
-          Pricing
-        </button>
-        <button 
-          onClick={() => scrollToSection('faq')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
-        >
-          FAQ
-        </button>
+    <div className="md:hidden">
+      <div className="py-4 border-t-2 border-brutal-black">
+        <div className="space-y-2 mb-4">
+          <a 
+            onClick={() => navigate('/')} 
+            className="block py-2 font-mono uppercase text-brutal-black hover:text-brutal-dark cursor-pointer"
+          >
+            Product Pricing
+          </a>
+          <a 
+            onClick={() => navigate('/emma-pricing')} 
+            className="block py-2 font-mono uppercase text-brutal-black hover:text-brutal-dark cursor-pointer"
+          >
+            Emma Pricing
+          </a>
+          <a 
+            onClick={() => scrollToSection('pricing')} 
+            className="block py-2 font-mono uppercase text-brutal-black hover:text-brutal-dark"
+          >
+            Pricing
+          </a>
+          <a 
+            onClick={() => scrollToSection('faq')} 
+            className="block py-2 font-mono uppercase text-brutal-black hover:text-brutal-dark"
+          >
+            FAQ
+          </a>
+        </div>
         
-        <div className="pt-2 flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2">
           {showDashboard ? (
             <NavButton onClick={handleDashboardClick}>
               Dashboard
