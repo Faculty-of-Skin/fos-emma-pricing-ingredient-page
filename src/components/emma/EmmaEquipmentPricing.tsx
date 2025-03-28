@@ -1,12 +1,13 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Info, Loader2, RefreshCcw } from "lucide-react";
+import { Info, Loader2, RefreshCcw, Database, ServerOff } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { fetchProductsWithDirectFetch } from "@/utils/supabaseUtils";
+import { fetchProductsWithFallback } from "@/utils/supabaseUtils";
 import { Button } from "@/components/ui/button";
 
 type Equipment = {
@@ -26,51 +27,40 @@ export const EmmaEquipmentPricing = () => {
   const [equipmentData, setEquipmentData] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [fetchAttempt, setFetchAttempt] = useState(0);
   const { toast } = useToast();
   
   const fetchEquipment = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      console.log("Fetching equipment data...");
+      console.log("Fetching equipment data... (attempt: " + (fetchAttempt + 1) + ")");
       
-      // Try direct fetch first for better reliability
-      const result = await fetchProductsWithDirectFetch({
+      // Use our enhanced function with multiple fallbacks
+      const result = await fetchProductsWithFallback({
         category: "Equipment",
         orderBy: ["reference.asc"]
       });
       
-      if (result.error) {
-        console.error("Direct fetch failed:", result.error);
-        
-        // Fallback to Supabase client if direct fetch fails
-        const { data, error: supabaseError } = await supabase
-          .from("products")
-          .select("*")
-          .eq("category", "Equipment")
-          .order("reference");
-        
-        if (supabaseError) {
-          console.error("Supabase client also failed:", supabaseError);
-          // If both approaches fail, show a user-friendly error
-          setError("Unable to load equipment data. Please try again later.");
+      if (result.data && result.data.length > 0) {
+        console.log("Equipment data fetch successful:", result.data.length, "items");
+        setEquipmentData(result.data);
+        // If we previously had an error but now succeeded, show success toast
+        if (error) {
           toast({
-            title: "Error fetching equipment",
-            description: "Unable to load equipment data. Please try again later.",
-            variant: "destructive",
+            title: "Data connection restored",
+            description: "Equipment data loaded successfully.",
+            variant: "default",
           });
-          setEquipmentData([]);
-        } else {
-          console.log("Supabase client successful, retrieved:", data?.length || 0, "items");
-          setEquipmentData(data || []);
         }
       } else {
-        console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
-        setEquipmentData(result.data || []);
+        console.warn("Equipment data fetch returned no data");
+        setEquipmentData([]);
+        setError("No equipment data available. This could be due to a temporary issue with the data connection.");
       }
     } catch (error: any) {
       console.error("Failed to fetch equipment data:", error);
-      setError("An unexpected error occurred. Please try again later.");
+      setError("Unable to load equipment data. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +68,7 @@ export const EmmaEquipmentPricing = () => {
   
   useEffect(() => {
     fetchEquipment();
-  }, [toast]);
+  }, [fetchAttempt, toast]);
   
   // Use the MOQ from first equipment item if available, otherwise use default values
   const volumeData = equipmentData.length > 0 
@@ -90,7 +80,7 @@ export const EmmaEquipmentPricing = () => {
     : { importer: 400, distributor: 20, beautyInstitute: 1 };
 
   const handleRefresh = () => {
-    fetchEquipment();
+    setFetchAttempt(prev => prev + 1);
     toast({
       title: "Refreshing data",
       description: "Attempting to retrieve the latest equipment data.",
@@ -107,6 +97,7 @@ export const EmmaEquipmentPricing = () => {
       {error && (
         <Alert variant="destructive" className="mb-6">
           <AlertTitle className="flex items-center gap-2">
+            <ServerOff className="h-4 w-4" /> 
             Error <Button variant="ghost" size="sm" onClick={handleRefresh} className="p-1 h-6 w-6 ml-2"><RefreshCcw className="h-4 w-4" /></Button>
           </AlertTitle>
           <AlertDescription>{error}</AlertDescription>

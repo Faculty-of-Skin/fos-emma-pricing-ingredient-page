@@ -1,7 +1,8 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { fetchProductsWithDirectFetch } from "@/utils/supabaseUtils";
+import { fetchProductsWithFallback } from "@/utils/supabaseUtils";
 
 type Product = {
   id: string;
@@ -25,54 +26,46 @@ export const useProducts = () => {
   const [error, setError] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [fetchAttempt, setFetchAttempt] = useState(0);
   const { toast } = useToast();
 
   // Get unique categories for filter
   const categories = ["all", ...new Set(products.map(product => product.category))].sort();
+
+  const refetch = () => {
+    setFetchAttempt(prev => prev + 1);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        console.log("Fetching products data...");
+        console.log("Fetching products data... (attempt: " + (fetchAttempt + 1) + ")");
         
-        // Try direct fetch first for better reliability
-        const result = await fetchProductsWithDirectFetch({
+        // Use our enhanced function with multiple fallbacks
+        const result = await fetchProductsWithFallback({
           orderBy: ["category.asc", "reference.asc"]
         });
         
-        if (result.error) {
-          console.error("Direct fetch failed:", result.error);
+        if (result.data && result.data.length > 0) {
+          console.log("Products fetch successful:", result.data.length, "items");
+          setProducts(result.data);
+          setFilteredProducts(result.data);
           
-          // Fallback to Supabase client
-          const { data, error: supabaseError } = await supabase
-            .from("products")
-            .select("*")
-            .order("category", { ascending: true })
-            .order("reference", { ascending: true });
-          
-          if (supabaseError) {
-            console.error("Supabase client also failed:", supabaseError);
-            setProducts([]);
-            setFilteredProducts([]);
-            
-            // Show user-friendly error
-            setError("Unable to load product data. Please try again later.");
+          // If we previously had an error but now succeeded, show success toast
+          if (error) {
             toast({
-              title: "Error fetching products",
-              description: "Unable to load product data. Please try again later.",
-              variant: "destructive",
+              title: "Data connection restored",
+              description: "Products loaded successfully.",
+              variant: "default",
             });
-          } else {
-            console.log("Supabase client successful, retrieved:", data?.length || 0, "items");
-            setProducts(data || []);
-            setFilteredProducts(data || []);
           }
         } else {
-          console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
-          setProducts(result.data || []);
-          setFilteredProducts(result.data || []);
+          console.warn("Products fetch returned no data");
+          setProducts([]);
+          setFilteredProducts([]);
+          setError("No products data available. Please try again later.");
         }
       } catch (error: any) {
         console.error("Error fetching products:", error);
@@ -83,7 +76,7 @@ export const useProducts = () => {
     };
 
     fetchProducts();
-  }, [toast]);
+  }, [fetchAttempt, toast, error]);
 
   // Filter products based on category and search query
   useEffect(() => {
@@ -116,6 +109,7 @@ export const useProducts = () => {
     setCategoryFilter,
     searchQuery,
     setSearchQuery,
-    categories
+    categories,
+    refetch
   };
 };
