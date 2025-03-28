@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -38,50 +37,42 @@ export const useProducts = () => {
         setError(null);
         console.log("Fetching products data...");
         
-        // First try with the Supabase client
-        let { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .order("category", { ascending: true })
-          .order("reference", { ascending: true });
-
-        if (error) {
-          console.error("Error fetching products:", error);
+        // Try direct fetch first for better reliability
+        const result = await fetchProductsWithDirectFetch({
+          orderBy: ["category.asc", "reference.asc"]
+        });
+        
+        if (result.error) {
+          console.error("Direct fetch failed:", result.error);
           
-          // For debugging, log the full error
-          console.log("Full error object:", JSON.stringify(error));
+          // Fallback to Supabase client
+          const { data, error: supabaseError } = await supabase
+            .from("products")
+            .select("*")
+            .order("category", { ascending: true })
+            .order("reference", { ascending: true });
           
-          // Try the request again with direct fetch method
-          console.log("Retrying with direct fetch...");
-          
-          const result = await fetchProductsWithDirectFetch({
-            orderBy: ["category.asc", "reference.asc"]
-          });
-          
-          if (result.error) {
-            console.error("Direct fetch also failed:", result.error);
-            // If both attempts fail, just continue with empty data
+          if (supabaseError) {
+            console.error("Supabase client also failed:", supabaseError);
             setProducts([]);
             setFilteredProducts([]);
             
-            // Only show user-friendly errors, not technical ones
-            if (!error.message?.includes("infinite recursion")) {
-              setError("Unable to load product data. Please try again later.");
-              toast({
-                title: "Error fetching products",
-                description: "Unable to load product data. Please try again later.",
-                variant: "destructive",
-              });
-            }
+            // Show user-friendly error
+            setError("Unable to load product data. Please try again later.");
+            toast({
+              title: "Error fetching products",
+              description: "Unable to load product data. Please try again later.",
+              variant: "destructive",
+            });
           } else {
-            console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
-            setProducts(result.data || []);
-            setFilteredProducts(result.data || []);
+            console.log("Supabase client successful, retrieved:", data?.length || 0, "items");
+            setProducts(data || []);
+            setFilteredProducts(data || []);
           }
         } else {
-          console.log("Products data retrieved:", data?.length || 0, "items");
-          setProducts(data || []);
-          setFilteredProducts(data || []);
+          console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
+          setProducts(result.data || []);
+          setFilteredProducts(result.data || []);
         }
       } catch (error: any) {
         console.error("Error fetching products:", error);

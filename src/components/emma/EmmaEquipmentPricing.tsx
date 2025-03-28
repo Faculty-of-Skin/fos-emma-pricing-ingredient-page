@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Info, Loader2, RefreshCcw } from "lucide-react";
@@ -35,44 +34,39 @@ export const EmmaEquipmentPricing = () => {
       setError(null);
       console.log("Fetching equipment data...");
       
-      // First try with the Supabase client
-      let { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("category", "Equipment")
-        .order("reference");
+      // Try direct fetch first for better reliability
+      const result = await fetchProductsWithDirectFetch({
+        category: "Equipment",
+        orderBy: ["reference.asc"]
+      });
       
-      if (error) {
-        console.error("Error fetching equipment:", error);
-        console.log("Full error object:", JSON.stringify(error));
+      if (result.error) {
+        console.error("Direct fetch failed:", result.error);
         
-        // Try with direct fetch as a fallback
-        console.log("Retrying with direct fetch...");
+        // Fallback to Supabase client if direct fetch fails
+        const { data, error: supabaseError } = await supabase
+          .from("products")
+          .select("*")
+          .eq("category", "Equipment")
+          .order("reference");
         
-        const result = await fetchProductsWithDirectFetch({
-          category: "Equipment",
-          orderBy: ["reference.asc"]
-        });
-        
-        if (result.error) {
-          console.error("Direct fetch also failed:", result.error);
+        if (supabaseError) {
+          console.error("Supabase client also failed:", supabaseError);
           // If both approaches fail, show a user-friendly error
-          if (!error.message?.includes("infinite recursion")) {
-            setError("Unable to load equipment data. Please try again later.");
-            toast({
-              title: "Error fetching equipment",
-              description: "Unable to load equipment data. Please try again later.",
-              variant: "destructive",
-            });
-          }
+          setError("Unable to load equipment data. Please try again later.");
+          toast({
+            title: "Error fetching equipment",
+            description: "Unable to load equipment data. Please try again later.",
+            variant: "destructive",
+          });
           setEquipmentData([]);
         } else {
-          console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
-          setEquipmentData(result.data || []);
+          console.log("Supabase client successful, retrieved:", data?.length || 0, "items");
+          setEquipmentData(data || []);
         }
       } else {
-        console.log("Equipment data retrieved:", data?.length || 0, "items");
-        setEquipmentData(data || []);
+        console.log("Direct fetch successful, retrieved:", result.data?.length || 0, "items");
+        setEquipmentData(result.data || []);
       }
     } catch (error: any) {
       console.error("Failed to fetch equipment data:", error);

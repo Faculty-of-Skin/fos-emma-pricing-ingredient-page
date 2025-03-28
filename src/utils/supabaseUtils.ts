@@ -23,6 +23,8 @@ export const fetchProductsWithDirectFetch = async (options: {
   const apiKey = getPublicApiKey();
   
   try {
+    console.log("Direct fetch attempt starting with options:", JSON.stringify(options));
+    
     // Build the query parameters
     let queryParams = 'select=*';
     
@@ -42,27 +44,38 @@ export const fetchProductsWithDirectFetch = async (options: {
       });
     }
     
-    // Make the fetch request
+    // Log the full request URL for debugging
+    console.log(`Making direct fetch request to: ${baseUrl}/rest/v1/products?${queryParams}`);
+    
+    // Make the fetch request with proper headers
     const response = await fetch(
       `${baseUrl}/rest/v1/products?${queryParams}`, 
       {
+        method: 'GET',
         headers: {
           'apikey': apiKey,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Prefer': 'return=representation'
         }
       }
     );
     
+    // Check for HTTP errors
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Direct fetch failed:', errorText);
-      return { data: null, error: errorText };
+      const errorData = await response.json().catch(() => response.text());
+      console.error('Direct fetch failed with status:', response.status, errorData);
+      return { data: null, error: JSON.stringify(errorData) };
     }
     
     const data = await response.json();
-    return { data, error: null };
+    console.log("Direct fetch successful, retrieved items:", data?.length || 0);
+    
+    // Return empty array instead of null for easier handling
+    return { data: data || [], error: null };
   } catch (error) {
-    console.error('Error with direct fetch:', error);
-    return { data: null, error: String(error) };
+    console.error('Exception in direct fetch:', error);
+    return { data: [], error: String(error) };
   }
 };
