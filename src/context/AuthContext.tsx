@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +13,7 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   profile: Profile | null;
+  profileError: Error | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<void>;
@@ -25,6 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [profileError, setProfileError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
@@ -49,6 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchProfile = async () => {
       if (user) {
         try {
+          setProfileError(null);
           const { data, error } = await supabase
             .from('profiles')
             .select('*')
@@ -58,15 +62,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           if (error) {
             console.error('Error fetching profile:', error);
             setProfile(null);
+            setProfileError(error);
           } else {
             setProfile(data as Profile);
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error('Error fetching profile:', error);
           setProfile(null);
+          setProfileError(error);
         }
       } else {
         setProfile(null);
+        setProfileError(null);
       }
     };
 
@@ -134,6 +141,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         session,
         user,
         profile,
+        profileError,
         isLoading,
         signIn,
         signUp,
