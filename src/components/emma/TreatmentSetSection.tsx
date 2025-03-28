@@ -14,7 +14,7 @@ const PRICES = {
 
 export const TreatmentSetSection = () => {
   const { formatPrice, convertPrice } = useCurrency();
-  const [textureCount, setTextureCount] = useState(1);
+  const [textureCount, setTextureCount] = useState(1); // Always at least 1
   const [activeCount, setActiveCount] = useState(1);
   const [perfumeCount, setPerfumeCount] = useState(1);
   const [bottleCount, setBottleCount] = useState(1);
@@ -54,16 +54,19 @@ export const TreatmentSetSection = () => {
                     <Select 
                       value={textureCount.toString()} 
                       onValueChange={(value) => setTextureCount(parseInt(value))}
+                      disabled // Disabled since it always must be 1
                     >
                       <SelectTrigger className="w-full h-8 bg-brutal-white border-2 border-brutal-black">
                         <SelectValue placeholder="1" />
                       </SelectTrigger>
                       <SelectContent className="bg-brutal-white border-2 border-brutal-black">
-                        <SelectItem value="0" className="font-mono">0</SelectItem>
                         <SelectItem value="1" className="font-mono">1</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
+                  <p className="text-xs text-brutal-charcoal mt-2 italic font-mono">
+                    Required component
+                  </p>
                 </div>
               </CardContent>
             </Card>
