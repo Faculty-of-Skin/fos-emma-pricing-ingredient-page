@@ -46,15 +46,7 @@ export const Navigation = () => {
           </div>
 
           <div className="hidden md:flex items-center justify-center flex-1 mx-8">
-            <div className="flex space-x-6">
-              <a 
-                onClick={() => navigate('/')} 
-                className="font-mono uppercase text-sm text-brutal-black hover:text-brutal-dark cursor-pointer"
-              >
-                Product Pricing
-              </a>
-              <NavLinks scrollToSection={scrollToSection} />
-            </div>
+            <NavLinks scrollToSection={scrollToSection} />
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
