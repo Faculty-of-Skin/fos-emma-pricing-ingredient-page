@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,7 +15,6 @@ type AuthContextType = {
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
 };
@@ -31,7 +29,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // First set up the auth listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
@@ -39,7 +36,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
-    // Then check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -49,7 +45,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Fetch user profile when user changes
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
@@ -121,26 +116,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signInWithGoogle = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + '/dashboard'
-        }
-      });
-      
-      if (error) throw error;
-    } catch (error: any) {
-      toast({
-        title: "Google Sign In Failed",
-        description: error.message || "An error occurred during Google sign in.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -162,7 +137,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoading,
         signIn,
         signUp,
-        signInWithGoogle,
         signOut,
         isAdmin: profile?.role === "admin",
       }}
