@@ -2,8 +2,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Info } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export const EmmaEquipmentPricing = () => {
+  const { convertPrice, formatPrice } = useCurrency();
+  
   const equipmentData = [
     {
       reference: "AE101",
@@ -25,7 +28,7 @@ export const EmmaEquipmentPricing = () => {
     <div className="brutal-card">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-black text-brutal-black font-mono uppercase">Equipment</h2>
-        <p className="text-brutal-charcoal font-mono uppercase text-sm mt-2">Emma Machine Pricing (EUR)</p>
+        <p className="text-brutal-charcoal font-mono uppercase text-sm mt-2">Emma Machine Pricing</p>
       </div>
       
       <div className="overflow-x-auto">
@@ -54,9 +57,15 @@ export const EmmaEquipmentPricing = () => {
               <TableRow key={index} className="border-t-2 border-brutal-black hover:bg-brutal-white/80">
                 <TableCell className="font-mono font-medium">{item.reference}</TableCell>
                 <TableCell className="font-mono">{item.description}</TableCell>
-                <TableCell className="font-mono text-right">€{item.importer.toFixed(2)}</TableCell>
-                <TableCell className="font-mono text-right">€{item.distributor.toFixed(2)}</TableCell>
-                <TableCell className="font-mono text-right">€{item.beautyInstitute.toFixed(2)}</TableCell>
+                <TableCell className="font-mono text-right">
+                  {formatPrice(convertPrice(item.importer))}
+                </TableCell>
+                <TableCell className="font-mono text-right">
+                  {formatPrice(convertPrice(item.distributor))}
+                </TableCell>
+                <TableCell className="font-mono text-right">
+                  {formatPrice(convertPrice(item.beautyInstitute))}
+                </TableCell>
                 <TableCell className="font-mono text-right">{item.finalConsumer}</TableCell>
               </TableRow>
             ))}
@@ -67,7 +76,7 @@ export const EmmaEquipmentPricing = () => {
       <div className="mt-6 flex items-start gap-2 text-sm text-brutal-charcoal">
         <Info className="h-5 w-5 flex-shrink-0 mt-0.5" />
         <p className="font-mono">
-          Pricing is provided in EUR. The Emma machine pack includes the main device and standard accessories.
+          Pricing is provided based on the selected currency. The Emma machine pack includes the main device and standard accessories.
           Contact us for detailed specifications and bulk order inquiries.
         </p>
       </div>

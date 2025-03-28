@@ -1,7 +1,10 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export const EmmaAccessoriesPricing = () => {
+  const { convertPrice, formatPrice } = useCurrency();
+  
   const accessoriesData = [
     {
       category: "Accessories",
@@ -69,7 +72,7 @@ export const EmmaAccessoriesPricing = () => {
     <div className="brutal-card">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-black text-brutal-black font-mono uppercase">Consumables & Accessories</h2>
-        <p className="text-brutal-charcoal font-mono uppercase text-sm mt-2">Pricing Without Tax (EUR)</p>
+        <p className="text-brutal-charcoal font-mono uppercase text-sm mt-2">Pricing Without Tax</p>
       </div>
       
       <div className="overflow-x-auto">
@@ -105,11 +108,17 @@ export const EmmaAccessoriesPricing = () => {
                 <TableCell className="font-mono font-medium">{item.category}</TableCell>
                 <TableCell className="font-mono">{item.reference}</TableCell>
                 <TableCell className="font-mono">{item.description}</TableCell>
-                <TableCell className="font-mono text-right">€{item.importer.toFixed(2)}</TableCell>
-                <TableCell className="font-mono text-right">€{item.distributor.toFixed(2)}</TableCell>
-                <TableCell className="font-mono text-right">€{item.beautyInstitute.toFixed(2)}</TableCell>
                 <TableCell className="font-mono text-right">
-                  {item.finalConsumer === "NA" ? "NA" : `€${Number(item.finalConsumer).toFixed(2)}`}
+                  {formatPrice(convertPrice(item.importer))}
+                </TableCell>
+                <TableCell className="font-mono text-right">
+                  {formatPrice(convertPrice(item.distributor))}
+                </TableCell>
+                <TableCell className="font-mono text-right">
+                  {formatPrice(convertPrice(item.beautyInstitute))}
+                </TableCell>
+                <TableCell className="font-mono text-right">
+                  {item.finalConsumer === "NA" ? "NA" : formatPrice(convertPrice(Number(item.finalConsumer)))}
                 </TableCell>
               </TableRow>
             ))}

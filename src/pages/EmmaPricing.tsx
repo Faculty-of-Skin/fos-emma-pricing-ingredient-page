@@ -4,6 +4,7 @@ import { EmmaEquipmentPricing } from "@/components/emma/EmmaEquipmentPricing";
 import { EmmaAccessoriesPricing } from "@/components/emma/EmmaAccessoriesPricing";
 import { Logo } from "@/components/navigation/Logo";
 import { useNavigate } from "react-router-dom";
+import { CurrencySelector } from "@/components/emma/CurrencySelector";
 
 const EmmaPricing = () => {
   const navigate = useNavigate();
@@ -25,6 +26,9 @@ const EmmaPricing = () => {
             <p className="text-lg text-brutal-charcoal font-mono uppercase tracking-wide mb-8 max-w-3xl mx-auto">
               Advanced facial treatment technology for beauty professionals
             </p>
+            <div className="flex justify-center mt-6">
+              <CurrencySelector />
+            </div>
           </div>
           
           <EmmaEquipmentPricing />
