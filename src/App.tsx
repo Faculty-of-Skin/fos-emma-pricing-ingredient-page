@@ -5,6 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import EmmaPricing from './pages/EmmaPricing';
+import JoinWaitlist from './pages/JoinWaitlist';
+import WaitlistRedirect from './pages/WaitlistRedirect';
 import { CurrencyProvider } from "./context/CurrencyContext";
 
 const App = () => {
@@ -27,6 +29,8 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<EmmaPricing />} />
+              <Route path="/join-waitlist" element={<JoinWaitlist />} />
+              <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
               <Route path="*" element={<EmmaPricing />} />
             </Routes>
           </BrowserRouter>
