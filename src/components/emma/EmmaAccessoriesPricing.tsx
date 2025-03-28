@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useCurrency } from "@/context/CurrencyContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 type Accessory = {
   category: string;
@@ -21,10 +22,15 @@ export const EmmaAccessoriesPricing = () => {
   const { convertPrice, formatPrice } = useCurrency();
   const [accessoriesData, setAccessoriesData] = useState<Accessory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
   
   useEffect(() => {
     const fetchAccessories = async () => {
       try {
+        setError(null);
+        console.log("Fetching accessories data...");
+        
         const { data, error } = await supabase
           .from("products")
           .select("*")
@@ -34,19 +40,27 @@ export const EmmaAccessoriesPricing = () => {
         
         if (error) {
           console.error("Error fetching accessories:", error);
+          setError(error.message || "Failed to load accessories data");
+          toast({
+            title: "Error fetching accessories",
+            description: error.message || "Failed to load accessories data",
+            variant: "destructive",
+          });
           return;
         }
         
-        setAccessoriesData(data);
-      } catch (error) {
+        console.log("Accessories data retrieved:", data?.length || 0, "items");
+        setAccessoriesData(data || []);
+      } catch (error: any) {
         console.error("Failed to fetch accessories data:", error);
+        setError(error.message || "An unexpected error occurred");
       } finally {
         setIsLoading(false);
       }
     };
     
     fetchAccessories();
-  }, []);
+  }, [toast]);
   
   // Calculate average MOQ values if data is available
   const calculateVolumeData = () => {
@@ -78,6 +92,13 @@ export const EmmaAccessoriesPricing = () => {
         <h2 className="text-2xl font-black text-brutal-black font-mono uppercase">Consumables & Accessories</h2>
         <p className="text-brutal-charcoal font-mono uppercase text-sm mt-2">Pricing Without Tax</p>
       </div>
+      
+      {error && (
+        <div className="p-4 mb-6 border-2 border-brutal-red bg-brutal-red/10 text-brutal-red font-mono text-sm">
+          <p>Error loading data: {error}</p>
+          <p className="mt-2">Please try refreshing the page or contact support if this persists.</p>
+        </div>
+      )}
       
       <div className="overflow-x-auto">
         <Table>

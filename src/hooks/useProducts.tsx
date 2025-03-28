@@ -34,29 +34,37 @@ export const useProducts = () => {
     const fetchProducts = async () => {
       try {
         setError(null);
+        console.log("Fetching products data...");
+        
         const { data, error } = await supabase
           .from("products")
           .select("*")
           .order("category", { ascending: true })
           .order("reference", { ascending: true });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error fetching products:", error);
+          
+          // Handle specific error messages
+          if (error.message?.includes("infinite recursion detected")) {
+            setError("There's an issue with database permissions. This has been reported and will be fixed soon.");
+          } else {
+            setError(error.message || "Failed to load products");
+            toast({
+              title: "Error fetching products",
+              description: error.message || "Failed to load products",
+              variant: "destructive",
+            });
+          }
+          return;
+        }
+        
+        console.log("Products data retrieved:", data?.length || 0, "items");
         setProducts(data || []);
         setFilteredProducts(data || []);
       } catch (error: any) {
         console.error("Error fetching products:", error);
-        
-        // Handle recursive policy error specifically
-        if (error.message?.includes("infinite recursion detected")) {
-          setError("There's an issue with access permissions. Please try refreshing the page or contact support if the issue persists.");
-        } else {
-          setError(error.message || "Failed to load products");
-          toast({
-            title: "Error fetching products",
-            description: error.message || "Failed to load products",
-            variant: "destructive",
-          });
-        }
+        setError(error.message || "An unexpected error occurred");
       } finally {
         setIsLoading(false);
       }

@@ -5,6 +5,7 @@ import { Info } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 type Equipment = {
   reference: string;
@@ -22,10 +23,15 @@ export const EmmaEquipmentPricing = () => {
   const { convertPrice, formatPrice } = useCurrency();
   const [equipmentData, setEquipmentData] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
   
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
+        setError(null);
+        console.log("Fetching equipment data...");
+        
         const { data, error } = await supabase
           .from("products")
           .select("*")
@@ -34,19 +40,27 @@ export const EmmaEquipmentPricing = () => {
         
         if (error) {
           console.error("Error fetching equipment:", error);
+          setError(error.message || "Failed to load equipment data");
+          toast({
+            title: "Error fetching equipment",
+            description: error.message || "Failed to load equipment data",
+            variant: "destructive",
+          });
           return;
         }
         
-        setEquipmentData(data);
-      } catch (error) {
+        console.log("Equipment data retrieved:", data?.length || 0, "items");
+        setEquipmentData(data || []);
+      } catch (error: any) {
         console.error("Failed to fetch equipment data:", error);
+        setError(error.message || "An unexpected error occurred");
       } finally {
         setIsLoading(false);
       }
     };
     
     fetchEquipment();
-  }, []);
+  }, [toast]);
   
   // Use the MOQ from first equipment item if available, otherwise use default values
   const volumeData = equipmentData.length > 0 
@@ -63,6 +77,13 @@ export const EmmaEquipmentPricing = () => {
         <h2 className="text-2xl font-black text-brutal-black font-mono uppercase">Equipment</h2>
         <p className="text-brutal-charcoal font-mono uppercase text-sm mt-2">Emma Machine Pricing</p>
       </div>
+      
+      {error && (
+        <div className="p-4 mb-6 border-2 border-brutal-red bg-brutal-red/10 text-brutal-red font-mono text-sm">
+          <p>Error loading data: {error}</p>
+          <p className="mt-2">Please try refreshing the page or contact support if this persists.</p>
+        </div>
+      )}
       
       <div className="overflow-x-auto">
         <Table>
