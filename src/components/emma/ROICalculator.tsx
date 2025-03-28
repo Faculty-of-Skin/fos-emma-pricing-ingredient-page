@@ -4,7 +4,6 @@ import { useCurrency } from "@/context/CurrencyContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { CircleDollarSign } from "lucide-react";
 
 export const ROICalculator = () => {
@@ -33,28 +32,6 @@ export const ROICalculator = () => {
   const annualProfit = annualRevenue - annualOperationalCost;
   const monthlyProfit = annualProfit / 12;
   
-  // Handle input changes
-  const handleMachineCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value >= 1 && value <= 10) {
-      setMachineCount(value);
-    }
-  };
-  
-  const handleDaysPerYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value >= 1 && value <= 365) {
-      setDaysPerYear(value);
-    }
-  };
-  
-  const handlePricePerProductChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    if (!isNaN(value) && value >= 0) {
-      setPricePerProduct(value);
-    }
-  };
-  
   return (
     <section className="py-2">
       <div className="container mx-auto px-4">
@@ -80,16 +57,16 @@ export const ROICalculator = () => {
                 <div className="space-y-6">
                   <div>
                     <Label htmlFor="machineCount" className="font-mono text-brutal-black mb-2 block">
-                      1. Number of Emma Machines
+                      1. Number of Emma Machines: {machineCount}
                     </Label>
-                    <Input 
+                    <Slider 
                       id="machineCount"
-                      type="number" 
-                      min="1"
-                      max="10"
-                      value={machineCount}
-                      onChange={handleMachineCountChange}
-                      className="bg-brutal-white border-2 border-brutal-black font-mono"
+                      min={1} 
+                      max={10} 
+                      step={1}
+                      value={[machineCount]}
+                      onValueChange={(value) => setMachineCount(value[0])}
+                      className="my-2"
                     />
                     <p className="text-xs text-brutal-charcoal mt-1 font-mono">
                       Select how many Emma machines you plan to operate.
@@ -116,16 +93,16 @@ export const ROICalculator = () => {
                   
                   <div>
                     <Label htmlFor="daysPerYear" className="font-mono text-brutal-black mb-2 block">
-                      3. Operating Days Per Year
+                      3. Operating Days Per Year: {daysPerYear}
                     </Label>
-                    <Input 
+                    <Slider 
                       id="daysPerYear"
-                      type="number" 
-                      min="1"
-                      max="365"
-                      value={daysPerYear}
-                      onChange={handleDaysPerYearChange}
-                      className="bg-brutal-white border-2 border-brutal-black font-mono"
+                      min={100} 
+                      max={365} 
+                      step={5}
+                      value={[daysPerYear]}
+                      onValueChange={(value) => setDaysPerYear(value[0])}
+                      className="my-2"
                     />
                     <p className="text-xs text-brutal-charcoal mt-1 font-mono">
                       Enter the number of days your business is open each year.
@@ -134,24 +111,19 @@ export const ROICalculator = () => {
                   
                   <div>
                     <Label htmlFor="pricePerProduct" className="font-mono text-brutal-black mb-2 block">
-                      4. Average Price per Product
+                      4. Average Price per Product: {formatPrice(convertedPrice)}
                     </Label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <CircleDollarSign className="h-4 w-4 text-brutal-black/60" />
-                      </div>
-                      <Input 
-                        id="pricePerProduct"
-                        type="number" 
-                        min="0"
-                        step="0.01"
-                        value={pricePerProduct}
-                        onChange={handlePricePerProductChange}
-                        className="bg-brutal-white border-2 border-brutal-black font-mono pl-10"
-                      />
-                    </div>
+                    <Slider 
+                      id="pricePerProduct"
+                      min={20} 
+                      max={150} 
+                      step={1}
+                      value={[pricePerProduct]}
+                      onValueChange={(value) => setPricePerProduct(value[0])}
+                      className="my-2"
+                    />
                     <p className="text-xs text-brutal-charcoal mt-1 font-mono">
-                      Set the minimum price for a typical product using the Emma machine at $67 USD. Adjust this price based on your typical sales.
+                      Set the price for a typical product using the Emma machine. Base price: $67 USD.
                     </p>
                   </div>
                 </div>
