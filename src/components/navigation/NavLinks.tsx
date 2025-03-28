@@ -18,9 +18,9 @@ export const NavLinks = ({ scrollToSection }: NavLinksProps) => {
     { label: "FAQ", action: () => scrollToSection("faq") },
   ];
 
-  // Links for other pages - removed Pricing and Emma Pricing
+  // Links for other pages - renamed Home to Emma Pricing
   const otherLinks = [
-    { label: "Home", href: "/" },
+    { label: "Emma Pricing", href: "/" },
     { label: "Join Waitlist", href: "/join-waitlist" }
   ];
 

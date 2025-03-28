@@ -14,6 +14,7 @@ import { WhyChooseUsSection } from "@/components/emma/WhyChooseUsSection";
 import { ContactSection } from "@/components/emma/ContactSection";
 import { FloatingCurrencySelector } from "@/components/emma/FloatingCurrencySelector";
 
+// This is essentially the Emma Pricing page
 const Index = () => {
   const { setCurrency } = useCurrency();
 
