@@ -38,12 +38,6 @@ export const MobileMenu = ({
           How It Works
         </button>
         <button 
-          onClick={() => scrollToSection('pricing')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
-        >
-          Pricing
-        </button>
-        <button 
           onClick={() => scrollToSection('faq')} 
           className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
         >

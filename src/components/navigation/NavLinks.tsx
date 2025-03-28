@@ -15,15 +15,12 @@ export const NavLinks = ({ scrollToSection }: NavLinksProps) => {
     { label: "How It Works", action: () => scrollToSection("how-it-works") },
     { label: "Benefits", action: () => scrollToSection("benefits") },
     { label: "For Spas", action: () => scrollToSection("for-spas") },
-    { label: "Emma Pricing", href: "/emma-pricing" },
     { label: "FAQ", action: () => scrollToSection("faq") },
   ];
 
-  // Links for other pages
+  // Links for other pages - removed Pricing and Emma Pricing
   const otherLinks = [
     { label: "Home", href: "/" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Emma Pricing", href: "/emma-pricing" },
     { label: "Join Waitlist", href: "/join-waitlist" }
   ];
 
