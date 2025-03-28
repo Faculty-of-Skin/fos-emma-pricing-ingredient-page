@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import AgentPage from './pages/AgentPage';
 import WaitlistRedirect from './pages/WaitlistRedirect';
 import JoinWaitlist from './pages/JoinWaitlist';
+import EmmaPricing from './pages/EmmaPricing';
 
 const App = () => {
   // Create a client inside the component to ensure proper React context
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/agent" element={<AgentPage />} />
             <Route path="/join-waitlist" element={<JoinWaitlist />} />
             <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
+            <Route path="/emma-pricing" element={<EmmaPricing />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
