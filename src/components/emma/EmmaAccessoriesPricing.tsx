@@ -1,72 +1,76 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useCurrency } from "@/context/CurrencyContext";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+type Accessory = {
+  category: string;
+  reference: string;
+  description: string;
+  importer_price: number;
+  distributor_price: number;
+  beauty_institute_price: number;
+  final_consumer_price: number | null;
+  importer_moq: number;
+  distributor_moq: number;
+  beauty_institute_moq: number;
+};
 
 export const EmmaAccessoriesPricing = () => {
   const { convertPrice, formatPrice } = useCurrency();
+  const [accessoriesData, setAccessoriesData] = useState<Accessory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  const accessoriesData = [
-    {
-      category: "Accessories",
-      reference: "AA020",
-      description: "Reusable bottle",
-      importer: 3.78,
-      distributor: 4.00,
-      beautyInstitute: 5.00,
-      finalConsumer: "NA"
-    },
-    {
-      category: "Face capsule",
-      reference: "C1FA2",
-      description: "Texture - Light emulsion",
-      importer: 2.75,
-      distributor: 3.88,
-      beautyInstitute: 6.46,
-      finalConsumer: 13.97
-    },
-    {
-      category: "Face capsule",
-      reference: "C1FA3",
-      description: "Texture - Gentle cream",
-      importer: 2.75,
-      distributor: 3.88,
-      beautyInstitute: 6.46,
-      finalConsumer: 13.97
-    },
-    {
-      category: "Face capsule",
-      reference: "C1FA4",
-      description: "Texture - Rich cream",
-      importer: 2.75,
-      distributor: 3.88,
-      beautyInstitute: 6.46,
-      finalConsumer: 13.97
-    },
-    {
-      category: "Face capsule",
-      reference: "C1FA6",
-      description: "Texture - Serum (gel)",
-      importer: 2.75,
-      distributor: 3.88,
-      beautyInstitute: 6.46,
-      finalConsumer: 13.97
-    },
-    {
-      category: "Face capsule",
-      reference: "C1FA7",
-      description: "Texture - Gel-cream",
-      importer: 2.75,
-      distributor: 3.88,
-      beautyInstitute: 6.46,
-      finalConsumer: 13.97
+  useEffect(() => {
+    const fetchAccessories = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("category", ['Accessories', 'Face capsule', 'Body capsule', 'Marketing item'])
+          .order("category")
+          .order("reference");
+        
+        if (error) {
+          console.error("Error fetching accessories:", error);
+          return;
+        }
+        
+        setAccessoriesData(data);
+      } catch (error) {
+        console.error("Failed to fetch accessories data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchAccessories();
+  }, []);
+  
+  // Calculate average MOQ values if data is available
+  const calculateVolumeData = () => {
+    if (accessoriesData.length === 0) {
+      return { importer: 500, distributor: 50, beautyInstitute: 5 };
     }
-  ];
-  
-  const volumeData = {
-    importer: 500,
-    distributor: 50,
-    beautyInstitute: 5
+    
+    // Find a face or body capsule for representative MOQs
+    const capsule = accessoriesData.find(item => 
+      item.category === 'Face capsule' || item.category === 'Body capsule'
+    );
+    
+    if (capsule) {
+      return {
+        importer: capsule.importer_moq,
+        distributor: capsule.distributor_moq, 
+        beautyInstitute: capsule.beauty_institute_moq
+      };
+    }
+    
+    return { importer: 500, distributor: 50, beautyInstitute: 5 };
   };
+  
+  const volumeData = calculateVolumeData();
 
   return (
     <div className="brutal-card">
@@ -101,27 +105,37 @@ export const EmmaAccessoriesPricing = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {accessoriesData.map((item, index) => (
-              <TableRow key={index} className={`border-t-2 border-brutal-black/30 hover:bg-brutal-white/80 ${
-                index > 0 && item.category !== accessoriesData[index - 1].category ? 'border-t-4 border-brutal-black pt-4' : ''
-              }`}>
-                <TableCell className="font-mono font-medium">{item.category}</TableCell>
-                <TableCell className="font-mono">{item.reference}</TableCell>
-                <TableCell className="font-mono">{item.description}</TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(item.importer))}
-                </TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(item.distributor))}
-                </TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(item.beautyInstitute))}
-                </TableCell>
-                <TableCell className="font-mono text-right">
-                  {item.finalConsumer === "NA" ? "NA" : formatPrice(convertPrice(Number(item.finalConsumer)))}
-                </TableCell>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center py-6">Loading product data...</TableCell>
               </TableRow>
-            ))}
+            ) : accessoriesData.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center py-6">No product data available</TableCell>
+              </TableRow>
+            ) : (
+              accessoriesData.map((item, index) => (
+                <TableRow key={index} className={`border-t-2 border-brutal-black/30 hover:bg-brutal-white/80 ${
+                  index > 0 && item.category !== accessoriesData[index - 1].category ? 'border-t-4 border-brutal-black pt-4' : ''
+                }`}>
+                  <TableCell className="font-mono font-medium">{item.category}</TableCell>
+                  <TableCell className="font-mono">{item.reference}</TableCell>
+                  <TableCell className="font-mono">{item.description}</TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(item.importer_price))}
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(item.distributor_price))}
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(item.beauty_institute_price))}
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {item.final_consumer_price === null ? "NA" : formatPrice(convertPrice(item.final_consumer_price))}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

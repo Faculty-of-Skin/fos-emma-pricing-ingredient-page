@@ -3,26 +3,59 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Info } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+type Equipment = {
+  reference: string;
+  description: string;
+  importer_price: number;
+  distributor_price: number;
+  beauty_institute_price: number;
+  final_consumer_price: number | null;
+  importer_moq: number;
+  distributor_moq: number;
+  beauty_institute_moq: number;
+};
 
 export const EmmaEquipmentPricing = () => {
   const { convertPrice, formatPrice } = useCurrency();
+  const [equipmentData, setEquipmentData] = useState<Equipment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  const equipmentData = [
-    {
-      reference: "AE101",
-      description: "Emma machine pack",
-      importer: 590.00,
-      distributor: 825.00,
-      beautyInstitute: 1150.00,
-      finalConsumer: "NA",
-    }
-  ];
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("category", "Equipment")
+          .order("reference");
+        
+        if (error) {
+          console.error("Error fetching equipment:", error);
+          return;
+        }
+        
+        setEquipmentData(data);
+      } catch (error) {
+        console.error("Failed to fetch equipment data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchEquipment();
+  }, []);
   
-  const volumeData = {
-    importer: 400,
-    distributor: 20,
-    beautyInstitute: 1
-  };
+  // Use the MOQ from first equipment item if available, otherwise use default values
+  const volumeData = equipmentData.length > 0 
+    ? {
+        importer: equipmentData[0].importer_moq,
+        distributor: equipmentData[0].distributor_moq,
+        beautyInstitute: equipmentData[0].beauty_institute_moq
+      } 
+    : { importer: 400, distributor: 20, beautyInstitute: 1 };
 
   return (
     <div className="brutal-card">
@@ -53,22 +86,34 @@ export const EmmaEquipmentPricing = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {equipmentData.map((item, index) => (
-              <TableRow key={index} className="border-t-2 border-brutal-black hover:bg-brutal-white/80">
-                <TableCell className="font-mono font-medium">{item.reference}</TableCell>
-                <TableCell className="font-mono">{item.description}</TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(item.importer))}
-                </TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(item.distributor))}
-                </TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(item.beautyInstitute))}
-                </TableCell>
-                <TableCell className="font-mono text-right">{item.finalConsumer}</TableCell>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-6">Loading equipment data...</TableCell>
               </TableRow>
-            ))}
+            ) : equipmentData.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-6">No equipment data available</TableCell>
+              </TableRow>
+            ) : (
+              equipmentData.map((item, index) => (
+                <TableRow key={index} className="border-t-2 border-brutal-black hover:bg-brutal-white/80">
+                  <TableCell className="font-mono font-medium">{item.reference}</TableCell>
+                  <TableCell className="font-mono">{item.description}</TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(item.importer_price))}
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(item.distributor_price))}
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(item.beauty_institute_price))}
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {item.final_consumer_price ? formatPrice(convertPrice(item.final_consumer_price)) : "NA"}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
