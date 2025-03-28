@@ -9,8 +9,8 @@ import { CurrencyProvider } from "./context/CurrencyContext";
 import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
 
 // Pages
-import EmmaPricing from './pages/EmmaPricing';
 import PublicPricing from './pages/PublicPricing';
+import EmmaPricing from './pages/EmmaPricing';
 import JoinWaitlist from './pages/JoinWaitlist';
 import WaitlistRedirect from './pages/WaitlistRedirect';
 import Auth from './pages/Auth';
