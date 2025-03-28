@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { PricingHeader } from "@/components/emma/PricingHeader";
 import { PricingOverview } from "@/components/emma/PricingOverview";
 import { EquipmentSection } from "@/components/emma/EquipmentSection";
+import { CustomizeEquipmentSection } from "@/components/emma/CustomizeEquipmentSection";
 import { BottlesSection } from "@/components/emma/BottlesSection";
 import { CapsulesSection } from "@/components/emma/CapsulesSection";
 import { TreatmentSetSection } from "@/components/emma/TreatmentSetSection";
@@ -33,6 +34,7 @@ const Index = () => {
       {/* Pricing Sections */}
       <PricingOverview />
       <EquipmentSection />
+      <CustomizeEquipmentSection />
       <BottlesSection />
       <CapsulesSection />
       <TreatmentSetSection />
