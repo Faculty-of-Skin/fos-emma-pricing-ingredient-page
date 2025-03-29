@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // Use hardcoded values from the client since the methods don't exist
@@ -13,6 +12,13 @@ export const getSupabaseUrl = () => {
 export const getPublicApiKey = () => {
   return SUPABASE_KEY;
 };
+
+// Interface for the fetch options
+interface FetchProductsOptions {
+  category?: string | string[];
+  orderBy?: string[];
+  useMockOnFailure?: boolean;
+}
 
 // Mock product data for cases when the database connection fails completely
 export const getMockProductData = (category?: string | string[]) => {
@@ -108,11 +114,7 @@ export const getMockProductData = (category?: string | string[]) => {
 };
 
 // Fetch products with direct fetch as a fallback when Supabase client fails
-export const fetchProductsWithDirectFetch = async (options: { 
-  category?: string | string[]; 
-  orderBy?: string[];
-  useMockOnFailure?: boolean;
-}) => {
+export const fetchProductsWithDirectFetch = async (options: FetchProductsOptions) => {
   const baseUrl = getSupabaseUrl();
   const apiKey = getPublicApiKey();
   
@@ -189,10 +191,7 @@ export const fetchProductsWithDirectFetch = async (options: {
 };
 
 // Fetch products using both direct fetch and Supabase client with fallback to mock data
-export const fetchProductsWithFallback = async (options: {
-  category?: string | string[];
-  orderBy?: string[];
-}) => {
+export const fetchProductsWithFallback = async (options: FetchProductsOptions) => {
   try {
     // First try direct fetch
     const directResult = await fetchProductsWithDirectFetch(options);
