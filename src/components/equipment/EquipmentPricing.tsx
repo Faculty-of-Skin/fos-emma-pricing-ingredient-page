@@ -1,11 +1,10 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Info, Loader2, RefreshCcw, ServerOff } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useState, useEffect } from "react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { fetchProductsWithFallback } from "@/utils/supabaseUtils";
+import { fetchProductsWithFallback } from "@/utils/supabase";
 
 export const EquipmentPricing = () => {
   const { convertPrice, formatPrice } = useCurrency();

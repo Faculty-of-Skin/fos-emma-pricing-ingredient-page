@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { fetchProductsWithFallback } from "@/utils/supabaseUtils";
+import { fetchProductsWithFallback } from "@/utils/supabase";
 import { toast as sonnerToast } from "sonner";
 
 type Product = {
@@ -31,7 +30,6 @@ export const useProducts = () => {
   const [isUsingFallbackData, setIsUsingFallbackData] = useState(false);
   const { toast } = useToast();
 
-  // Get unique categories for filter, sorted alphabetically
   const categories = ["all", ...new Set(products.map(product => product.category))].sort();
 
   const refetch = () => {
@@ -48,7 +46,6 @@ export const useProducts = () => {
         setIsUsingFallbackData(false);
         console.log("Fetching products data... (attempt: " + (fetchAttempt + 1) + ")");
         
-        // First try direct Supabase query without relying on user profile
         try {
           console.log("Attempting direct query first...");
           const { data, error } = await supabase
@@ -73,7 +70,6 @@ export const useProducts = () => {
           // Continue to fallback methods
         }
         
-        // Use our enhanced function with multiple fallbacks if direct query failed
         console.log("Trying fallback methods...");
         const result = await fetchProductsWithFallback({
           orderBy: ["category.asc", "reference.asc"],
@@ -85,7 +81,6 @@ export const useProducts = () => {
           setProducts(result.data);
           setFilteredProducts(result.data);
           
-          // Check if we're using mock data
           const firstItem = result.data[0];
           if (firstItem.id.startsWith('mock-')) {
             console.log("Using mock data as fallback");
@@ -93,7 +88,6 @@ export const useProducts = () => {
             setError("Unable to connect to the database. Database permission error (recursive policy).");
             sonnerToast.warning("Using sample data - Database connection issue");
           } else {
-            // If we previously had an error but now succeeded, show success toast
             if (error) {
               toast({
                 title: "Data connection restored",
@@ -114,7 +108,6 @@ export const useProducts = () => {
       } catch (error: any) {
         console.error("Error fetching products:", error);
         
-        // Look for specific error messages
         let errorMessage = "An unexpected error occurred. Please try again later.";
         if (error.message && error.message.includes("infinite recursion")) {
           errorMessage = "Database permission error (recursive policy). Please contact your administrator.";
@@ -125,7 +118,6 @@ export const useProducts = () => {
         
         setError(errorMessage);
         
-        // Still try to load mock data
         try {
           console.log("Attempting to load mock data as final fallback");
           const mockData = await fetchProductsWithFallback({
@@ -152,16 +144,13 @@ export const useProducts = () => {
     fetchProducts();
   }, [fetchAttempt, toast, error]);
 
-  // Filter products based on category and search query
   useEffect(() => {
     let result = products;
     
-    // Apply category filter
     if (categoryFilter !== "all") {
       result = result.filter(product => product.category === categoryFilter);
     }
     
-    // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
