@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CurrencyProvider } from "./context/CurrencyContext";
+import { NotificationProvider } from "./context/NotificationContext";
 import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
 
 // Pages
@@ -37,35 +38,37 @@ const App = () => {
       <TooltipProvider>
         <AuthProvider>
           <CurrencyProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                {/* Public routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/pricing" element={<PricingPage />} />
-                <Route path="/emma-pricing" element={<EmmaPricing />} />
-                <Route path="/join-waitlist" element={<JoinWaitlist />} />
-                <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
-                <Route path="/auth" element={<Auth />} />
-                
-                {/* Protected routes - require authentication */}
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/forecasts" element={<Forecasts />} />
-                  <Route path="/account-settings" element={<AccountSettings />} />
+            <NotificationProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  {/* Public routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/pricing" element={<PricingPage />} />
+                  <Route path="/emma-pricing" element={<EmmaPricing />} />
+                  <Route path="/join-waitlist" element={<JoinWaitlist />} />
+                  <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
+                  <Route path="/auth" element={<Auth />} />
                   
-                  {/* Admin-only routes */}
-                  <Route element={<AdminRoute />}>
-                    <Route path="/admin" element={<AdminPanel />} />
+                  {/* Protected routes - require authentication */}
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/forecasts" element={<Forecasts />} />
+                    <Route path="/account-settings" element={<AccountSettings />} />
+                    
+                    {/* Admin-only routes */}
+                    <Route element={<AdminRoute />}>
+                      <Route path="/admin" element={<AdminPanel />} />
+                    </Route>
                   </Route>
-                </Route>
-                
-                {/* Fallback route - redirect to home */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </BrowserRouter>
+                  
+                  {/* Fallback route - redirect to home */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </BrowserRouter>
+            </NotificationProvider>
           </CurrencyProvider>
         </AuthProvider>
       </TooltipProvider>

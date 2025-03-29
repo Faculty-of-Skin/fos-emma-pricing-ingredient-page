@@ -11,13 +11,16 @@ import {
   LogOut,
   Menu,
   X,
-  Settings
+  Settings,
 } from "lucide-react";
+import { NotificationDropdown } from "./NotificationDropdown";
+import { useNotifications } from "@/context/NotificationContext";
 
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { notifications, markAsRead, markAllAsRead, hasUnread } = useNotifications();
 
   const handleSignOut = async () => {
     await signOut();
@@ -77,9 +80,22 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
         </div>
       </div>
 
-      {/* Main content with adjusted padding to account for fixed header */}
-      <div className="flex-1 md:ml-64 pt-16 md:pt-0 w-full">
-        {children}
+      {/* Main content with header */}
+      <div className="flex-1 md:ml-64 w-full flex flex-col">
+        {/* Fixed header with notifications */}
+        <header className="bg-white border-b border-brutal-gray/10 sticky top-0 z-30 p-4 flex justify-end items-center">
+          <NotificationDropdown 
+            notifications={notifications}
+            onMarkAsRead={markAsRead}
+            onMarkAllAsRead={markAllAsRead}
+            hasUnread={hasUnread}
+          />
+        </header>
+        
+        {/* Main content */}
+        <main className="flex-1">
+          {children}
+        </main>
       </div>
     </div>
   );
