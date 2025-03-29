@@ -55,27 +55,33 @@ const Products = () => {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex items-center justify-between mb-6">
-          <ProductsHeader title="Products" />
-          <div className="flex gap-4 items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-brutal-charcoal font-mono uppercase text-sm">Currency:</span>
-              <CurrencySelector />
-            </div>
-            <div className="flex gap-2">
-              {isUsingFallbackData && (
-                <Button variant="default" size="sm" onClick={handleForceRefresh} className="gap-2">
-                  <Database className="h-4 w-4" /> Reconnect
+      {/* Fixed top bar */}
+      <div className="sticky top-0 z-10 bg-brutal-white border-b border-brutal-gray/10 shadow-sm">
+        <div className="container mx-auto px-4 max-w-7xl py-4">
+          <div className="flex items-center justify-between">
+            <ProductsHeader title="Products" />
+            <div className="flex gap-4 items-center">
+              <div className="flex items-center gap-2">
+                <span className="text-brutal-charcoal font-mono uppercase text-sm">Currency:</span>
+                <CurrencySelector />
+              </div>
+              <div className="flex gap-2">
+                {isUsingFallbackData && (
+                  <Button variant="default" size="sm" onClick={handleForceRefresh} className="gap-2">
+                    <Database className="h-4 w-4" /> Reconnect
+                  </Button>
+                )}
+                <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
+                  <RefreshCw className="h-4 w-4" /> Refresh
                 </Button>
-              )}
-              <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
-                <RefreshCw className="h-4 w-4" /> Refresh
-              </Button>
+              </div>
             </div>
           </div>
         </div>
-        
+      </div>
+      
+      {/* Main content with padding to account for the fixed top bar */}
+      <div className="container mx-auto px-4 max-w-7xl py-6">
         {isUsingFallbackData && (
           <Alert variant="destructive" className="mb-6">
             <Database className="h-4 w-4" />

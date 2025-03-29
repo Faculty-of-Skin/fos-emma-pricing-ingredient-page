@@ -38,18 +38,18 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
         {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar */}
+      {/* Sidebar - fixed position */}
       <div
         className={`fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 z-40 w-64 transition duration-200 ease-in-out brutal-nav md:relative`}
+        } md:translate-x-0 z-40 w-64 transition duration-200 ease-in-out brutal-nav md:sticky md:top-0 md:h-screen`}
       >
         <div className="h-full flex flex-col">
           <div className="p-4 border-b border-brutal-gray/20">
             <h1 className="text-xl font-bold">Emma Dashboard</h1>
           </div>
 
-          <nav className="flex-1 py-4 px-2 space-y-1">
+          <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
             <NavItem icon={<LayoutDashboard size={18} />} href="/dashboard" label="Dashboard" />
             <NavItem icon={<Package size={18} />} href="/products" label="Products" />
             <NavItem icon={<BarChart3 size={18} />} href="/forecasts" label="Forecasts" />
@@ -77,8 +77,8 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="flex-1 md:ml-64 pt-16 md:pt-0">
+      {/* Main content with adjusted padding to account for fixed header */}
+      <div className="flex-1 md:ml-64 pt-16 md:pt-0 w-full">
         {children}
       </div>
     </div>
