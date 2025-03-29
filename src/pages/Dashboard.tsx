@@ -5,10 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { BarChart3, Package, Calculator, Clock, Users, ArrowRight, TrendingUp, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { CurrencyToggleGroup } from "@/components/emma/CurrencyToggleGroup";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const Dashboard = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   
   // Get the first name from the email or use "there" as fallback
   const firstName = user?.email ? user.email.split('@')[0] : 'there';
@@ -137,6 +140,12 @@ const Dashboard = () => {
                   <div>
                     <p className="text-sm font-medium text-brutal-gray">Account Type</p>
                     <p className="text-brutal-black capitalize">{profile?.role || "Loading..."}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-brutal-gray">Currency</p>
+                    <div className="mt-1">
+                      <CurrencyToggleGroup />
+                    </div>
                   </div>
                   <div className="pt-2">
                     <Button 
