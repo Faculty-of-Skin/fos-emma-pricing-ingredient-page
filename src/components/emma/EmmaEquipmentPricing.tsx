@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Info, Loader2, RefreshCcw, Database, ServerOff } from "lucide-react";
@@ -7,7 +6,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { fetchProductsWithFallback } from "@/utils/supabaseUtils";
+import { fetchProductsWithFallback } from "@/utils/supabase";
 import { Button } from "@/components/ui/button";
 
 type Equipment = {
@@ -36,7 +35,6 @@ export const EmmaEquipmentPricing = () => {
       setError(null);
       console.log("Fetching equipment data... (attempt: " + (fetchAttempt + 1) + ")");
       
-      // Use our enhanced function with multiple fallbacks
       const result = await fetchProductsWithFallback({
         category: "Equipment",
         orderBy: ["reference.asc"]
@@ -45,7 +43,6 @@ export const EmmaEquipmentPricing = () => {
       if (result.data && result.data.length > 0) {
         console.log("Equipment data fetch successful:", result.data.length, "items");
         setEquipmentData(result.data);
-        // If we previously had an error but now succeeded, show success toast
         if (error) {
           toast({
             title: "Data connection restored",
@@ -70,7 +67,6 @@ export const EmmaEquipmentPricing = () => {
     fetchEquipment();
   }, [fetchAttempt, toast]);
   
-  // Use the MOQ from first equipment item if available, otherwise use default values
   const volumeData = equipmentData.length > 0 
     ? {
         importer: equipmentData[0].importer_moq,

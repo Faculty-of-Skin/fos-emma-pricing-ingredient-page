@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useEffect, useState } from "react";
@@ -6,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Loader2, RefreshCcw } from "lucide-react";
-import { fetchProductsWithDirectFetch } from "@/utils/supabaseUtils";
+import { fetchProductsWithDirectFetch } from "@/utils/supabase";
 import { Button } from "@/components/ui/button";
 
 type Accessory = {
