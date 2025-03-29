@@ -48,6 +48,36 @@ export type Database = {
         }
         Relationships: []
       }
+      product_ingredients: {
+        Row: {
+          code: string
+          created_at: string
+          description: string
+          id: string
+          ingredients: string
+          properties: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description: string
+          id?: string
+          ingredients: string
+          properties: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string
+          id?: string
+          ingredients?: string
+          properties?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           beauty_institute_moq: number
