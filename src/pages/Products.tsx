@@ -12,6 +12,7 @@ import { AlertCircle, Database, RefreshCw, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState } from "react";
 import { toast } from "sonner";
+import { FloatingCurrencySelector } from "@/components/emma/FloatingCurrencySelector";
 
 const Products = () => {
   const { 
@@ -54,6 +55,7 @@ const Products = () => {
 
   return (
     <DashboardLayout>
+      <FloatingCurrencySelector />
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <ProductsHeader title="Products" />

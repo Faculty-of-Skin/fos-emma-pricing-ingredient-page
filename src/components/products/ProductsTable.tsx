@@ -88,8 +88,10 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
                 <TableHead className="font-mono uppercase">Reference</TableHead>
                 <TableHead className="font-mono uppercase">Description</TableHead>
                 <TableHead className="font-mono uppercase text-right">
-                  Beauty Institute
-                  <div className="font-mono text-xs text-brutal-gray mt-1">MOQ: {products[0]?.beauty_institute_moq || "N/A"}</div>
+                  Beauty Institute Price
+                </TableHead>
+                <TableHead className="font-mono uppercase text-right">
+                  MOQ
                 </TableHead>
                 {isAdmin && <TableHead className="text-right">Actions</TableHead>}
               </TableRow>
@@ -109,7 +111,9 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
                   <TableCell className="font-mono">{product.description}</TableCell>
                   <TableCell className="font-mono text-right">
                     {formatPrice(convertPrice(product.beauty_institute_price))}
-                    <div className="text-xs text-brutal-gray">MOQ: {product.beauty_institute_moq}</div>
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {product.beauty_institute_moq}
                   </TableCell>
                   {isAdmin && (
                     <TableCell className="text-right">

@@ -1,3 +1,4 @@
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Info, Loader2, RefreshCcw, ServerOff } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
@@ -43,10 +44,6 @@ export const EquipmentPricing = () => {
   useEffect(() => {
     fetchEquipment();
   }, [fetchAttempt]);
-  
-  const beautyInstituteData = equipmentData.length > 0 
-    ? { moq: equipmentData[0].beauty_institute_moq }
-    : { moq: 1 };
 
   const handleRefresh = () => {
     setFetchAttempt(prev => prev + 1);
@@ -77,17 +74,15 @@ export const EquipmentPricing = () => {
                 <TableRow>
                   <TableHead className="font-mono uppercase text-brutal-black">Reference</TableHead>
                   <TableHead className="font-mono uppercase text-brutal-black">Description</TableHead>
-                  <TableHead className="font-mono uppercase text-brutal-black text-right">
-                    Beauty Institute
-                    <div className="font-mono text-xs text-brutal-gray mt-1">MOQ: {beautyInstituteData.moq}</div>
-                  </TableHead>
+                  <TableHead className="font-mono uppercase text-brutal-black text-right">Beauty Institute Price</TableHead>
+                  <TableHead className="font-mono uppercase text-brutal-black text-right">MOQ</TableHead>
                   <TableHead className="font-mono uppercase text-brutal-black text-right">Final Consumer</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-6">
+                    <TableCell colSpan={5} className="text-center py-6">
                       <div className="flex justify-center">
                         <Loader2 className="h-6 w-6 animate-spin text-primary" />
                       </div>
@@ -96,7 +91,7 @@ export const EquipmentPricing = () => {
                   </TableRow>
                 ) : equipmentData.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-6">
+                    <TableCell colSpan={5} className="text-center py-6">
                       <div className="text-brutal-charcoal">
                         No equipment data available
                         <div className="mt-2 text-sm">
@@ -119,6 +114,9 @@ export const EquipmentPricing = () => {
                       <TableCell className="font-mono">{item.description}</TableCell>
                       <TableCell className="font-mono text-right">
                         {formatPrice(convertPrice(item.beauty_institute_price))}
+                      </TableCell>
+                      <TableCell className="font-mono text-right">
+                        {item.beauty_institute_moq}
                       </TableCell>
                       <TableCell className="font-mono text-right">
                         {item.final_consumer_price ? formatPrice(convertPrice(item.final_consumer_price)) : "NA"}
