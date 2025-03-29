@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -28,6 +29,7 @@ export const useProducts = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [fetchAttempt, setFetchAttempt] = useState(0);
   const [isUsingFallbackData, setIsUsingFallbackData] = useState(false);
+  const [rawError, setRawError] = useState<any>(null);
   const { toast } = useToast();
 
   const categories = ["all", ...new Set(products.map(product => product.category))].sort();
@@ -44,10 +46,20 @@ export const useProducts = () => {
         setIsLoading(true);
         setError(null);
         setIsUsingFallbackData(false);
+        setRawError(null);
         console.log("Fetching products data... (attempt: " + (fetchAttempt + 1) + ")");
         
         try {
           console.log("Attempting direct query first...");
+          // Test the profiles connection first to check if RLS is working correctly
+          const profilesCheck = await supabase.from("profiles").select("role").limit(1);
+          if (profilesCheck.error) {
+            console.error("Profile check failed:", profilesCheck.error);
+            throw profilesCheck.error;
+          } else {
+            console.log("Profile check successful:", profilesCheck.data);
+          }
+          
           const { data, error } = await supabase
             .from("products")
             .select("*")
@@ -63,10 +75,12 @@ export const useProducts = () => {
             console.log("Direct query successful:", data.length, "items");
             setProducts(data);
             setFilteredProducts(data);
+            sonnerToast.success("Products loaded successfully");
             return;
           }
-        } catch (directError) {
+        } catch (directError: any) {
           console.error("Direct query exception:", directError);
+          setRawError(directError);
           // Continue to fallback methods
         }
         
@@ -85,7 +99,9 @@ export const useProducts = () => {
           if (firstItem.id.startsWith('mock-')) {
             console.log("Using mock data as fallback");
             setIsUsingFallbackData(true);
-            setError("Unable to connect to the database. Database permission error (recursive policy).");
+            const errorMsg = result.error || rawError?.message || 
+              "Unable to connect to the database. Database permission error (recursive policy).";
+            setError(errorMsg);
             sonnerToast.warning("Using sample data - Database connection issue");
           } else {
             if (error) {
@@ -107,6 +123,7 @@ export const useProducts = () => {
         }
       } catch (error: any) {
         console.error("Error fetching products:", error);
+        setRawError(error);
         
         let errorMessage = "An unexpected error occurred. Please try again later.";
         if (error.message && error.message.includes("infinite recursion")) {
@@ -174,6 +191,7 @@ export const useProducts = () => {
     setSearchQuery,
     categories,
     refetch,
-    isUsingFallbackData
+    isUsingFallbackData,
+    rawError
   };
 };

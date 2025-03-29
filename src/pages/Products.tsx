@@ -8,9 +8,9 @@ import { ProductsError } from "@/components/products/ProductsError";
 import { EmptyProducts } from "@/components/products/EmptyProducts";
 import { useProducts } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Database, RefreshCw } from "lucide-react";
+import { AlertCircle, Database, RefreshCw, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Products = () => {
@@ -27,23 +27,36 @@ const Products = () => {
     refetch,
     isUsingFallbackData
   } = useProducts();
+  
+  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const [lastReconnectTime, setLastReconnectTime] = useState<Date | null>(null);
 
   // Check if we need to force a refetch after RLS policy updates
   useEffect(() => {
-    if (isUsingFallbackData) {
+    if (isUsingFallbackData && reconnectAttempts < 3) {
       // Wait a bit before trying to reconnect after policy updates
       const timer = setTimeout(() => {
-        toast.info("Attempting to reconnect to database...");
+        toast.info(`Attempting to reconnect to database (attempt ${reconnectAttempts + 1}/3)...`);
+        setReconnectAttempts(prev => prev + 1);
+        setLastReconnectTime(new Date());
         refetch();
-      }, 2000);
+      }, 3000);
       
       return () => clearTimeout(timer);
     }
-  }, [isUsingFallbackData, refetch]);
+  }, [isUsingFallbackData, refetch, reconnectAttempts]);
 
   const handleForceRefresh = () => {
     toast.info("Force refreshing data connection...");
+    setReconnectAttempts(prev => prev + 1);
+    setLastReconnectTime(new Date());
     refetch();
+    
+    // Log connection attempt for debugging
+    console.log("Manual reconnection attempt initiated", {
+      timestamp: new Date().toISOString(),
+      previousAttempts: reconnectAttempts
+    });
   };
 
   if (error && !isUsingFallbackData) {
@@ -80,14 +93,38 @@ const Products = () => {
               {error && (
                 <p className="mt-1 text-sm">Error: {error}</p>
               )}
-              <Button 
-                onClick={handleForceRefresh} 
-                variant="outline" 
-                size="sm" 
-                className="mt-2"
-              >
-                Try reconnecting
-              </Button>
+              <div className="mt-2 flex flex-col gap-2">
+                <Button 
+                  onClick={handleForceRefresh} 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full sm:w-auto"
+                >
+                  Try reconnecting
+                </Button>
+                
+                {lastReconnectTime && (
+                  <div className="text-xs flex items-center gap-1 text-muted-foreground">
+                    <Info className="h-3 w-3" /> Last attempt: {lastReconnectTime.toLocaleTimeString()} 
+                    ({reconnectAttempts} total attempts)
+                  </div>
+                )}
+                
+                <details className="text-xs mt-2 text-muted-foreground">
+                  <summary className="cursor-pointer">Debug Information</summary>
+                  <div className="mt-1 p-2 bg-muted/50 rounded text-xs font-mono whitespace-pre-wrap">
+                    Connection Status: Using Fallback Data
+                    <br />
+                    Error Message: {error || "Unknown error"}
+                    <br />
+                    Browser: {navigator.userAgent}
+                    <br />
+                    Reconnection Attempts: {reconnectAttempts}
+                    <br />
+                    Products Count: {products.length} (mock), {filteredProducts.length} (filtered)
+                  </div>
+                </details>
+              </div>
             </AlertDescription>
           </Alert>
         )}
