@@ -9,7 +9,6 @@ import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { AccountCard } from "@/components/dashboard/AccountCard";
 import { AdminTools } from "@/components/dashboard/AdminTools";
 import { SupportCard } from "@/components/dashboard/SupportCard";
-import { AddNotificationButton } from "@/components/dashboard/AddNotificationButton";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -20,12 +19,9 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto p-6">
-        {/* Welcome Banner with notification test button */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        {/* Welcome Banner */}
+        <div className="mb-6">
           <WelcomeBanner firstName={firstName} />
-          <div className="mt-4 md:mt-0">
-            <AddNotificationButton />
-          </div>
         </div>
         
         {/* Quick Access Tiles */}
