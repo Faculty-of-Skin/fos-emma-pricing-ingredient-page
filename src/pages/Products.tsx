@@ -10,6 +10,8 @@ import { useProducts } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Database, RefreshCw } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 const Products = () => {
   const { 
@@ -26,6 +28,24 @@ const Products = () => {
     isUsingFallbackData
   } = useProducts();
 
+  // Check if we need to force a refetch after RLS policy updates
+  useEffect(() => {
+    if (isUsingFallbackData) {
+      // Wait a bit before trying to reconnect after policy updates
+      const timer = setTimeout(() => {
+        toast.info("Attempting to reconnect to database...");
+        refetch();
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isUsingFallbackData, refetch]);
+
+  const handleForceRefresh = () => {
+    toast.info("Force refreshing data connection...");
+    refetch();
+  };
+
   if (error && !isUsingFallbackData) {
     return (
       <DashboardLayout>
@@ -39,9 +59,16 @@ const Products = () => {
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <ProductsHeader title="Products" />
-          <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
-            <RefreshCw className="h-4 w-4" /> Refresh
-          </Button>
+          <div className="flex gap-2">
+            {isUsingFallbackData && (
+              <Button variant="default" size="sm" onClick={handleForceRefresh} className="gap-2">
+                <Database className="h-4 w-4" /> Reconnect
+              </Button>
+            )}
+            <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
+              <RefreshCw className="h-4 w-4" /> Refresh
+            </Button>
+          </div>
         </div>
         
         {isUsingFallbackData && (
@@ -53,6 +80,14 @@ const Products = () => {
               {error && (
                 <p className="mt-1 text-sm">Error: {error}</p>
               )}
+              <Button 
+                onClick={handleForceRefresh} 
+                variant="outline" 
+                size="sm" 
+                className="mt-2"
+              >
+                Try reconnecting
+              </Button>
             </AlertDescription>
           </Alert>
         )}
