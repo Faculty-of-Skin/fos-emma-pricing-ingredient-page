@@ -1,16 +1,7 @@
 
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Loader2, Package, RefreshCcw } from "lucide-react";
-import { useCurrency } from "@/context/CurrencyContext";
-import { useAuth } from "@/context/AuthContext";
+import { ProductsLoadingState } from "./ProductsLoadingState";
+import { ProductsEmptyState } from "./ProductsEmptyState";
+import { ProductsCategoryGroup } from "./ProductsCategoryGroup";
 
 type Product = {
   id: string;
@@ -35,34 +26,12 @@ interface ProductsTableProps {
 }
 
 export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackData = false }: ProductsTableProps) => {
-  const { isAdmin } = useAuth();
-  const { formatPrice, convertPrice } = useCurrency();
-
   if (isLoading) {
-    return (
-      <div className="flex justify-center p-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <ProductsLoadingState />;
   }
 
   if (products.length === 0) {
-    return (
-      <div className="brutal-card p-8 text-center">
-        <div className="flex flex-col items-center gap-4 py-8">
-          <Package className="h-12 w-12 text-muted-foreground/50" />
-          <div className="space-y-2 text-center">
-            <h3 className="text-xl font-semibold">No products found</h3>
-            <p className="text-muted-foreground">
-              Either no products match your filter criteria, or there was an issue connecting to the database.
-            </p>
-          </div>
-          <Button onClick={onRefresh} variant="outline" className="gap-2">
-            <RefreshCcw className="h-4 w-4" /> Refresh Data
-          </Button>
-        </div>
-      </div>
-    );
+    return <ProductsEmptyState onRefresh={onRefresh} />;
   }
 
   // Group products by category for better organization
@@ -80,58 +49,12 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   return (
     <div className="space-y-8">
       {sortedCategories.map(category => (
-        <div key={category} className="brutal-card p-4 overflow-x-auto w-full">
-          <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow className="border-b-2 border-brutal-black/30">
-                <TableHead className="font-mono uppercase text-brutal-black w-1/6">Reference</TableHead>
-                <TableHead className="font-mono uppercase text-brutal-black w-2/5">Description</TableHead>
-                <TableHead className="font-mono uppercase text-brutal-black text-right w-1/6">
-                  Beauty Institute Price
-                </TableHead>
-                <TableHead className="font-mono uppercase text-brutal-black text-right w-1/6">
-                  MOQ
-                </TableHead>
-                {isAdmin && <TableHead className="text-right w-1/6">Actions</TableHead>}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {groupedProducts[category].map((product) => (
-                <TableRow 
-                  key={product.id}
-                  className={`border-t-2 border-brutal-black/10 hover:bg-brutal-white/80 ${isUsingFallbackData ? 'opacity-80' : ''}`}
-                >
-                  <TableCell className="font-mono font-medium">
-                    {product.reference}
-                    {isUsingFallbackData && product.id.startsWith('mock-') && (
-                      <span className="text-xs text-muted-foreground ml-2">(sample)</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="font-mono">{product.description}</TableCell>
-                  <TableCell className="font-mono text-right">
-                    {formatPrice(convertPrice(product.beauty_institute_price))}
-                  </TableCell>
-                  <TableCell className="font-mono text-right">
-                    {product.beauty_institute_moq}
-                  </TableCell>
-                  {isAdmin && (
-                    <TableCell className="text-right">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        asChild 
-                        disabled={isUsingFallbackData && product.id.startsWith('mock-')}
-                      >
-                        <a href={`/admin/products/${product.id}`}>Edit</a>
-                      </Button>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <ProductsCategoryGroup 
+          key={category}
+          category={category}
+          products={groupedProducts[category]}
+          isUsingFallbackData={isUsingFallbackData}
+        />
       ))}
     </div>
   );
