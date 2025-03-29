@@ -49,17 +49,8 @@ export const useProducts = () => {
         setRawError(null);
         console.log("Fetching products data... (attempt: " + (fetchAttempt + 1) + ")");
         
+        // Try the direct query first with the fixed policies
         try {
-          console.log("Attempting direct query first...");
-          // Test the profiles connection first to check if RLS is working correctly
-          const profilesCheck = await supabase.from("profiles").select("role").limit(1);
-          if (profilesCheck.error) {
-            console.error("Profile check failed:", profilesCheck.error);
-            throw profilesCheck.error;
-          } else {
-            console.log("Profile check successful:", profilesCheck.data);
-          }
-          
           const { data, error } = await supabase
             .from("products")
             .select("*")
@@ -100,7 +91,7 @@ export const useProducts = () => {
             console.log("Using mock data as fallback");
             setIsUsingFallbackData(true);
             const errorMsg = result.error || rawError?.message || 
-              "Unable to connect to the database. Database permission error (recursive policy).";
+              "Unable to connect to the database. Please try reconnecting.";
             setError(errorMsg);
             sonnerToast.warning("Using sample data - Database connection issue");
           } else {
@@ -126,11 +117,14 @@ export const useProducts = () => {
         setRawError(error);
         
         let errorMessage = "An unexpected error occurred. Please try again later.";
-        if (error.message && error.message.includes("infinite recursion")) {
-          errorMessage = "Database permission error (recursive policy). Please contact your administrator.";
-          console.log("Detected recursion error in RLS policies");
-        } else if (error.message && error.message.includes("JWT")) {
-          errorMessage = "Authentication error. Please try logging in again.";
+        if (error.message) {
+          if (error.message.includes("infinite recursion")) {
+            errorMessage = "Database permission error (recursive policy). Please contact your administrator.";
+          } else if (error.message.includes("JWT")) {
+            errorMessage = "Authentication error. Please try logging in again.";
+          } else {
+            errorMessage = error.message;
+          }
         }
         
         setError(errorMessage);
