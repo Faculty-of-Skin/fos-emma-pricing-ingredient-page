@@ -18,7 +18,7 @@ const Dashboard = () => {
   
   return (
     <DashboardLayout>
-      <div className="container mx-auto p-6">
+      <div className="p-4 sm:p-6">
         {/* Welcome Banner */}
         <div className="mb-6">
           <WelcomeBanner firstName={firstName} />

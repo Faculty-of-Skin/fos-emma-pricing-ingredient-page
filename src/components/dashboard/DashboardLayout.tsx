@@ -81,7 +81,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
       </div>
 
       {/* Main content with header */}
-      <div className="flex-1 md:ml-64 w-full flex flex-col">
+      <div className="flex-1 flex flex-col">
         {/* Fixed header with notifications */}
         <header className="bg-white border-b border-brutal-gray/10 sticky top-0 z-30 p-4 flex justify-end items-center">
           <NotificationDropdown 
