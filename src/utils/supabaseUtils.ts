@@ -15,29 +15,25 @@ export const getPublicApiKey = () => {
 };
 
 // Mock product data for cases when the database connection fails completely
-const getMockProductData = (category: string | string[]) => {
-  // For equipment
-  if (category === "Equipment" || (Array.isArray(category) && category.includes("Equipment"))) {
-    return [
-      {
-        id: "mock-equip-1",
-        reference: "EMMA2024-PRO",
-        description: "Emma Professional Machine",
-        category: "Equipment",
-        importer_price: 1200,
-        distributor_price: 1600,
-        beauty_institute_price: 2400,
-        final_consumer_price: 3200,
-        importer_moq: 400,
-        distributor_moq: 20,
-        beauty_institute_moq: 1,
-        created_at: new Date().toISOString()
-      }
-    ];
-  }
-  
-  // For accessories and other categories
-  return [
+export const getMockProductData = (category?: string | string[]) => {
+  // Define common mock data
+  const mockData = [
+    // Equipment category
+    {
+      id: "mock-equip-1",
+      reference: "EMMA2024-PRO",
+      description: "Emma Professional Machine",
+      category: "Equipment",
+      importer_price: 1200,
+      distributor_price: 1600,
+      beauty_institute_price: 2400,
+      final_consumer_price: 3200,
+      importer_moq: 400,
+      distributor_moq: 20,
+      beauty_institute_moq: 1,
+      created_at: new Date().toISOString()
+    },
+    // Accessories category
     {
       id: "mock-acc-1",
       reference: "EMMA-ACC-01",
@@ -51,8 +47,64 @@ const getMockProductData = (category: string | string[]) => {
       distributor_moq: 10,
       beauty_institute_moq: 1,
       created_at: new Date().toISOString()
+    },
+    // Face capsule category
+    {
+      id: "mock-face-1",
+      reference: "EMMA-FACE-01",
+      description: "Rejuvenating Face Capsule",
+      category: "Face capsule",
+      importer_price: 90,
+      distributor_price: 120,
+      beauty_institute_price: 180,
+      final_consumer_price: 220,
+      importer_moq: 500,
+      distributor_moq: 50,
+      beauty_institute_moq: 5,
+      created_at: new Date().toISOString()
+    },
+    // Body capsule category
+    {
+      id: "mock-body-1",
+      reference: "EMMA-BODY-01",
+      description: "Slimming Body Capsule",
+      category: "Body capsule",
+      importer_price: 110,
+      distributor_price: 140,
+      beauty_institute_price: 210,
+      final_consumer_price: 250,
+      importer_moq: 500,
+      distributor_moq: 50,
+      beauty_institute_moq: 5,
+      created_at: new Date().toISOString()
+    },
+    // Marketing items
+    {
+      id: "mock-marketing-1",
+      reference: "EMMA-MKT-01",
+      description: "Emma Brochure Pack",
+      category: "Marketing item",
+      importer_price: 50,
+      distributor_price: 70,
+      beauty_institute_price: 90,
+      final_consumer_price: null,
+      importer_moq: 1000,
+      distributor_moq: 100,
+      beauty_institute_moq: 10,
+      created_at: new Date().toISOString()
     }
   ];
+  
+  // Filter by category if provided
+  if (category) {
+    if (Array.isArray(category)) {
+      return mockData.filter(item => category.includes(item.category));
+    } else if (category !== "all") {
+      return mockData.filter(item => item.category === category);
+    }
+  }
+  
+  return mockData;
 };
 
 // Fetch products with direct fetch as a fallback when Supabase client fails
@@ -112,7 +164,7 @@ export const fetchProductsWithDirectFetch = async (options: {
       // If mock data is requested and fetch failed, return mock data
       if (options.useMockOnFailure) {
         console.log("Returning mock data due to fetch failure");
-        return { data: getMockProductData(options.category || ""), error: null };
+        return { data: getMockProductData(options.category), error: null };
       }
       
       return { data: null, error: JSON.stringify(errorData) };
@@ -129,7 +181,7 @@ export const fetchProductsWithDirectFetch = async (options: {
     // If mock data is requested and there was an exception, return mock data
     if (options.useMockOnFailure) {
       console.log("Returning mock data due to exception");
-      return { data: getMockProductData(options.category || ""), error: null };
+      return { data: getMockProductData(options.category), error: null };
     }
     
     return { data: [], error: String(error) };
@@ -179,7 +231,7 @@ export const fetchProductsWithFallback = async (options: {
       
       // Both methods failed, return mock data as last resort
       console.log("Both fetch methods failed, returning mock data");
-      return { data: getMockProductData(options.category || ""), error: null };
+      return { data: getMockProductData(options.category), error: null };
     }
     
     console.log("Supabase client successful, retrieved items:", data?.length || 0);
@@ -189,6 +241,6 @@ export const fetchProductsWithFallback = async (options: {
     
     // Unexpected error, return mock data
     console.log("Exception occurred, returning mock data");
-    return { data: getMockProductData(options.category || ""), error: null };
+    return { data: getMockProductData(options.category), error: null };
   }
 };

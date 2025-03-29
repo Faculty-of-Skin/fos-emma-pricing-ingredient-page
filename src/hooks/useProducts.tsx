@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { fetchProductsWithFallback } from "@/utils/supabaseUtils";
+import { toast as sonnerToast } from "sonner";
 
 type Product = {
   id: string;
@@ -29,11 +30,13 @@ export const useProducts = () => {
   const [fetchAttempt, setFetchAttempt] = useState(0);
   const { toast } = useToast();
 
-  // Get unique categories for filter
+  // Get unique categories for filter, sorted alphabetically
   const categories = ["all", ...new Set(products.map(product => product.category))].sort();
 
   const refetch = () => {
+    setIsLoading(true);
     setFetchAttempt(prev => prev + 1);
+    sonnerToast("Refreshing product data...");
   };
 
   useEffect(() => {
@@ -61,15 +64,18 @@ export const useProducts = () => {
               variant: "default",
             });
           }
+          sonnerToast.success("Products loaded successfully");
         } else {
           console.warn("Products fetch returned no data");
           setProducts([]);
           setFilteredProducts([]);
           setError("No products data available. Please try again later.");
+          sonnerToast.error("No products data available");
         }
       } catch (error: any) {
         console.error("Error fetching products:", error);
         setError("An unexpected error occurred. Please try again later.");
+        sonnerToast.error("Error fetching products");
       } finally {
         setIsLoading(false);
       }

@@ -8,7 +8,7 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Package, RefreshCcw } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useAuth } from "@/context/AuthContext";
 
@@ -30,9 +30,10 @@ type Product = {
 interface ProductsTableProps {
   products: Product[];
   isLoading: boolean;
+  onRefresh: () => void;
 }
 
-export const ProductsTable = ({ products, isLoading }: ProductsTableProps) => {
+export const ProductsTable = ({ products, isLoading, onRefresh }: ProductsTableProps) => {
   const { isAdmin } = useAuth();
   const { formatPrice, convertPrice } = useCurrency();
 
@@ -47,65 +48,83 @@ export const ProductsTable = ({ products, isLoading }: ProductsTableProps) => {
   if (products.length === 0) {
     return (
       <div className="brutal-card p-8 text-center">
-        <p className="text-brutal-gray mb-4">
-          No products match your filter criteria.
-        </p>
+        <div className="flex flex-col items-center gap-4 py-8">
+          <Package className="h-12 w-12 text-muted-foreground/50" />
+          <div className="space-y-2 text-center">
+            <h3 className="text-xl font-semibold">No products found</h3>
+            <p className="text-muted-foreground">
+              Either no products match your filter criteria, or there was an issue connecting to the database.
+            </p>
+          </div>
+          <Button onClick={onRefresh} variant="outline" className="gap-2">
+            <RefreshCcw className="h-4 w-4" /> Refresh Data
+          </Button>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="brutal-card p-4 overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="font-mono uppercase">Reference</TableHead>
-            <TableHead className="font-mono uppercase">Description</TableHead>
-            <TableHead className="font-mono uppercase">Category</TableHead>
-            <TableHead className="font-mono uppercase text-right">Importer</TableHead>
-            <TableHead className="font-mono uppercase text-right">Distributor</TableHead>
-            <TableHead className="font-mono uppercase text-right">Beauty Institute</TableHead>
-            {isAdmin && <TableHead className="text-right">Actions</TableHead>}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product, index) => {
-            // Add visual separators between different categories
-            const prevProduct = index > 0 ? products[index - 1] : null;
-            const isNewCategory = prevProduct && prevProduct.category !== product.category;
+  // Group products by category for better organization
+  const groupedProducts = products.reduce((acc, product) => {
+    if (!acc[product.category]) {
+      acc[product.category] = [];
+    }
+    acc[product.category].push(product);
+    return acc;
+  }, {} as Record<string, Product[]>);
 
-            return (
-              <TableRow 
-                key={product.id}
-                className={`${isNewCategory ? 'border-t-4 border-brutal-black' : ''} hover:bg-brutal-white/50`}
-              >
-                <TableCell className="font-medium font-mono">{product.reference}</TableCell>
-                <TableCell className="font-mono">{product.description}</TableCell>
-                <TableCell className="font-mono">{product.category}</TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(product.importer_price))}
-                  <div className="text-xs text-brutal-gray">MOQ: {product.importer_moq}</div>
-                </TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(product.distributor_price))}
-                  <div className="text-xs text-brutal-gray">MOQ: {product.distributor_moq}</div>
-                </TableCell>
-                <TableCell className="font-mono text-right">
-                  {formatPrice(convertPrice(product.beauty_institute_price))}
-                  <div className="text-xs text-brutal-gray">MOQ: {product.beauty_institute_moq}</div>
-                </TableCell>
-                {isAdmin && (
-                  <TableCell className="text-right">
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={`/admin/products/${product.id}`}>Edit</a>
-                    </Button>
-                  </TableCell>
-                )}
+  // Sort categories alphabetically
+  const sortedCategories = Object.keys(groupedProducts).sort();
+
+  return (
+    <div className="space-y-8">
+      {sortedCategories.map(category => (
+        <div key={category} className="brutal-card p-4 overflow-x-auto">
+          <h3 className="text-lg font-semibold mb-4 px-4">{category}</h3>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="font-mono uppercase">Reference</TableHead>
+                <TableHead className="font-mono uppercase">Description</TableHead>
+                <TableHead className="font-mono uppercase text-right">Importer</TableHead>
+                <TableHead className="font-mono uppercase text-right">Distributor</TableHead>
+                <TableHead className="font-mono uppercase text-right">Beauty Institute</TableHead>
+                {isAdmin && <TableHead className="text-right">Actions</TableHead>}
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            </TableHeader>
+            <TableBody>
+              {groupedProducts[category].map((product) => (
+                <TableRow 
+                  key={product.id}
+                  className="hover:bg-brutal-white/50"
+                >
+                  <TableCell className="font-medium font-mono">{product.reference}</TableCell>
+                  <TableCell className="font-mono">{product.description}</TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(product.importer_price))}
+                    <div className="text-xs text-brutal-gray">MOQ: {product.importer_moq}</div>
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(product.distributor_price))}
+                    <div className="text-xs text-brutal-gray">MOQ: {product.distributor_moq}</div>
+                  </TableCell>
+                  <TableCell className="font-mono text-right">
+                    {formatPrice(convertPrice(product.beauty_institute_price))}
+                    <div className="text-xs text-brutal-gray">MOQ: {product.beauty_institute_moq}</div>
+                  </TableCell>
+                  {isAdmin && (
+                    <TableCell className="text-right">
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={`/admin/products/${product.id}`}>Edit</a>
+                      </Button>
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ))}
     </div>
   );
 };
