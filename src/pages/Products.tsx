@@ -10,7 +10,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Database, RefreshCw, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 const Products = () => {
@@ -30,21 +30,6 @@ const Products = () => {
   
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
   const [lastReconnectTime, setLastReconnectTime] = useState<Date | null>(null);
-
-  // Check if we need to force a refetch after RLS policy updates
-  useEffect(() => {
-    if (isUsingFallbackData && reconnectAttempts < 3) {
-      // Wait a bit before trying to reconnect after policy updates
-      const timer = setTimeout(() => {
-        toast.info(`Attempting to reconnect to database (attempt ${reconnectAttempts + 1}/3)...`);
-        setReconnectAttempts(prev => prev + 1);
-        setLastReconnectTime(new Date());
-        refetch();
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isUsingFallbackData, refetch, reconnectAttempts]);
 
   const handleForceRefresh = () => {
     toast.info("Force refreshing data connection...");

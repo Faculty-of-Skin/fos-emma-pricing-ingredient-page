@@ -159,7 +159,7 @@ export const useProducts = () => {
     };
 
     fetchProducts();
-  }, [fetchAttempt, toast, error]);
+  }, [fetchAttempt, toast]);
 
   useEffect(() => {
     let result = products;
