@@ -12,7 +12,7 @@ import { AlertCircle, Database, RefreshCw, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState } from "react";
 import { toast } from "sonner";
-import { FloatingCurrencySelector } from "@/components/emma/FloatingCurrencySelector";
+import { CurrencySelector } from "@/components/emma/CurrencySelector";
 
 const Products = () => {
   const { 
@@ -55,19 +55,24 @@ const Products = () => {
 
   return (
     <DashboardLayout>
-      <FloatingCurrencySelector />
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <ProductsHeader title="Products" />
-          <div className="flex gap-2">
-            {isUsingFallbackData && (
-              <Button variant="default" size="sm" onClick={handleForceRefresh} className="gap-2">
-                <Database className="h-4 w-4" /> Reconnect
+          <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-2">
+              <span className="text-brutal-charcoal font-mono uppercase text-sm">Currency:</span>
+              <CurrencySelector />
+            </div>
+            <div className="flex gap-2">
+              {isUsingFallbackData && (
+                <Button variant="default" size="sm" onClick={handleForceRefresh} className="gap-2">
+                  <Database className="h-4 w-4" /> Reconnect
+                </Button>
+              )}
+              <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
+                <RefreshCw className="h-4 w-4" /> Refresh
               </Button>
-            )}
-            <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
-              <RefreshCw className="h-4 w-4" /> Refresh
-            </Button>
+            </div>
           </div>
         </div>
         

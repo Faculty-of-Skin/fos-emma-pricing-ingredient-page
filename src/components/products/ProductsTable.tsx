@@ -81,16 +81,16 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
     <div className="space-y-8">
       {sortedCategories.map(category => (
         <div key={category} className="brutal-card p-4 overflow-x-auto">
-          <h3 className="text-lg font-semibold mb-4 px-4">{category}</h3>
+          <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="font-mono uppercase">Reference</TableHead>
-                <TableHead className="font-mono uppercase">Description</TableHead>
-                <TableHead className="font-mono uppercase text-right">
+              <TableRow className="border-b-2 border-brutal-black/30">
+                <TableHead className="font-mono uppercase text-brutal-black">Reference</TableHead>
+                <TableHead className="font-mono uppercase text-brutal-black">Description</TableHead>
+                <TableHead className="font-mono uppercase text-brutal-black text-right">
                   Beauty Institute Price
                 </TableHead>
-                <TableHead className="font-mono uppercase text-right">
+                <TableHead className="font-mono uppercase text-brutal-black text-right">
                   MOQ
                 </TableHead>
                 {isAdmin && <TableHead className="text-right">Actions</TableHead>}
@@ -100,9 +100,9 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
               {groupedProducts[category].map((product) => (
                 <TableRow 
                   key={product.id}
-                  className={`hover:bg-brutal-white/50 ${isUsingFallbackData ? 'opacity-80' : ''}`}
+                  className={`border-t-2 border-brutal-black/10 hover:bg-brutal-white/80 ${isUsingFallbackData ? 'opacity-80' : ''}`}
                 >
-                  <TableCell className="font-medium font-mono">
+                  <TableCell className="font-mono font-medium">
                     {product.reference}
                     {isUsingFallbackData && product.id.startsWith('mock-') && (
                       <span className="text-xs text-muted-foreground ml-2">(sample)</span>
