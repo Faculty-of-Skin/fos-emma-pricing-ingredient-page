@@ -44,14 +44,9 @@ export const EquipmentPricing = () => {
     fetchEquipment();
   }, [fetchAttempt]);
   
-  // Use the MOQ from first equipment item if available, otherwise use default values
-  const volumeData = equipmentData.length > 0 
-    ? {
-        importer: equipmentData[0].importer_moq,
-        distributor: equipmentData[0].distributor_moq,
-        beautyInstitute: equipmentData[0].beauty_institute_moq
-      } 
-    : { importer: 400, distributor: 20, beautyInstitute: 1 };
+  const beautyInstituteData = equipmentData.length > 0 
+    ? { moq: equipmentData[0].beauty_institute_moq }
+    : { moq: 1 };
 
   const handleRefresh = () => {
     setFetchAttempt(prev => prev + 1);
@@ -83,16 +78,8 @@ export const EquipmentPricing = () => {
                   <TableHead className="font-mono uppercase text-brutal-black">Reference</TableHead>
                   <TableHead className="font-mono uppercase text-brutal-black">Description</TableHead>
                   <TableHead className="font-mono uppercase text-brutal-black text-right">
-                    Importer
-                    <div className="font-mono text-xs text-brutal-gray mt-1">MOQ: {volumeData.importer}</div>
-                  </TableHead>
-                  <TableHead className="font-mono uppercase text-brutal-black text-right">
-                    Distributor
-                    <div className="font-mono text-xs text-brutal-gray mt-1">MOQ: {volumeData.distributor}</div>
-                  </TableHead>
-                  <TableHead className="font-mono uppercase text-brutal-black text-right">
                     Beauty Institute
-                    <div className="font-mono text-xs text-brutal-gray mt-1">MOQ: {volumeData.beautyInstitute}</div>
+                    <div className="font-mono text-xs text-brutal-gray mt-1">MOQ: {beautyInstituteData.moq}</div>
                   </TableHead>
                   <TableHead className="font-mono uppercase text-brutal-black text-right">Final Consumer</TableHead>
                 </TableRow>
@@ -100,7 +87,7 @@ export const EquipmentPricing = () => {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-6">
+                    <TableCell colSpan={4} className="text-center py-6">
                       <div className="flex justify-center">
                         <Loader2 className="h-6 w-6 animate-spin text-primary" />
                       </div>
@@ -109,7 +96,7 @@ export const EquipmentPricing = () => {
                   </TableRow>
                 ) : equipmentData.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-6">
+                    <TableCell colSpan={4} className="text-center py-6">
                       <div className="text-brutal-charcoal">
                         No equipment data available
                         <div className="mt-2 text-sm">
@@ -130,12 +117,6 @@ export const EquipmentPricing = () => {
                     <TableRow key={index} className="border-t-2 border-brutal-black hover:bg-brutal-white/80">
                       <TableCell className="font-mono font-medium">{item.reference}</TableCell>
                       <TableCell className="font-mono">{item.description}</TableCell>
-                      <TableCell className="font-mono text-right">
-                        {formatPrice(convertPrice(item.importer_price))}
-                      </TableCell>
-                      <TableCell className="font-mono text-right">
-                        {formatPrice(convertPrice(item.distributor_price))}
-                      </TableCell>
                       <TableCell className="font-mono text-right">
                         {formatPrice(convertPrice(item.beauty_institute_price))}
                       </TableCell>

@@ -88,29 +88,12 @@ export const EmmaAccessoriesPricing = () => {
     fetchAccessories();
   }, [toast]);
   
-  // Calculate average MOQ values if data is available
-  const calculateVolumeData = () => {
-    if (accessoriesData.length === 0) {
-      return { importer: 500, distributor: 50, beautyInstitute: 5 };
-    }
-    
-    // Find a face or body capsule for representative MOQs
-    const capsule = accessoriesData.find(item => 
-      item.category === 'Face capsule' || item.category === 'Body capsule'
-    );
-    
-    if (capsule) {
-      return {
-        importer: capsule.importer_moq,
-        distributor: capsule.distributor_moq, 
-        beautyInstitute: capsule.beauty_institute_moq
-      };
-    }
-    
-    return { importer: 500, distributor: 50, beautyInstitute: 5 };
-  };
-  
-  const volumeData = calculateVolumeData();
+  // Calculate MOQ value if data is available
+  const beautyInstituteData = accessoriesData.length > 0 
+    ? { moq: accessoriesData.find(item => 
+        item.category === 'Face capsule' || item.category === 'Body capsule'
+      )?.beauty_institute_moq || 5 }
+    : { moq: 5 };
 
   const handleRefresh = () => {
     fetchAccessories();
@@ -144,16 +127,8 @@ export const EmmaAccessoriesPricing = () => {
               <TableHead className="font-mono uppercase text-brutal-black">Reference</TableHead>
               <TableHead className="font-mono uppercase text-brutal-black">Description</TableHead>
               <TableHead className="font-mono uppercase text-brutal-black text-right">
-                Importer
-                <div className="font-mono text-xs text-brutal-gray mt-1">(Without tax) MOQ: {volumeData.importer}</div>
-              </TableHead>
-              <TableHead className="font-mono uppercase text-brutal-black text-right">
-                Distributor
-                <div className="font-mono text-xs text-brutal-gray mt-1">(Without tax) MOQ: {volumeData.distributor}</div>
-              </TableHead>
-              <TableHead className="font-mono uppercase text-brutal-black text-right">
                 Beauty Institute
-                <div className="font-mono text-xs text-brutal-gray mt-1">(Without tax) MOQ: {volumeData.beautyInstitute}</div>
+                <div className="font-mono text-xs text-brutal-gray mt-1">(Without tax) MOQ: {beautyInstituteData.moq}</div>
               </TableHead>
               <TableHead className="font-mono uppercase text-brutal-black text-right">
                 Final Consumer
@@ -164,7 +139,7 @@ export const EmmaAccessoriesPricing = () => {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-6">
+                <TableCell colSpan={5} className="text-center py-6">
                   <div className="flex justify-center">
                     <Loader2 className="h-6 w-6 animate-spin text-primary" />
                   </div>
@@ -173,7 +148,7 @@ export const EmmaAccessoriesPricing = () => {
               </TableRow>
             ) : accessoriesData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-6">
+                <TableCell colSpan={5} className="text-center py-6">
                   <div className="text-brutal-charcoal">
                     No product data available
                     <div className="mt-2 text-sm">
@@ -198,12 +173,6 @@ export const EmmaAccessoriesPricing = () => {
                   <TableCell className="font-mono">{item.reference}</TableCell>
                   <TableCell className="font-mono">{item.description}</TableCell>
                   <TableCell className="font-mono text-right">
-                    {formatPrice(convertPrice(item.importer_price))}
-                  </TableCell>
-                  <TableCell className="font-mono text-right">
-                    {formatPrice(convertPrice(item.distributor_price))}
-                  </TableCell>
-                  <TableCell className="font-mono text-right">
                     {formatPrice(convertPrice(item.beauty_institute_price))}
                   </TableCell>
                   <TableCell className="font-mono text-right">
@@ -220,20 +189,15 @@ export const EmmaAccessoriesPricing = () => {
         <div className="brutal-card border-2 bg-brutal-white/70">
           <h3 className="font-mono uppercase text-brutal-black font-bold mb-3">MOQ Information</h3>
           <p className="font-mono text-sm text-brutal-charcoal">
-            MOQ (Minimum Order Quantity) varies by buyer type:
+            MOQ (Minimum Order Quantity) for Beauty Institute: {beautyInstituteData.moq} units
           </p>
-          <ul className="mt-2 space-y-1">
-            <li className="font-mono text-sm">Importer: {volumeData.importer} units</li>
-            <li className="font-mono text-sm">Distributor: {volumeData.distributor} units</li>
-            <li className="font-mono text-sm">Beauty Institute: {volumeData.beautyInstitute} units</li>
-          </ul>
         </div>
         
         <div className="brutal-card border-2 bg-brutal-white/70">
           <h3 className="font-mono uppercase text-brutal-black font-bold mb-3">Ordering Information</h3>
           <p className="font-mono text-sm text-brutal-charcoal">
-            For bulk orders and distributor pricing, please contact our sales team directly.
-            Custom packaging and branding options are available for distributors and importers.
+            For bulk orders and beauty institute pricing, please contact our sales team directly.
+            Custom packaging and branding options are available.
           </p>
         </div>
       </div>
