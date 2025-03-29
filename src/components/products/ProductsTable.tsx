@@ -31,9 +31,10 @@ interface ProductsTableProps {
   products: Product[];
   isLoading: boolean;
   onRefresh: () => void;
+  isUsingFallbackData?: boolean;
 }
 
-export const ProductsTable = ({ products, isLoading, onRefresh }: ProductsTableProps) => {
+export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackData = false }: ProductsTableProps) => {
   const { isAdmin } = useAuth();
   const { formatPrice, convertPrice } = useCurrency();
 
@@ -96,9 +97,14 @@ export const ProductsTable = ({ products, isLoading, onRefresh }: ProductsTableP
               {groupedProducts[category].map((product) => (
                 <TableRow 
                   key={product.id}
-                  className="hover:bg-brutal-white/50"
+                  className={`hover:bg-brutal-white/50 ${isUsingFallbackData ? 'opacity-80' : ''}`}
                 >
-                  <TableCell className="font-medium font-mono">{product.reference}</TableCell>
+                  <TableCell className="font-medium font-mono">
+                    {product.reference}
+                    {isUsingFallbackData && product.id.startsWith('mock-') && (
+                      <span className="text-xs text-muted-foreground ml-2">(sample)</span>
+                    )}
+                  </TableCell>
                   <TableCell className="font-mono">{product.description}</TableCell>
                   <TableCell className="font-mono text-right">
                     {formatPrice(convertPrice(product.importer_price))}
@@ -114,7 +120,12 @@ export const ProductsTable = ({ products, isLoading, onRefresh }: ProductsTableP
                   </TableCell>
                   {isAdmin && (
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm" asChild>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        asChild 
+                        disabled={isUsingFallbackData && product.id.startsWith('mock-')}
+                      >
                         <a href={`/admin/products/${product.id}`}>Edit</a>
                       </Button>
                     </TableCell>

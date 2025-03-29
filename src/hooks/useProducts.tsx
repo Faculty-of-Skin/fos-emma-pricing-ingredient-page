@@ -28,6 +28,7 @@ export const useProducts = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [fetchAttempt, setFetchAttempt] = useState(0);
+  const [isUsingFallbackData, setIsUsingFallbackData] = useState(false);
   const { toast } = useToast();
 
   // Get unique categories for filter, sorted alphabetically
@@ -44,38 +45,98 @@ export const useProducts = () => {
       try {
         setIsLoading(true);
         setError(null);
+        setIsUsingFallbackData(false);
         console.log("Fetching products data... (attempt: " + (fetchAttempt + 1) + ")");
         
-        // Use our enhanced function with multiple fallbacks
+        // First try direct Supabase query without relying on user profile
+        try {
+          console.log("Attempting direct query first...");
+          const { data, error } = await supabase
+            .from("products")
+            .select("*")
+            .order("category")
+            .order("reference");
+            
+          if (error) {
+            console.warn("Direct query failed:", error);
+            throw error;
+          }
+          
+          if (data && data.length > 0) {
+            console.log("Direct query successful:", data.length, "items");
+            setProducts(data);
+            setFilteredProducts(data);
+            return;
+          }
+        } catch (directError) {
+          console.error("Direct query exception:", directError);
+          // Continue to fallback methods
+        }
+        
+        // Use our enhanced function with multiple fallbacks if direct query failed
+        console.log("Trying fallback methods...");
         const result = await fetchProductsWithFallback({
           orderBy: ["category.asc", "reference.asc"]
         });
         
         if (result.data && result.data.length > 0) {
-          console.log("Products fetch successful:", result.data.length, "items");
+          console.log("Products fetch successful via fallback:", result.data.length, "items");
           setProducts(result.data);
           setFilteredProducts(result.data);
           
-          // If we previously had an error but now succeeded, show success toast
-          if (error) {
-            toast({
-              title: "Data connection restored",
-              description: "Products loaded successfully.",
-              variant: "default",
-            });
+          // Check if we're using mock data
+          const firstItem = result.data[0];
+          if (firstItem.id.startsWith('mock-')) {
+            console.log("Using mock data as fallback");
+            setIsUsingFallbackData(true);
+            setError("Unable to connect to the database. Showing sample data instead.");
+            sonnerToast.warning("Using sample data - Database connection issue");
+          } else {
+            // If we previously had an error but now succeeded, show success toast
+            if (error) {
+              toast({
+                title: "Data connection restored",
+                description: "Products loaded successfully.",
+                variant: "default",
+              });
+            }
+            sonnerToast.success("Products loaded successfully");
           }
-          sonnerToast.success("Products loaded successfully");
         } else {
           console.warn("Products fetch returned no data");
           setProducts([]);
           setFilteredProducts([]);
           setError("No products data available. Please try again later.");
+          setIsUsingFallbackData(true);
           sonnerToast.error("No products data available");
         }
       } catch (error: any) {
         console.error("Error fetching products:", error);
-        setError("An unexpected error occurred. Please try again later.");
+        
+        // Look for specific error messages
+        let errorMessage = "An unexpected error occurred. Please try again later.";
+        if (error.message && error.message.includes("infinite recursion")) {
+          errorMessage = "Database permission error. Please contact your administrator.";
+          console.log("Detected recursion error in RLS policies");
+        } else if (error.message && error.message.includes("JWT")) {
+          errorMessage = "Authentication error. Please try logging in again.";
+        }
+        
+        setError(errorMessage);
+        setIsUsingFallbackData(true);
         sonnerToast.error("Error fetching products");
+        
+        // Still try to load mock data
+        const mockData = await fetchProductsWithFallback({
+          orderBy: ["category.asc", "reference.asc"],
+          useMockOnFailure: true
+        });
+        
+        if (mockData.data && mockData.data.length > 0) {
+          console.log("Falling back to mock data");
+          setProducts(mockData.data);
+          setFilteredProducts(mockData.data);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -116,6 +177,7 @@ export const useProducts = () => {
     searchQuery,
     setSearchQuery,
     categories,
-    refetch
+    refetch,
+    isUsingFallbackData
   };
 };

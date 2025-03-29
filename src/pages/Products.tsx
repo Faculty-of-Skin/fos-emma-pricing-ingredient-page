@@ -8,7 +8,8 @@ import { ProductsError } from "@/components/products/ProductsError";
 import { EmptyProducts } from "@/components/products/EmptyProducts";
 import { useProducts } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { AlertCircle, Database, RefreshCw } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Products = () => {
   const { 
@@ -21,7 +22,8 @@ const Products = () => {
     searchQuery, 
     setSearchQuery,
     products,
-    refetch
+    refetch,
+    isUsingFallbackData
   } = useProducts();
 
   if (error) {
@@ -42,6 +44,17 @@ const Products = () => {
           </Button>
         </div>
         
+        {isUsingFallbackData && (
+          <Alert variant="warning" className="mb-6">
+            <Database className="h-4 w-4" />
+            <AlertTitle>Sample Data</AlertTitle>
+            <AlertDescription>
+              Unable to connect to the database. Showing sample product data instead.
+              Contact your administrator to resolve database connectivity issues.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <ProductsFilter 
           categories={categories}
           categoryFilter={categoryFilter}
@@ -57,6 +70,7 @@ const Products = () => {
             products={filteredProducts} 
             isLoading={isLoading} 
             onRefresh={refetch}
+            isUsingFallbackData={isUsingFallbackData}
           />
         )}
 
@@ -64,6 +78,7 @@ const Products = () => {
           count={filteredProducts.length}
           categoryFilter={categoryFilter}
           searchQuery={searchQuery}
+          isUsingFallbackData={isUsingFallbackData}
         />
       </div>
     </DashboardLayout>
