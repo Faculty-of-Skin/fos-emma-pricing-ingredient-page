@@ -10,7 +10,8 @@ import {
   UserCog, 
   LogOut,
   Menu,
-  X
+  X,
+  Settings
 } from "lucide-react";
 
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
@@ -45,7 +46,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
       >
         <div className="h-full flex flex-col">
           <div className="p-4 border-b border-brutal-gray/20">
-            <h1 className="text-xl font-bold">Emma Admin</h1>
+            <h1 className="text-xl font-bold">Emma Dashboard</h1>
           </div>
 
           <nav className="flex-1 py-4 px-2 space-y-1">
@@ -56,6 +57,12 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
             {isAdmin && (
               <NavItem icon={<UserCog size={18} />} href="/admin" label="Admin" />
             )}
+            
+            <div className="py-2">
+              <div className="border-t border-brutal-gray/20 my-2"></div>
+            </div>
+            
+            <NavItem icon={<Settings size={18} />} href="/account-settings" label="Settings" />
           </nav>
 
           <div className="p-4 border-t border-brutal-gray/20">
@@ -86,7 +93,7 @@ const NavItem = ({ icon, href, label }: { icon: React.ReactNode; href: string; l
     <Button
       variant="ghost"
       className={`w-full justify-start gap-2 ${
-        isActive ? "bg-accent" : ""
+        isActive ? "bg-accent font-medium" : ""
       }`}
       onClick={() => navigate(href)}
     >

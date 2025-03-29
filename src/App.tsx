@@ -19,6 +19,7 @@ import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Forecasts from './pages/Forecasts';
 import AdminPanel from './pages/AdminPanel';
+import AccountSettings from './pages/AccountSettings';
 
 const App = () => {
   // Create a client inside the component to ensure proper React context
@@ -53,6 +54,7 @@ const App = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/products" element={<Products />} />
                   <Route path="/forecasts" element={<Forecasts />} />
+                  <Route path="/account-settings" element={<AccountSettings />} />
                   
                   {/* Admin-only routes */}
                   <Route element={<AdminRoute />}>
