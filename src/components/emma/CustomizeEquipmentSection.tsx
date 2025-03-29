@@ -46,7 +46,7 @@ export const CustomizeEquipmentSection = () => {
             <Card className="border-2 border-brutal-black">
               <CardContent className="pt-4">
                 <div className="flex flex-col items-center">
-                  <h3 className="font-mono text-brutal-black font-bold mb-2">Emuage Machine Pack</h3>
+                  <h3 className="font-mono text-brutal-black font-bold mb-2">Emma Machine Pack</h3>
                   <p className="text-sm text-brutal-charcoal mb-2 font-mono">
                     {formatPrice(convertPrice(PRICES.machinePack))} each
                   </p>

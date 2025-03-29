@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCurrency } from "@/context/CurrencyContext";
 
@@ -18,7 +19,7 @@ export const EquipmentSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             <Card className="border-2 border-brutal-black">
               <CardHeader>
-                <CardTitle className="font-mono text-brutal-black">Emuage Machine Pack</CardTitle>
+                <CardTitle className="font-mono text-brutal-black">Emma Machine Pack</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(1150))}</p>
