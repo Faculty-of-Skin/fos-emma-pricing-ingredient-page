@@ -2,11 +2,13 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { StatCard } from './StatCard';
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, Loader2 } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
+import { usePerformanceData } from "@/hooks/usePerformanceData";
 
 export const PerformanceOverview = () => {
   const { formatPrice } = useCurrency();
+  const { data, isLoading } = usePerformanceData();
   
   return (
     <Card className="brutal-card">
@@ -19,12 +21,34 @@ export const PerformanceOverview = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <StatCard title="Total Products" value="24" trend="+3 this month" />
-          <StatCard title="Forecasts Created" value="7" trend="2 active" />
-          <StatCard title="Est. Revenue" value="€45,780" trend="+12% from last month" />
-          <StatCard title="Potential Clients" value="18" trend="5 new leads" />
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <StatCard 
+              title="Total Products" 
+              value={data?.totalProducts.toString() || "0"} 
+              trend={`${data?.totalProducts ? '+' : ''}${Math.floor(data?.totalProducts / 8)} this month`} 
+            />
+            <StatCard 
+              title="Forecasts Created" 
+              value={data?.forecastsCreated.toString() || "0"} 
+              trend={`${data?.activeForecasts || 0} active`} 
+            />
+            <StatCard 
+              title="Est. Revenue" 
+              value={formatPrice(data?.estimatedRevenue || 0)} 
+              trend={`+${data?.revenueGrowth || 0}% from last month`} 
+            />
+            <StatCard 
+              title="Potential Clients" 
+              value={data?.potentialClients.toString() || "0"} 
+              trend={`${data?.newLeads || 0} new leads`} 
+            />
+          </div>
+        )}
       </CardContent>
     </Card>
   );
