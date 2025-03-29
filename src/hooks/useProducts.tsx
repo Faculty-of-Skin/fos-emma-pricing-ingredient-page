@@ -76,7 +76,8 @@ export const useProducts = () => {
         // Use our enhanced function with multiple fallbacks if direct query failed
         console.log("Trying fallback methods...");
         const result = await fetchProductsWithFallback({
-          orderBy: ["category.asc", "reference.asc"]
+          orderBy: ["category.asc", "reference.asc"],
+          useMockOnFailure: true // Always allow mock data as last resort
         });
         
         if (result.data && result.data.length > 0) {
@@ -89,7 +90,7 @@ export const useProducts = () => {
           if (firstItem.id.startsWith('mock-')) {
             console.log("Using mock data as fallback");
             setIsUsingFallbackData(true);
-            setError("Unable to connect to the database. Showing sample data instead.");
+            setError("Unable to connect to the database. Database permission error (recursive policy).");
             sonnerToast.warning("Using sample data - Database connection issue");
           } else {
             // If we previously had an error but now succeeded, show success toast
@@ -116,26 +117,32 @@ export const useProducts = () => {
         // Look for specific error messages
         let errorMessage = "An unexpected error occurred. Please try again later.";
         if (error.message && error.message.includes("infinite recursion")) {
-          errorMessage = "Database permission error. Please contact your administrator.";
+          errorMessage = "Database permission error (recursive policy). Please contact your administrator.";
           console.log("Detected recursion error in RLS policies");
         } else if (error.message && error.message.includes("JWT")) {
           errorMessage = "Authentication error. Please try logging in again.";
         }
         
         setError(errorMessage);
-        setIsUsingFallbackData(true);
-        sonnerToast.error("Error fetching products");
         
         // Still try to load mock data
-        const mockData = await fetchProductsWithFallback({
-          orderBy: ["category.asc", "reference.asc"],
-          useMockOnFailure: true
-        });
-        
-        if (mockData.data && mockData.data.length > 0) {
-          console.log("Falling back to mock data");
-          setProducts(mockData.data);
-          setFilteredProducts(mockData.data);
+        try {
+          console.log("Attempting to load mock data as final fallback");
+          const mockData = await fetchProductsWithFallback({
+            orderBy: ["category.asc", "reference.asc"],
+            useMockOnFailure: true
+          });
+          
+          if (mockData.data && mockData.data.length > 0) {
+            console.log("Falling back to mock data");
+            setProducts(mockData.data);
+            setFilteredProducts(mockData.data);
+            setIsUsingFallbackData(true);
+            sonnerToast.warning("Using sample data - Database connection issue");
+          }
+        } catch (mockError) {
+          console.error("Failed to load even mock data:", mockError);
+          sonnerToast.error("Error loading any data");
         }
       } finally {
         setIsLoading(false);

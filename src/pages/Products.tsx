@@ -26,7 +26,7 @@ const Products = () => {
     isUsingFallbackData
   } = useProducts();
 
-  if (error) {
+  if (error && !isUsingFallbackData) {
     return (
       <DashboardLayout>
         <ProductsError error={error} onRetry={refetch} />
@@ -50,7 +50,9 @@ const Products = () => {
             <AlertTitle>Sample Data</AlertTitle>
             <AlertDescription>
               Unable to connect to the database. Showing sample product data instead.
-              Contact your administrator to resolve database connectivity issues.
+              {error && (
+                <p className="mt-1 text-sm">Error: {error}</p>
+              )}
             </AlertDescription>
           </Alert>
         )}
