@@ -51,7 +51,7 @@ export const EquipmentPricing = () => {
 
   return (
     <section className="py-12">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="brutal-card">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-black text-brutal-black font-mono uppercase">Equipment Pricing</h2>
@@ -68,15 +68,15 @@ export const EquipmentPricing = () => {
             </Alert>
           )}
           
-          <div className="overflow-x-auto">
-            <Table>
+          <div className="overflow-x-auto w-full">
+            <Table className="w-full">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="font-mono uppercase text-brutal-black">Reference</TableHead>
-                  <TableHead className="font-mono uppercase text-brutal-black">Description</TableHead>
-                  <TableHead className="font-mono uppercase text-brutal-black text-right">Beauty Institute Price</TableHead>
-                  <TableHead className="font-mono uppercase text-brutal-black text-right">MOQ</TableHead>
-                  <TableHead className="font-mono uppercase text-brutal-black text-right">Final Consumer</TableHead>
+                  <TableHead className="font-mono uppercase text-brutal-black w-1/6">Reference</TableHead>
+                  <TableHead className="font-mono uppercase text-brutal-black w-2/5">Description</TableHead>
+                  <TableHead className="font-mono uppercase text-brutal-black text-right w-1/6">Beauty Institute Price</TableHead>
+                  <TableHead className="font-mono uppercase text-brutal-black text-right w-1/6">MOQ</TableHead>
+                  <TableHead className="font-mono uppercase text-brutal-black text-right w-1/6">Final Consumer</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

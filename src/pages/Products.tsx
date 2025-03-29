@@ -55,7 +55,7 @@ const Products = () => {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between mb-6">
           <ProductsHeader title="Products" />
           <div className="flex gap-4 items-center">

@@ -80,20 +80,20 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   return (
     <div className="space-y-8">
       {sortedCategories.map(category => (
-        <div key={category} className="brutal-card p-4 overflow-x-auto">
+        <div key={category} className="brutal-card p-4 overflow-x-auto w-full">
           <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
-          <Table>
+          <Table className="w-full">
             <TableHeader>
               <TableRow className="border-b-2 border-brutal-black/30">
-                <TableHead className="font-mono uppercase text-brutal-black">Reference</TableHead>
-                <TableHead className="font-mono uppercase text-brutal-black">Description</TableHead>
-                <TableHead className="font-mono uppercase text-brutal-black text-right">
+                <TableHead className="font-mono uppercase text-brutal-black w-1/6">Reference</TableHead>
+                <TableHead className="font-mono uppercase text-brutal-black w-2/5">Description</TableHead>
+                <TableHead className="font-mono uppercase text-brutal-black text-right w-1/6">
                   Beauty Institute Price
                 </TableHead>
-                <TableHead className="font-mono uppercase text-brutal-black text-right">
+                <TableHead className="font-mono uppercase text-brutal-black text-right w-1/6">
                   MOQ
                 </TableHead>
-                {isAdmin && <TableHead className="text-right">Actions</TableHead>}
+                {isAdmin && <TableHead className="text-right w-1/6">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
