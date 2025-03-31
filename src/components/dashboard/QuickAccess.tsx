@@ -1,41 +1,89 @@
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Briefcase,
+  Calendar,
+  LineChart,
+  Settings,
+  Database,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
-import React from 'react';
-import { QuickAccessCard } from './QuickAccessCard';
-import { useNavigate } from "react-router-dom";
-import { Package, BarChart3, Calculator, Clock } from "lucide-react";
+interface QuickAccessItemProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  path: string;
+  color: string;
+}
 
-export const QuickAccess = () => {
-  const navigate = useNavigate();
-  
+const QuickAccessItem: React.FC<QuickAccessItemProps> = ({
+  icon,
+  title,
+  description,
+  path,
+  color,
+}) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <QuickAccessCard 
-        title="Products" 
-        description="Manage your product inventory"
-        icon={<Package className="h-8 w-8 text-brutal-black" />}
-        onClick={() => navigate('/products')}
-      />
-      
-      <QuickAccessCard 
-        title="Forecasts" 
-        description="Calculate revenue projections"
-        icon={<BarChart3 className="h-8 w-8 text-brutal-black" />}
-        onClick={() => navigate('/forecasts')}
-      />
-      
-      <QuickAccessCard 
-        title="ROI Calculator" 
-        description="Evaluate investment returns"
-        icon={<Calculator className="h-8 w-8 text-brutal-black" />}
-        onClick={() => navigate('/emma-pricing#roi-calculator')}
-      />
-      
-      <QuickAccessCard 
-        title="Latest Updates" 
-        description="See what's new with Emma"
-        icon={<Clock className="h-8 w-8 text-brutal-black" />}
-        onClick={() => navigate('/')}
-      />
+    <Link to={path}>
+      <Card className="hover:bg-accent/40 transition-colors">
+        <CardContent className="flex items-center space-x-4 p-3">
+          <div className={`p-2 rounded-md ${color}`}>{icon}</div>
+          <div>
+            <h2 className="text-sm font-semibold">{title}</h2>
+            <p className="text-xs text-muted-foreground">{description}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+};
+
+export const QuickAccess: React.FC = () => {
+  const quickAccessItems = [
+    {
+      icon: <LineChart className="h-5 w-5" />,
+      title: "Dashboard",
+      description: "View overall insights",
+      path: "/dashboard",
+      color: "bg-blue-100",
+    },
+    {
+      icon: <Briefcase className="h-5 w-5" />,
+      title: "Products",
+      description: "Manage your products",
+      path: "/products",
+      color: "bg-green-100",
+    },
+    {
+      icon: <Calendar className="h-5 w-5" />,
+      title: "Forecasts",
+      description: "View sales forecasts",
+      path: "/forecasts",
+      color: "bg-orange-100",
+    },
+    {
+      icon: <Settings className="h-5 w-5" />,
+      title: "Settings",
+      description: "Configure app settings",
+      path: "/settings",
+      color: "bg-red-100",
+    },
+    // Add Emma Ingredients to dashboard quick access
+    {
+      icon: <Database className="h-5 w-5" />,
+      title: "Emma Ingredients",
+      description: "Browse the Emma ingredients database",
+      path: "/emma-ingredients",
+      color: "bg-purple-100"
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {quickAccessItems.map((item) => (
+        <QuickAccessItem key={item.title} {...item} />
+      ))}
     </div>
   );
 };

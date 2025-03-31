@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      emma_ingredients: {
+        Row: {
+          "Beauty institute": number | null
+          Benefit: string | null
+          Category: string | null
+          Description: string | null
+          Distributor: number | null
+          "Final consumer": string | null
+          "FRAGRANCE NOTES": string | null
+          "Full Description": string | null
+          Importer: number | null
+          "INCI LIST": string | null
+          "Ingredient Breakdown": string | null
+          "Order quantity": string | null
+          Reference: string
+          Texture: string | null
+        }
+        Insert: {
+          "Beauty institute"?: number | null
+          Benefit?: string | null
+          Category?: string | null
+          Description?: string | null
+          Distributor?: number | null
+          "Final consumer"?: string | null
+          "FRAGRANCE NOTES"?: string | null
+          "Full Description"?: string | null
+          Importer?: number | null
+          "INCI LIST"?: string | null
+          "Ingredient Breakdown"?: string | null
+          "Order quantity"?: string | null
+          Reference: string
+          Texture?: string | null
+        }
+        Update: {
+          "Beauty institute"?: number | null
+          Benefit?: string | null
+          Category?: string | null
+          Description?: string | null
+          Distributor?: number | null
+          "Final consumer"?: string | null
+          "FRAGRANCE NOTES"?: string | null
+          "Full Description"?: string | null
+          Importer?: number | null
+          "INCI LIST"?: string | null
+          "Ingredient Breakdown"?: string | null
+          "Order quantity"?: string | null
+          Reference?: string
+          Texture?: string | null
+        }
+        Relationships: []
+      }
       forecasts: {
         Row: {
           created_at: string

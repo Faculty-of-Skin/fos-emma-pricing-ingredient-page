@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +20,7 @@ import Products from './pages/Products';
 import Forecasts from './pages/Forecasts';
 import AdminPanel from './pages/AdminPanel';
 import AccountSettings from './pages/AccountSettings';
+import EmmaIngredientsPage from './pages/EmmaIngredientsPage';
 
 const App = () => {
   // Create a client inside the component to ensure proper React context
