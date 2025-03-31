@@ -17,13 +17,13 @@ export const CurrencySelector = () => {
 
   return (
     <Select value={currency} onValueChange={handleCurrencyChange}>
-      <SelectTrigger className="w-24 h-8 bg-brutal-white border border-brutal-black/30">
+      <SelectTrigger className="w-20 h-7 bg-brutal-white border border-brutal-black/30 text-sm">
         <SelectValue placeholder="USD" />
       </SelectTrigger>
       <SelectContent className="bg-brutal-white border border-brutal-black/30">
-        <SelectItem value="USD" className="font-mono">USD</SelectItem>
-        <SelectItem value="EUR" className="font-mono">EUR</SelectItem>
-        <SelectItem value="CAD" className="font-mono">CAD</SelectItem>
+        <SelectItem value="USD" className="font-mono text-sm">USD</SelectItem>
+        <SelectItem value="EUR" className="font-mono text-sm">EUR</SelectItem>
+        <SelectItem value="CAD" className="font-mono text-sm">CAD</SelectItem>
       </SelectContent>
     </Select>
   );
