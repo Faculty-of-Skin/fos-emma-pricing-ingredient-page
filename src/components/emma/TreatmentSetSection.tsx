@@ -47,7 +47,7 @@ export const TreatmentSetSection = () => {
               <CardContent className="pt-4">
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Texture Capsules</h3>
-                  <p className="text-sm text-brutal-charcoal mb-2 font-mono">
+                  <p className="text-sm text-brutal-charcoal mb-2 font-mono" data-price-element="true">
                     {formatPrice(convertPrice(PRICES.texture))} each
                   </p>
                   <div className="w-full mt-2">
@@ -75,7 +75,7 @@ export const TreatmentSetSection = () => {
               <CardContent className="pt-4">
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Active Capsules</h3>
-                  <p className="text-sm text-brutal-charcoal mb-2 font-mono">
+                  <p className="text-sm text-brutal-charcoal mb-2 font-mono" data-price-element="true">
                     {formatPrice(convertPrice(PRICES.active))} each
                   </p>
                   <div className="w-full mt-2">
@@ -101,7 +101,7 @@ export const TreatmentSetSection = () => {
               <CardContent className="pt-4">
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Perfume Capsules</h3>
-                  <p className="text-sm text-brutal-charcoal mb-2 font-mono">
+                  <p className="text-sm text-brutal-charcoal mb-2 font-mono" data-price-element="true">
                     {formatPrice(convertPrice(PRICES.perfume))} each
                   </p>
                   <div className="w-full mt-2">
@@ -126,7 +126,7 @@ export const TreatmentSetSection = () => {
               <CardContent className="pt-4">
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Reusable Bottles</h3>
-                  <p className="text-sm text-brutal-charcoal mb-2 font-mono">
+                  <p className="text-sm text-brutal-charcoal mb-2 font-mono" data-price-element="true">
                     {formatPrice(convertPrice(PRICES.bottle))} each
                   </p>
                   <div className="w-full mt-2">
@@ -149,7 +149,7 @@ export const TreatmentSetSection = () => {
           </div>
 
           <div className="text-center mt-4 py-3 border-t-2 border-brutal-black/20">
-            <p className="text-xl font-bold font-mono text-brutal-black mb-1">
+            <p className="text-xl font-bold font-mono text-brutal-black mb-1" data-price-element="true">
               Total: {formatPrice(convertPrice(totalPrice))}
             </p>
             <p className="text-brutal-charcoal font-mono mt-1 text-sm">

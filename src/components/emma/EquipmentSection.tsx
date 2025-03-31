@@ -22,7 +22,7 @@ export const EquipmentSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Emma Machine Pack</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(1150))}</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">{formatPrice(convertPrice(1150))}</p>
                 <CardDescription className="font-mono">
                   Equip your institute with the latest in skincare technology, designed for bespoke beauty experiences.
                 </CardDescription>
@@ -34,7 +34,7 @@ export const EquipmentSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Calibration Kit</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(14))}</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">{formatPrice(convertPrice(14))}</p>
                 <CardDescription className="font-mono">
                   Essential for ensuring your equipment operates with precision and accuracy.
                 </CardDescription>
@@ -46,7 +46,7 @@ export const EquipmentSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Thermal Printer</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(150))}</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">{formatPrice(convertPrice(150))}</p>
                 <CardDescription className="font-mono">
                   Streamline your operations with on-site printing for client treatment plans and receipts.
                 </CardDescription>
@@ -58,7 +58,7 @@ export const EquipmentSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Chowis DermoSmart</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(621))}</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">{formatPrice(convertPrice(621))}</p>
                 <CardDescription className="font-mono">
                   An advanced diagnostic tool that enhances treatment personalization and effectiveness.
                 </CardDescription>

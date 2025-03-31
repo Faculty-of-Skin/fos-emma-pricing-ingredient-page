@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCurrency } from "@/context/CurrencyContext";
 
@@ -22,7 +23,7 @@ export const BottlesSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Sustainable Bottles</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">Beauty Institute Price: {formatPrice(bottlePrice)} each</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">Beauty Institute Price: {formatPrice(bottlePrice)} each</p>
                 <CardDescription className="font-mono">
                   Embrace sustainability without compromising on quality with our reusable and refillable bottles. 
                   Designed for multiple uses, these bottles reduce environmental impact and help to lower operational 

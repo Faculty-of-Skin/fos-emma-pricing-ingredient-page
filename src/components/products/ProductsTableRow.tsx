@@ -33,7 +33,7 @@ export const ProductsTableRow = ({ product, isUsingFallbackData }: ProductsTable
         )}
       </TableCell>
       <TableCell className="font-mono">{product.description}</TableCell>
-      <TableCell className="font-mono text-right">
+      <TableCell className="font-mono text-right" data-price-element="true">
         {formatPrice(convertPrice(product.beauty_institute_price))}
       </TableCell>
       <TableCell className="font-mono text-right">

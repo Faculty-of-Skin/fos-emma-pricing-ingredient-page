@@ -70,10 +70,10 @@ export const AccessoriesTable = ({ accessories, isLoading, onRefresh }: Accessor
           <TableCell className="font-mono font-medium">{item.category}</TableCell>
           <TableCell className="font-mono">{item.reference}</TableCell>
           <TableCell className="font-mono">{item.description}</TableCell>
-          <TableCell className="font-mono text-right">
+          <TableCell className="font-mono text-right" data-price-element="true">
             {formatPrice(convertPrice(item.beauty_institute_price))}
           </TableCell>
-          <TableCell className="font-mono text-right">
+          <TableCell className="font-mono text-right" data-price-element="true">
             {item.final_consumer_price === null ? "NA" : formatPrice(convertPrice(item.final_consumer_price))}
           </TableCell>
         </TableRow>

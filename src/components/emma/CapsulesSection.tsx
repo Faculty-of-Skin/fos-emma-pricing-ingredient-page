@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCurrency } from "@/context/CurrencyContext";
 
@@ -21,7 +22,7 @@ export const CapsulesSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Texture Capsules</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(5.86))}</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">{formatPrice(convertPrice(5.86))}</p>
                 <CardDescription className="font-mono">
                   Average price per capsule
                 </CardDescription>
@@ -33,7 +34,7 @@ export const CapsulesSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Active Capsules</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(5.56))}</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">{formatPrice(convertPrice(5.56))}</p>
                 <CardDescription className="font-mono">
                   Average price per capsule
                 </CardDescription>
@@ -45,7 +46,7 @@ export const CapsulesSection = () => {
                 <CardTitle className="font-mono text-brutal-black">Perfume Capsules</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold mb-2 font-mono">{formatPrice(convertPrice(3.38))}</p>
+                <p className="text-xl font-bold mb-2 font-mono" data-price-element="true">{formatPrice(convertPrice(3.38))}</p>
                 <CardDescription className="font-mono">
                   Average price per capsule
                 </CardDescription>
