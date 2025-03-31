@@ -27,6 +27,7 @@ export const useEmmaIngredients = () => {
       setIsLoading(true);
       setError(null);
       
+      // Use the table name directly and explicit type casting for the expected response
       const { data, error } = await supabase
         .from("emma_ingredients")
         .select("*")
@@ -39,7 +40,8 @@ export const useEmmaIngredients = () => {
         return;
       }
       
-      setIngredients(data || []);
+      // Cast the data to ensure TypeScript understands it matches our EmmaIngredient type
+      setIngredients(data as unknown as EmmaIngredient[]);
     } catch (error: any) {
       console.error("Unexpected error fetching emma ingredients:", error);
       setError(error.message || "An unexpected error occurred");
