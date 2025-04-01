@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from "react";
 import { 
   Card, 
@@ -243,24 +244,26 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
             </CardHeader>
             <CardContent className="pt-4">
               {activeIngredients.length > 0 ? (
-                <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
-                  {activeIngredients.map(ingredient => (
-                    <Button
-                      key={ingredient.Reference}
-                      variant={selectedActiveRefs.includes(ingredient.Reference) ? "default" : "outline"}
-                      size="sm"
-                      className={`w-full justify-start text-left ${selectedActiveRefs.includes(ingredient.Reference) ? 'bg-blue-600 hover:bg-blue-700' : 'border-dashed'}`}
-                      onClick={() => handleActiveChange(ingredient.Reference)}
-                    >
-                      <div className="flex items-center gap-2">
-                        {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4" />}
-                        <span className="font-medium">{ingredient.Reference}</span>
-                        <span className="text-muted-foreground">•</span>
-                        <span className="truncate">{ingredient.Description}</span>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
+                <ScrollArea className="h-[200px] pr-1 rounded-md bg-blue-50/30 border border-blue-50">
+                  <div className="space-y-2 p-2">
+                    {activeIngredients.map(ingredient => (
+                      <Button
+                        key={ingredient.Reference}
+                        variant={selectedActiveRefs.includes(ingredient.Reference) ? "default" : "outline"}
+                        size="sm"
+                        className={`w-full justify-start text-left ${selectedActiveRefs.includes(ingredient.Reference) ? 'bg-blue-600 hover:bg-blue-700' : 'border-dashed bg-white'}`}
+                        onClick={() => handleActiveChange(ingredient.Reference)}
+                      >
+                        <div className="flex items-center gap-2">
+                          {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4" />}
+                          <span className="font-medium">{ingredient.Reference}</span>
+                          <span className="text-muted-foreground">•</span>
+                          <span className="truncate">{ingredient.Description}</span>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </ScrollArea>
               ) : (
                 <div className="text-center py-4 text-muted-foreground">
                   <p>No active capsules available</p>
@@ -288,24 +291,26 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
             </CardHeader>
             <CardContent className="pt-4">
               {fragranceIngredients.length > 0 ? (
-                <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
-                  {fragranceIngredients.map(ingredient => (
-                    <Button
-                      key={ingredient.Reference}
-                      variant={selectedFragranceRef === ingredient.Reference ? "default" : "outline"}
-                      size="sm"
-                      className={`w-full justify-start text-left ${selectedFragranceRef === ingredient.Reference ? 'bg-purple-600 hover:bg-purple-700' : 'border-dashed'}`}
-                      onClick={() => handleFragranceChange(ingredient.Reference)}
-                    >
-                      <div className="flex items-center gap-2">
-                        {selectedFragranceRef === ingredient.Reference && <Check className="h-4 w-4" />}
-                        <span className="font-medium">{ingredient.Reference}</span>
-                        <span className="text-muted-foreground">•</span>
-                        <span className="truncate">{ingredient.Description}</span>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
+                <ScrollArea className="h-[200px] pr-1 rounded-md bg-purple-50/30 border border-purple-50">
+                  <div className="space-y-2 p-2">
+                    {fragranceIngredients.map(ingredient => (
+                      <Button
+                        key={ingredient.Reference}
+                        variant={selectedFragranceRef === ingredient.Reference ? "default" : "outline"}
+                        size="sm"
+                        className={`w-full justify-start text-left ${selectedFragranceRef === ingredient.Reference ? 'bg-purple-600 hover:bg-purple-700' : 'border-dashed bg-white'}`}
+                        onClick={() => handleFragranceChange(ingredient.Reference)}
+                      >
+                        <div className="flex items-center gap-2">
+                          {selectedFragranceRef === ingredient.Reference && <Check className="h-4 w-4" />}
+                          <span className="font-medium">{ingredient.Reference}</span>
+                          <span className="text-muted-foreground">•</span>
+                          <span className="truncate">{ingredient.Description}</span>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </ScrollArea>
               ) : (
                 <div className="text-center py-4 text-muted-foreground">
                   <p>No fragrance capsules available</p>
