@@ -2,7 +2,7 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { EmmaIngredientsSplit } from "@/components/emma/ingredients/EmmaIngredientsSplit";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, List, FileText } from "lucide-react";
+import { HelpCircle, List, FileText, Leaf, Sparkles, Droplets } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -14,6 +14,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { useEmmaIngredients } from "@/hooks/useEmmaIngredients";
 import { EmmaProductSimulator } from "@/components/emma/ingredients/EmmaProductSimulator";
+import { Separator } from "@/components/ui/separator";
 
 const EmmaIngredientsPage = () => {
   const { isAdmin } = useAuth();
@@ -29,87 +30,130 @@ const EmmaIngredientsPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 max-w-7xl py-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Emma Ingredients Database</h1>
-          
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
-                <HelpCircle className="h-4 w-4" />
-                Help
-              </Button>
-            </DialogTrigger>
-            
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>About Emma Ingredients</DialogTitle>
-                <DialogDescription>
-                  {isAdmin 
-                    ? "This page displays all ingredients from the emma_ingredients table in your Supabase database."
-                    : "This page displays all ingredients available in the Emma collection."}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="mt-4 space-y-4">
-                {isAdmin ? (
-                  <>
-                    <h3 className="font-semibold">Troubleshooting Tips:</h3>
-                    <ul className="list-disc pl-5 space-y-2">
-                      <li>
-                        <strong>No data showing?</strong> Make sure your Supabase database has an 'emma_ingredients' table with data.
-                      </li>
-                      <li>
-                        <strong>Connection issues?</strong> Verify your Supabase connection details in the src/integrations/supabase/client.ts file.
-                      </li>
-                      <li>
-                        <strong>Wrong column names?</strong> Ensure column names in the database match the expected format in the EmmaIngredient type.
-                      </li>
-                    </ul>
-                  </>
-                ) : (
-                  <>
-                    <h3 className="font-semibold">Need help?</h3>
-                    <p>
-                      For more information about Emma ingredients or if you have any questions, please contact our support team:
-                    </p>
-                    <p className="pt-2">
-                      <strong>Email:</strong> <a href="mailto:info@facultyofskin.com" className="text-primary hover:underline">info@facultyofskin.com</a>
-                    </p>
-                    <p className="pt-4 text-sm text-muted-foreground">
-                      Our team will respond to your inquiry as soon as possible.
-                    </p>
-                  </>
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-        
-        <div className="mb-6">
-          <p className="text-muted-foreground">
-            Browse the complete database of Emma ingredients, including formulations, pricing, and details for different distribution channels.
-          </p>
-          
-          <div className="flex items-center gap-6 mt-4 p-4 bg-muted/30 rounded-lg">
-            <div className="flex items-center gap-2">
-              <List className="h-5 w-5 text-primary" />
-              <span className="font-medium">INCI Lists</span>
-              <span className="text-sm text-muted-foreground">Full ingredient declarations</span>
+      <div className="bg-gradient-to-br from-white to-slate-50">
+        <div className="container mx-auto px-4 max-w-7xl py-8">
+          <div className="flex flex-col gap-4 mb-8">
+            <div className="flex justify-between items-center">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Emma Ingredients Collection
+              </h1>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <HelpCircle className="h-4 w-4" />
+                    Help
+                  </Button>
+                </DialogTrigger>
+                
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>About Emma Ingredients</DialogTitle>
+                    <DialogDescription>
+                      {isAdmin 
+                        ? "This page displays all ingredients from the emma_ingredients table in your Supabase database."
+                        : "This page displays all ingredients available in the Emma collection."}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="mt-4 space-y-4">
+                    {isAdmin ? (
+                      <>
+                        <h3 className="font-semibold">Troubleshooting Tips:</h3>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            <strong>No data showing?</strong> Make sure your Supabase database has an 'emma_ingredients' table with data.
+                          </li>
+                          <li>
+                            <strong>Connection issues?</strong> Verify your Supabase connection details in the src/integrations/supabase/client.ts file.
+                          </li>
+                          <li>
+                            <strong>Wrong column names?</strong> Ensure column names in the database match the expected format in the EmmaIngredient type.
+                          </li>
+                        </ul>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="font-semibold">Need help?</h3>
+                        <p>
+                          For more information about Emma ingredients or if you have any questions, please contact our support team:
+                        </p>
+                        <p className="pt-2">
+                          <strong>Email:</strong> <a href="mailto:info@facultyofskin.com" className="text-primary hover:underline">info@facultyofskin.com</a>
+                        </p>
+                        <p className="pt-4 text-sm text-muted-foreground">
+                          Our team will respond to your inquiry as soon as possible.
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
             
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-primary" />
-              <span className="font-medium">Ingredient Breakdowns</span>
-              <span className="text-sm text-muted-foreground">Detailed composition information</span>
+            <p className="text-lg text-muted-foreground max-w-3xl">
+              Explore our complete collection of premium ingredients designed for personalized skincare formulations.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center transition-all hover:shadow-md">
+              <div className="h-12 w-12 rounded-full bg-green-50 flex items-center justify-center mb-4">
+                <Leaf className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="text-lg font-medium mb-2">Texture Capsules</h3>
+              <p className="text-muted-foreground text-sm">
+                The base formulation that determines the feel and consistency of the final product.
+              </p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center transition-all hover:shadow-md">
+              <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+                <Sparkles className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-medium mb-2">Active Capsules</h3>
+              <p className="text-muted-foreground text-sm">
+                Concentrated active ingredients targeting specific skin concerns and conditions.
+              </p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center transition-all hover:shadow-md">
+              <div className="h-12 w-12 rounded-full bg-purple-50 flex items-center justify-center mb-4">
+                <Droplets className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="text-lg font-medium mb-2">Fragrance Capsules</h3>
+              <p className="text-muted-foreground text-sm">
+                Optional scent additions to enhance the sensory experience of the product.
+              </p>
             </div>
           </div>
+          
+          <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-8">
+            <div className="flex items-center gap-6 mb-6">
+              <div className="flex items-center gap-2">
+                <List className="h-5 w-5 text-primary" />
+                <span className="font-medium">INCI Lists</span>
+                <span className="text-sm text-muted-foreground">Full ingredient declarations</span>
+              </div>
+              
+              <Separator orientation="vertical" className="h-6" />
+              
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-primary" />
+                <span className="font-medium">Ingredient Breakdowns</span>
+                <span className="text-sm text-muted-foreground">Detailed composition information</span>
+              </div>
+            </div>
+            
+            <EmmaIngredientsSplit />
+          </div>
+          
+          {!isLoading && !error && filteredIngredientsWithoutEquipment.length > 0 && (
+            <div className="bg-gradient-to-br from-slate-50 to-white p-8 rounded-xl shadow-sm border border-slate-100">
+              <h2 className="text-2xl font-bold mb-6">Product Simulator</h2>
+              <EmmaProductSimulator ingredients={filteredIngredientsWithoutEquipment} />
+            </div>
+          )}
         </div>
-        
-        <EmmaIngredientsSplit />
-        
-        {!isLoading && !error && filteredIngredientsWithoutEquipment.length > 0 && (
-          <EmmaProductSimulator ingredients={filteredIngredientsWithoutEquipment} />
-        )}
       </div>
     </DashboardLayout>
   );
