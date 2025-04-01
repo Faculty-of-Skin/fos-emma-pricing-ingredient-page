@@ -1,13 +1,12 @@
 
 import React from "react";
 import { CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { EmmaIngredient } from "@/types/emmaIngredients";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { FlaskConical, List, Leaf, Sparkles, Droplets, ArrowRight, CreditCard } from "lucide-react";
+import { FlaskConical, ArrowRight } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
+import { FormulaBadges } from "./FormulaBadges";
+import { InciListAccordion } from "./InciListAccordion";
+import { PriceDisplay } from "./PriceDisplay";
 
 // Base prices in EUR
 const PRICES = {
@@ -29,21 +28,6 @@ export const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
 }) => {
   const { formatPrice, convertPrice } = useCurrency();
   
-  const textureStyles = {
-    badge: 'bg-green-100 text-green-800',
-    icon: <Leaf className="h-3 w-3 text-green-600" />
-  };
-  
-  const activeStyles = {
-    badge: 'bg-blue-100 text-blue-800',
-    icon: <Sparkles className="h-3 w-3 text-blue-600" />
-  };
-  
-  const fragranceStyles = {
-    badge: 'bg-purple-100 text-purple-800',
-    icon: <Droplets className="h-3 w-3 text-purple-600" />
-  };
-
   // Calculate the total price based on selected capsules
   const calculateTotalPrice = () => {
     let total = 0;
@@ -115,95 +99,25 @@ export const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
       <CardContent className="p-0">
         <div className="p-5 bg-gradient-to-br from-slate-50 to-white">
           <div className="flex justify-between items-start mb-4">
-            <div className="flex flex-wrap gap-2">
-              {selectedTexture && (
-                <Badge variant="outline" className={`${textureStyles.badge} flex items-center gap-1`}>
-                  {textureStyles.icon}
-                  <span>{selectedTexture.Reference}</span>
-                </Badge>
-              )}
-              
-              {selectedActives.map(active => (
-                <Badge key={active.Reference} variant="outline" className={`${activeStyles.badge} flex items-center gap-1`}>
-                  <Sparkles className="h-3 w-3 text-blue-600" />
-                  <span>{active.Reference}</span>
-                </Badge>
-              ))}
-              
-              {selectedFragrance && (
-                <Badge variant="outline" className={`${fragranceStyles.badge} flex items-center gap-1`}>
-                  <Droplets className="h-3 w-3 text-purple-600" />
-                  <span>{selectedFragrance.Reference}</span>
-                </Badge>
-              )}
-            </div>
+            <FormulaBadges 
+              selectedTexture={selectedTexture} 
+              selectedActives={selectedActives} 
+              selectedFragrance={selectedFragrance} 
+            />
             
-            <div className="bg-white border rounded-lg px-4 py-2 shadow-sm">
-              <div className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4 text-primary" />
-                <span className="text-lg font-bold text-primary" data-price-element="true">
-                  {formatPrice(convertPrice(totalPrice))}
-                </span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                <span>{selectedTexture ? 1 : 0} Texture</span>
-                <span> • {selectedActives.length} Active</span>
-                <span> • {selectedFragrance ? 1 : 0} Fragrance</span>
-              </div>
-            </div>
+            <PriceDisplay 
+              totalPrice={totalPrice}
+              textureCount={selectedTexture ? 1 : 0}
+              activeCount={selectedActives.length}
+              fragranceCount={selectedFragrance ? 1 : 0}
+            />
           </div>
 
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="inci" className="border-none">
-              <AccordionTrigger className="py-2 hover:no-underline">
-                <div className="flex items-center gap-2 text-left">
-                  <List className="h-4 w-4 text-primary" />
-                  <div>
-                    <span className="font-medium">Combined INCI List</span>
-                    <p className="text-xs text-muted-foreground">Full ingredient declaration</p>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <ScrollArea className="h-[300px] w-full rounded-md border p-4 bg-white">
-                  <div className="space-y-4">
-                    {selectedTexture && (
-                      <div className="p-3 rounded-md bg-green-50/50 border border-green-100">
-                        <h4 className="text-sm font-semibold mb-1 flex items-center gap-2">
-                          {textureStyles.icon}
-                          <span>{selectedTexture.Reference} - {selectedTexture.Description}</span>
-                        </h4>
-                        <Separator className="my-2" />
-                        <p className="text-xs whitespace-pre-wrap">{selectedTexture["INCI LIST"] || "No INCI list available"}</p>
-                      </div>
-                    )}
-                    
-                    {selectedActives.length > 0 && selectedActives.map(active => (
-                      <div key={active.Reference} className="p-3 rounded-md bg-blue-50/50 border border-blue-100">
-                        <h4 className="text-sm font-semibold mb-1 flex items-center gap-2">
-                          {activeStyles.icon}
-                          <span>{active.Reference} - {active.Description}</span>
-                        </h4>
-                        <Separator className="my-2" />
-                        <p className="text-xs whitespace-pre-wrap">{active["INCI LIST"] || "No INCI list available"}</p>
-                      </div>
-                    ))}
-                    
-                    {selectedFragrance && (
-                      <div className="p-3 rounded-md bg-purple-50/50 border border-purple-100">
-                        <h4 className="text-sm font-semibold mb-1 flex items-center gap-2">
-                          {fragranceStyles.icon}
-                          <span>{selectedFragrance.Reference} - {selectedFragrance.Description}</span>
-                        </h4>
-                        <Separator className="my-2" />
-                        <p className="text-xs whitespace-pre-wrap">{selectedFragrance["INCI LIST"] || "No INCI list available"}</p>
-                      </div>
-                    )}
-                  </div>
-                </ScrollArea>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <InciListAccordion 
+            selectedTexture={selectedTexture}
+            selectedActives={selectedActives}
+            selectedFragrance={selectedFragrance}
+          />
         </div>
         
         <div className="p-4 bg-gradient-to-r from-slate-100 to-slate-50 border-t">
