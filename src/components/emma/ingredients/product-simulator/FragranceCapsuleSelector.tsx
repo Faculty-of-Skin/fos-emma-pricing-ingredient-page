@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Droplets, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, Droplets, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { EmmaIngredient } from "@/types/emmaIngredients";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FragranceCapsulesProps {
   fragranceIngredients: EmmaIngredient[];
@@ -24,6 +25,8 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
   };
   
   const [showAll, setShowAll] = useState(false);
+  const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
+  
   const displayCount = showAll ? fragranceIngredients.length : 5;
   const displayIngredients = fragranceIngredients.slice(0, displayCount);
   
@@ -37,14 +40,24 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
     return previewIngredients.join(', ') + (ingredients.length > 3 ? '...' : '');
   };
 
+  const toggleIngredientDetails = (reference: string) => {
+    if (expandedIngredient === reference) {
+      setExpandedIngredient(null);
+    } else {
+      setExpandedIngredient(reference);
+    }
+  };
+
   return (
-    <Card className={`border-l-4 ${fragranceStyles.border} hover:shadow-md transition-shadow`}>
+    <Card className={`border-l-4 ${fragranceStyles.border} hover:shadow-md transition-shadow rounded-xl overflow-hidden`}>
       <CardHeader className={`${fragranceStyles.header} pb-3`}>
         <div className="flex items-center gap-2">
-          {fragranceStyles.icon}
+          <div className="bg-purple-100 p-1.5 rounded-full shadow-sm">
+            {fragranceStyles.icon}
+          </div>
           <div>
-            <h3 className="text-sm font-semibold">Fragrance Capsule</h3>
-            <p className="text-xs text-muted-foreground">Optional: Select up to 1</p>
+            <h3 className="text-sm font-semibold text-slate-800">Fragrance Capsule</h3>
+            <p className="text-xs text-slate-500">Optional: Select up to 1</p>
           </div>
         </div>
       </CardHeader>
@@ -52,27 +65,80 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
         {fragranceIngredients.length > 0 ? (
           <div className="space-y-2">
             {displayIngredients.map(ingredient => (
-              <Button
-                key={ingredient.Reference}
-                variant={selectedFragranceRef === ingredient.Reference ? "default" : "outline"}
-                size="sm"
-                className={`w-full justify-start text-left ${selectedFragranceRef === ingredient.Reference ? 'bg-purple-600 hover:bg-purple-700' : 'border-dashed bg-white'} py-3`}
-                onClick={() => onFragranceChange(ingredient.Reference)}
-              >
-                <div className="w-full">
-                  <div className="flex items-center gap-2">
-                    {selectedFragranceRef === ingredient.Reference && <Check className="h-4 w-4 flex-shrink-0" />}
-                    <span className="font-medium">{ingredient.Reference}</span>
-                    <span className="text-muted-foreground">•</span>
-                    <span className="truncate">{ingredient.Description}</span>
+              <div key={ingredient.Reference} className="space-y-1">
+                <Button
+                  variant={selectedFragranceRef === ingredient.Reference ? "default" : "outline"}
+                  size="sm"
+                  className={`w-full justify-start text-left ${
+                    selectedFragranceRef === ingredient.Reference 
+                      ? 'bg-purple-600 hover:bg-purple-700' 
+                      : 'border-dashed bg-white hover:border-purple-300 hover:bg-purple-50'
+                  } py-3`}
+                  onClick={() => onFragranceChange(ingredient.Reference)}
+                >
+                  <div className="w-full">
+                    <div className="flex items-center gap-2">
+                      {selectedFragranceRef === ingredient.Reference && <Check className="h-4 w-4" />}
+                      <span className="font-medium">{ingredient.Reference}</span>
+                      <span className={selectedFragranceRef === ingredient.Reference ? "text-purple-200" : "text-muted-foreground"}>•</span>
+                      <span className="truncate">{ingredient.Description}</span>
+                      
+                      <TooltipProvider delayDuration={300}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="ml-auto h-6 w-6 p-0" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleIngredientDetails(ingredient.Reference);
+                              }}
+                            >
+                              <Info className={`h-4 w-4 ${
+                                selectedFragranceRef === ingredient.Reference ? "text-purple-200" : "text-purple-600"
+                              }`} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="text-xs">Click for details</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <p className={`text-xs mt-1 line-clamp-1 ${
+                      selectedFragranceRef === ingredient.Reference ? 'text-white/70' : 'text-muted-foreground'
+                    }`}>
+                      {getIngredientsPreview(ingredient["INCI LIST"], ingredient["FRAGRANCE NOTES"])}
+                    </p>
                   </div>
-                  <p className={`text-xs mt-1 line-clamp-1 ${
-                    selectedFragranceRef === ingredient.Reference ? 'text-white/70' : 'text-muted-foreground'
-                  }`}>
-                    {getIngredientsPreview(ingredient["INCI LIST"], ingredient["FRAGRANCE NOTES"])}
-                  </p>
-                </div>
-              </Button>
+                </Button>
+                
+                {expandedIngredient === ingredient.Reference && (
+                  <div className="mt-1 p-3 bg-purple-50 rounded-md border border-purple-100 text-sm">
+                    <h4 className="font-medium text-slate-800 mb-1">{ingredient.Reference} - {ingredient.Description}</h4>
+                    
+                    {ingredient["FRAGRANCE NOTES"] && (
+                      <p className="text-xs mb-2 text-slate-600">
+                        <span className="font-medium">Fragrance Notes:</span> {ingredient["FRAGRANCE NOTES"]}
+                      </p>
+                    )}
+                    
+                    {ingredient.Benefit && (
+                      <p className="text-xs mb-2 text-slate-600">
+                        <span className="font-medium">Benefits:</span> {ingredient.Benefit}
+                      </p>
+                    )}
+                    
+                    {ingredient["INCI LIST"] && (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium text-slate-700">INCI List:</p>
+                        <p className="text-xs mt-1 whitespace-pre-wrap text-slate-600">{ingredient["INCI LIST"]}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         ) : (

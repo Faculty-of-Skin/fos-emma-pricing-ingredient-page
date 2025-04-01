@@ -1,10 +1,12 @@
 
 import React, { useState } from "react";
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardFooter, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Check, Leaf, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, Leaf, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { EmmaIngredient } from "@/types/emmaIngredients";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface TextureCapsulesProps {
   textureIngredients: EmmaIngredient[];
@@ -24,6 +26,8 @@ export const TextureCapsuleSelector: React.FC<TextureCapsulesProps> = ({
   };
   
   const [showAll, setShowAll] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  
   const displayCount = showAll ? textureIngredients.length : 5;
   const displayIngredients = textureIngredients.slice(0, displayCount);
   
@@ -37,13 +41,15 @@ export const TextureCapsuleSelector: React.FC<TextureCapsulesProps> = ({
   };
 
   return (
-    <Card className={`border-l-4 ${textureStyles.border} hover:shadow-md transition-shadow`}>
+    <Card className={`border-l-4 ${textureStyles.border} hover:shadow-md transition-shadow rounded-xl overflow-hidden`}>
       <CardHeader className={`${textureStyles.header} pb-3`}>
         <div className="flex items-center gap-2">
-          {textureStyles.icon}
+          <div className="bg-green-100 p-1.5 rounded-full shadow-sm">
+            {textureStyles.icon}
+          </div>
           <div>
-            <h3 className="text-sm font-semibold">Texture Capsule</h3>
-            <p className="text-xs text-muted-foreground">Required: Select 1</p>
+            <h3 className="text-sm font-semibold text-slate-800">Texture Capsule</h3>
+            <p className="text-xs text-slate-500">Required: Select 1</p>
           </div>
         </div>
       </CardHeader>
@@ -77,13 +83,78 @@ export const TextureCapsuleSelector: React.FC<TextureCapsulesProps> = ({
         )}
         
         {selectedTexture && (
-          <div className="mt-4 p-3 bg-green-50/50 rounded-md border border-green-100">
-            <div className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-green-600" />
-              <p className="text-sm font-medium text-slate-800">{selectedTexture.Reference} selected</p>
+          <>
+            <div className="mt-4 p-3 bg-green-50/50 rounded-md border border-green-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-600" />
+                  <p className="text-sm font-medium text-slate-800">{selectedTexture.Reference} selected</p>
+                </div>
+                
+                <TooltipProvider delayDuration={300}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-7 w-7 p-0" 
+                        onClick={() => setShowDetails(!showDetails)}
+                      >
+                        <Info className="h-4 w-4 text-green-600" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">View ingredient details</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <p className="text-xs text-slate-500 mt-1 line-clamp-2">{selectedTexture.Description}</p>
+              
+              <Collapsible open={showDetails} onOpenChange={setShowDetails}>
+                <CollapsibleContent className="mt-3 pt-3 border-t border-green-100">
+                  {selectedTexture.Texture && (
+                    <div className="mb-2">
+                      <p className="text-xs font-medium text-slate-700">Texture:</p>
+                      <p className="text-xs text-slate-600">{selectedTexture.Texture}</p>
+                    </div>
+                  )}
+                  
+                  {selectedTexture.Benefit && (
+                    <div className="mb-2">
+                      <p className="text-xs font-medium text-slate-700">Benefits:</p>
+                      <p className="text-xs text-slate-600">{selectedTexture.Benefit}</p>
+                    </div>
+                  )}
+                  
+                  {selectedTexture["INCI LIST"] && (
+                    <div className="mb-2">
+                      <p className="text-xs font-medium text-slate-700">INCI List:</p>
+                      <p className="text-xs whitespace-pre-wrap text-slate-600">{selectedTexture["INCI LIST"]}</p>
+                    </div>
+                  )}
+                  
+                  {selectedTexture["Ingredient Breakdown"] && (
+                    <div>
+                      <p className="text-xs font-medium text-slate-700">Ingredient Breakdown:</p>
+                      <p className="text-xs whitespace-pre-wrap text-slate-600">{selectedTexture["Ingredient Breakdown"]}</p>
+                    </div>
+                  )}
+                </CollapsibleContent>
+                
+                <CollapsibleTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-full mt-2 text-xs flex items-center justify-center gap-1 text-green-700"
+                  >
+                    {showDetails ? "Hide details" : "Show details"}
+                    {showDetails ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                  </Button>
+                </CollapsibleTrigger>
+              </Collapsible>
             </div>
-            <p className="text-xs text-slate-500 mt-1 line-clamp-2">{selectedTexture.Description}</p>
-          </div>
+          </>
         )}
       </CardContent>
       {textureIngredients.length > 5 && (

@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, Sparkles, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { EmmaIngredient } from "@/types/emmaIngredients";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ActiveCapsulesProps {
   activeIngredients: EmmaIngredient[];
@@ -18,6 +19,8 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
   onActiveChange
 }) => {
   const [showAll, setShowAll] = useState(false);
+  const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
+  
   const displayCount = showAll ? activeIngredients.length : 5;
   const displayIngredients = activeIngredients.slice(0, displayCount);
   
@@ -28,6 +31,14 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
     const ingredients = inciList.split(',').map(i => i.trim());
     const previewIngredients = ingredients.slice(0, 3);
     return previewIngredients.join(', ') + (ingredients.length > 3 ? '...' : '');
+  };
+
+  const toggleIngredientDetails = (reference: string) => {
+    if (expandedIngredient === reference) {
+      setExpandedIngredient(null);
+    } else {
+      setExpandedIngredient(reference);
+    }
   };
 
   return (
@@ -47,31 +58,72 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
         {activeIngredients.length > 0 ? (
           <div className="space-y-2">
             {displayIngredients.map(ingredient => (
-              <Button
-                key={ingredient.Reference}
-                variant={selectedActiveRefs.includes(ingredient.Reference) ? "default" : "outline"}
-                size="sm"
-                className={`w-full justify-start text-left ${
-                  selectedActiveRefs.includes(ingredient.Reference) 
-                    ? 'bg-blue-600 hover:bg-blue-700 shadow-sm' 
-                    : 'border-dashed bg-white hover:border-blue-300 hover:bg-blue-50'
-                } rounded-lg transition-all py-3`}
-                onClick={() => onActiveChange(ingredient.Reference)}
-              >
-                <div className="w-full">
-                  <div className="flex items-center gap-2">
-                    {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4 flex-shrink-0" />}
-                    <span className="font-medium">{ingredient.Reference}</span>
-                    <span className="text-muted-foreground">•</span>
-                    <span className="truncate">{ingredient.Description}</span>
+              <div key={ingredient.Reference} className="space-y-1">
+                <Button
+                  variant={selectedActiveRefs.includes(ingredient.Reference) ? "default" : "outline"}
+                  size="sm"
+                  className={`w-full justify-start text-left ${
+                    selectedActiveRefs.includes(ingredient.Reference) 
+                      ? 'bg-blue-600 hover:bg-blue-700 shadow-sm' 
+                      : 'border-dashed bg-white hover:border-blue-300 hover:bg-blue-50'
+                  } rounded-lg transition-all py-3`}
+                  onClick={() => onActiveChange(ingredient.Reference)}
+                >
+                  <div className="w-full">
+                    <div className="flex items-center gap-2">
+                      {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4 flex-shrink-0" />}
+                      <span className="font-medium">{ingredient.Reference}</span>
+                      <span className={selectedActiveRefs.includes(ingredient.Reference) ? "text-blue-200" : "text-muted-foreground"}>•</span>
+                      <span className="truncate">{ingredient.Description}</span>
+                      
+                      <TooltipProvider delayDuration={300}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="ml-auto h-6 w-6 p-0" 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleIngredientDetails(ingredient.Reference);
+                              }}
+                            >
+                              <Info className={`h-4 w-4 ${
+                                selectedActiveRefs.includes(ingredient.Reference) ? "text-blue-200" : "text-blue-600"
+                              }`} />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="text-xs">Click for details</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <p className={`text-xs mt-1 line-clamp-1 ${
+                      selectedActiveRefs.includes(ingredient.Reference) ? 'text-white/70' : 'text-muted-foreground'
+                    }`}>
+                      {getIngredientsPreview(ingredient["INCI LIST"])}
+                    </p>
                   </div>
-                  <p className={`text-xs mt-1 line-clamp-1 ${
-                    selectedActiveRefs.includes(ingredient.Reference) ? 'text-white/70' : 'text-muted-foreground'
-                  }`}>
-                    {getIngredientsPreview(ingredient["INCI LIST"])}
-                  </p>
-                </div>
-              </Button>
+                </Button>
+                
+                {expandedIngredient === ingredient.Reference && (
+                  <div className="mt-1 p-3 bg-blue-50 rounded-md border border-blue-100 text-sm">
+                    <h4 className="font-medium text-slate-800 mb-1">{ingredient.Reference} - {ingredient.Description}</h4>
+                    {ingredient.Benefit && (
+                      <p className="text-xs mb-2 text-slate-600">
+                        <span className="font-medium">Benefits:</span> {ingredient.Benefit}
+                      </p>
+                    )}
+                    {ingredient["INCI LIST"] && (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium text-slate-700">INCI List:</p>
+                        <p className="text-xs mt-1 whitespace-pre-wrap text-slate-600">{ingredient["INCI LIST"]}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         ) : (
