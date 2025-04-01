@@ -13,16 +13,16 @@ export const AccountCard = () => {
   const navigate = useNavigate();
   
   return (
-    <Card className="brutal-card">
+    <Card className="brutal-card border-2 border-brutal-black/20">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold flex items-center gap-2">
+        <CardTitle className="text-xl font-semibold flex items-center gap-2 uppercase font-mono tracking-wide">
           <Users className="h-5 w-5" /> Your Account
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div>
-            <p className="text-sm font-medium text-brutal-gray">Email</p>
+            <p className="text-sm font-medium text-brutal-gray uppercase font-mono">Email</p>
             {isLoading ? (
               <Skeleton className="h-5 w-full" />
             ) : (
@@ -30,15 +30,15 @@ export const AccountCard = () => {
             )}
           </div>
           <div>
-            <p className="text-sm font-medium text-brutal-gray">Account Type</p>
+            <p className="text-sm font-medium text-brutal-gray uppercase font-mono">Account Type</p>
             {isLoading ? (
               <Skeleton className="h-5 w-32" />
             ) : (
-              <p className="text-brutal-black capitalize">{profile?.role || "customer"}</p>
+              <p className="text-brutal-black uppercase">{profile?.role || "customer"}</p>
             )}
           </div>
           <div>
-            <p className="text-sm font-medium text-brutal-gray">Currency</p>
+            <p className="text-sm font-medium text-brutal-gray uppercase font-mono">Currency</p>
             <div className="mt-1">
               <CurrencyToggleGroup />
             </div>
@@ -46,7 +46,8 @@ export const AccountCard = () => {
           <div className="pt-2">
             <Button 
               variant="outline" 
-              className="w-full border-2 border-brutal-black" 
+              className="w-full border-2 border-brutal-black hover:bg-brutal-black hover:text-brutal-white 
+              transform hover:translate-y-0.5 transition-all uppercase font-mono tracking-wide" 
               onClick={() => navigate('/account-settings')}
             >
               <Settings className="mr-2 h-4 w-4" />

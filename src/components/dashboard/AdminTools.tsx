@@ -14,21 +14,23 @@ export const AdminTools = () => {
   }
   
   return (
-    <Card className="brutal-card bg-brutal-black text-brutal-white">
+    <Card className="brutal-card bg-brutal-black text-brutal-white border-4 border-brutal-black">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Admin Tools</CardTitle>
+        <CardTitle className="text-xl font-semibold uppercase font-mono tracking-wide">Admin Tools</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           <Button 
-            className="w-full bg-brutal-white text-brutal-black hover:bg-brutal-gray"
+            className="w-full bg-brutal-white text-brutal-black hover:bg-brutal-gray
+            border-2 border-brutal-white uppercase font-mono tracking-wide transform hover:translate-y-0.5 transition-transform"
             onClick={() => navigate('/admin')}
           >
             Admin Panel
           </Button>
           <Button 
             variant="outline" 
-            className="w-full border border-brutal-white text-brutal-white hover:bg-brutal-black/60"
+            className="w-full border-2 border-brutal-white text-brutal-white hover:bg-brutal-black/60
+            uppercase font-mono tracking-wide transform hover:translate-y-0.5 transition-transform"
             onClick={() => navigate('/admin/users')}
           >
             Manage Users

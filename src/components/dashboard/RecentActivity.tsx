@@ -32,10 +32,14 @@ export const RecentActivity = () => {
   };
   
   return (
-    <Card className="brutal-card">
+    <Card className="brutal-card border-2 border-brutal-black/20">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Recent Activity</CardTitle>
-        <CardDescription>Your latest actions and updates</CardDescription>
+        <CardTitle className="text-xl font-semibold uppercase font-mono tracking-wide flex items-center gap-2">
+          <Activity className="h-5 w-5" /> Recent Activity
+        </CardTitle>
+        <CardDescription>
+          Your latest actions and updates
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -74,7 +78,7 @@ export const RecentActivity = () => {
           // No activities found
           <div className="text-center py-8 text-brutal-gray flex flex-col items-center gap-2">
             <Clock className="h-8 w-8 opacity-50" />
-            <p>No recent activity</p>
+            <p className="uppercase font-mono tracking-wide">No recent activity</p>
             <p className="text-sm">Your recent actions will appear here</p>
           </div>
         )}

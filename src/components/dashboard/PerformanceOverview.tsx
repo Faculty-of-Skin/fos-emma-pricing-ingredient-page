@@ -11,9 +11,9 @@ export const PerformanceOverview = () => {
   const { data, isLoading } = usePerformanceData();
   
   return (
-    <Card className="brutal-card">
+    <Card className="brutal-card border-2 border-brutal-black/20">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold flex items-center gap-2">
+        <CardTitle className="text-xl font-semibold flex items-center gap-2 uppercase font-mono tracking-wide">
           <TrendingUp className="h-5 w-5" /> Performance Overview
         </CardTitle>
         <CardDescription>
@@ -23,7 +23,7 @@ export const PerformanceOverview = () => {
       <CardContent>
         {isLoading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <Loader2 className="h-8 w-8 animate-spin text-brutal-gray" />
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -39,13 +39,13 @@ export const PerformanceOverview = () => {
             />
             <StatCard 
               title="Est. Revenue" 
-              value={formatPrice(data?.estimatedRevenue || 0)} 
-              trend={`+${data?.revenueGrowth || 0}% from last month`} 
+              value="Coming Soon" 
+              trend="Feature in development" 
             />
             <StatCard 
               title="Potential Clients" 
-              value={data?.potentialClients.toString() || "0"} 
-              trend={`${data?.newLeads || 0} new leads`} 
+              value="Coming Soon" 
+              trend="Feature in development" 
             />
           </div>
         )}
