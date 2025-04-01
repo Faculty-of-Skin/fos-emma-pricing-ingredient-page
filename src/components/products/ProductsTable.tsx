@@ -39,7 +39,7 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   const categoryOrder = [
     "Equipment", // Top row, full width
     "Face Capsules", "Body Capsules", // Middle row, two columns
-    "Accessories", "Marketing" // Bottom row, two columns
+    "Marketing", "Accessories" // Bottom row, two columns (Marketing on left, Accessories on right)
   ];
   
   // Group products by category for better organization
@@ -69,8 +69,8 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   const isMiddleRowCategory = (category: string): category is "Face Capsules" | "Body Capsules" => 
     category === "Face Capsules" || category === "Body Capsules";
   
-  const isBottomRowCategory = (category: string): category is "Accessories" | "Marketing" => 
-    category === "Accessories" || category === "Marketing";
+  const isBottomRowCategory = (category: string): category is "Marketing" | "Accessories" => 
+    category === "Marketing" || category === "Accessories";
   
   // Filter categories for the top row (Equipment)
   const topRowCategories = sortedCategories.filter(cat => isEquipmentCategory(cat));
@@ -88,8 +88,9 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   const faceCapsules = middleRowCategories.find(cat => cat === "Face Capsules");
   const bodyCapsules = middleRowCategories.find(cat => cat === "Body Capsules");
   
-  // Filter categories for the bottom row (Accessories, Marketing)
-  const bottomRowCategories = sortedCategories.filter(cat => isBottomRowCategory(cat));
+  // Get specific categories for the bottom row, ensuring Marketing is first
+  const marketing = sortedCategories.find(cat => cat === "Marketing");
+  const accessories = sortedCategories.find(cat => cat === "Accessories");
 
   return (
     <div className="space-y-8">
@@ -129,16 +130,27 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
         )}
       </div>
 
-      {/* Bottom row - Accessories and Marketing (two columns) */}
+      {/* Bottom row - Marketing and Accessories (two columns) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {bottomRowCategories.map(category => (
+        {/* Marketing on the left */}
+        {marketing && (
           <ProductsCategoryGroup 
-            key={category}
-            category={category}
-            products={groupedProducts[category]}
+            key={marketing}
+            category={marketing}
+            products={groupedProducts[marketing]}
             isUsingFallbackData={isUsingFallbackData}
           />
-        ))}
+        )}
+        
+        {/* Accessories on the right */}
+        {accessories && (
+          <ProductsCategoryGroup 
+            key={accessories}
+            category={accessories}
+            products={groupedProducts[accessories]}
+            isUsingFallbackData={isUsingFallbackData}
+          />
+        )}
       </div>
 
       {/* Any other categories */}
