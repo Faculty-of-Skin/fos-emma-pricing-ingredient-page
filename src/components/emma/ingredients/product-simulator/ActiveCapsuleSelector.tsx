@@ -136,6 +136,18 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
           <div className="mt-4 p-3 bg-blue-50 rounded-md border border-blue-100 shadow-sm">
             <p className="text-sm font-medium text-slate-800">{selectedActiveRefs.length} active capsule(s) selected</p>
             <p className="text-xs text-slate-500 mt-1">{selectedActiveRefs.join(', ')}</p>
+            {selectedActiveRefs.length > 0 && (
+              <div className="mt-2 pt-2 border-t border-blue-100">
+                {selectedActiveRefs.map(ref => {
+                  const ingredient = activeIngredients.find(i => i.Reference === ref);
+                  return ingredient && ingredient["INCI LIST"] ? (
+                    <p key={ref} className="text-xs text-slate-500 mt-1 line-clamp-1 italic">
+                      <span className="font-medium">{ref} INCI:</span> {getIngredientsPreview(ingredient["INCI LIST"])}
+                    </p>
+                  ) : null;
+                })}
+              </div>
+            )}
           </div>
         )}
       </CardContent>

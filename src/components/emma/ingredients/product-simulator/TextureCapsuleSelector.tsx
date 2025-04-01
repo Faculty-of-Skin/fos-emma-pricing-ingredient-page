@@ -110,6 +110,11 @@ export const TextureCapsuleSelector: React.FC<TextureCapsulesProps> = ({
                 </TooltipProvider>
               </div>
               <p className="text-xs text-slate-500 mt-1 line-clamp-2">{selectedTexture.Description}</p>
+              {selectedTexture["INCI LIST"] && (
+                <p className="text-xs text-slate-500 mt-1 line-clamp-1 italic">
+                  INCI: {getIngredientsPreview(selectedTexture["INCI LIST"])}
+                </p>
+              )}
               
               <Collapsible open={showDetails} onOpenChange={setShowDetails}>
                 <CollapsibleContent className="mt-3 pt-3 border-t border-green-100">

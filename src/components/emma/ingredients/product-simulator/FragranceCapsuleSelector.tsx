@@ -153,6 +153,29 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
               <Check className="h-4 w-4 text-purple-600" />
               <p className="text-sm font-medium text-slate-800">{selectedFragranceRef} selected</p>
             </div>
+            {selectedFragranceRef && (
+              <div className="mt-2 pt-2 border-t border-purple-100">
+                {(() => {
+                  const ingredient = fragranceIngredients.find(i => i.Reference === selectedFragranceRef);
+                  if (ingredient) {
+                    if (ingredient["FRAGRANCE NOTES"]) {
+                      return (
+                        <p className="text-xs text-slate-500 line-clamp-1 italic">
+                          <span className="font-medium">Notes:</span> {ingredient["FRAGRANCE NOTES"]}
+                        </p>
+                      );
+                    } else if (ingredient["INCI LIST"]) {
+                      return (
+                        <p className="text-xs text-slate-500 line-clamp-1 italic">
+                          <span className="font-medium">INCI:</span> {getIngredientsPreview(ingredient["INCI LIST"], null)}
+                        </p>
+                      );
+                    }
+                  }
+                  return null;
+                })()}
+              </div>
+            )}
           </div>
         )}
       </CardContent>

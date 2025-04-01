@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { EmmaIngredient } from "@/types/emmaIngredients";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronDown, ChevronUp, Info } from "lucide-react";
+import { ChevronDown, ChevronUp, Info, List } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
@@ -33,6 +33,15 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
     } else {
       setDetailsShown(reference);
     }
+  };
+
+  // Extract first few ingredients from INCI list to show as preview
+  const getIngredientsPreview = (inciList: string | undefined) => {
+    if (!inciList) return null;
+    
+    const ingredients = inciList.split(',').map(i => i.trim());
+    const previewIngredients = ingredients.slice(0, 3);
+    return previewIngredients.join(', ') + (ingredients.length > 3 ? '...' : '');
   };
 
   if (ingredients.length === 0) {
@@ -84,6 +93,14 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
                     <div>
                       <h4 className="font-medium">{ingredient.Reference}</h4>
                       <p className="text-sm text-muted-foreground">{ingredient.Description}</p>
+                      {ingredient["INCI LIST"] && getIngredientsPreview(ingredient["INCI LIST"]) && (
+                        <div className="flex items-center gap-1 mt-1">
+                          <List className="h-3 w-3 text-muted-foreground" />
+                          <p className="text-xs text-muted-foreground line-clamp-1">
+                            {getIngredientsPreview(ingredient["INCI LIST"])}
+                          </p>
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
