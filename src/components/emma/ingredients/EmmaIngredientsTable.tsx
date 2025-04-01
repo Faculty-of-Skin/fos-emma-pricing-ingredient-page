@@ -1,31 +1,19 @@
 
-import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import React, { useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { EmmaIngredient } from "@/hooks/useEmmaIngredients";
-import { 
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { 
   FileText, 
   List, 
   Info, 
   ChevronDown, 
+  ChevronUp,
   ChevronRight,
-  ChevronUp
+  FolderOpen,
+  Tags
 } from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface EmmaIngredientsTableProps {
   ingredients: EmmaIngredient[];
@@ -34,15 +22,155 @@ interface EmmaIngredientsTableProps {
   toggleIngredient: (reference: string) => void;
 }
 
+// Group ingredients by category and then by type based on first word of description
 export const EmmaIngredientsTable: React.FC<EmmaIngredientsTableProps> = ({
   filteredIngredients,
   expandedIngredient,
   toggleIngredient,
 }) => {
+  // Group ingredients by category and then by first word of description
+  const groupedIngredients = useMemo(() => {
+    const byCategory: Record<string, EmmaIngredient[]> = {};
+    
+    // First group by category
+    filteredIngredients.forEach(ingredient => {
+      const category = ingredient.Category || "Uncategorized";
+      if (!byCategory[category]) {
+        byCategory[category] = [];
+      }
+      byCategory[category].push(ingredient);
+    });
+    
+    // Then for each category, group by type (first word of description)
+    const result: Record<string, Record<string, EmmaIngredient[]>> = {};
+    
+    Object.entries(byCategory).forEach(([category, ingredients]) => {
+      result[category] = {};
+      
+      ingredients.forEach(ingredient => {
+        // Extract first word from description to determine type
+        const firstWord = ingredient.Description.split(' ')[0];
+        let type = "Other";
+        
+        if (/texture/i.test(firstWord)) {
+          type = "Texture";
+        } else if (/active/i.test(firstWord)) {
+          type = "Active";
+        } else if (/perfume/i.test(firstWord) || /fragrance/i.test(firstWord)) {
+          type = "Perfume";
+        } else if (/base/i.test(firstWord)) {
+          type = "Base";
+        }
+        
+        if (!result[category][type]) {
+          result[category][type] = [];
+        }
+        result[category][type].push(ingredient);
+      });
+    });
+    
+    return result;
+  }, [filteredIngredients]);
+  
+  // Get array of categories for rendering
+  const categories = useMemo(() => {
+    return Object.keys(groupedIngredients).sort();
+  }, [groupedIngredients]);
+
   return (
     <ScrollArea className="h-[600px] rounded-md border">
-      <div className="p-1">
-        {filteredIngredients.map((ingredient) => (
+      <div className="p-3">
+        {categories.length === 0 ? (
+          <div className="p-4 text-center text-muted-foreground">
+            No ingredients match your search criteria
+          </div>
+        ) : (
+          categories.map((category) => (
+            <CategoryGroup 
+              key={category}
+              category={category}
+              typeGroups={groupedIngredients[category]}
+              expandedIngredient={expandedIngredient}
+              toggleIngredient={toggleIngredient}
+            />
+          ))
+        )}
+      </div>
+    </ScrollArea>
+  );
+};
+
+interface CategoryGroupProps {
+  category: string;
+  typeGroups: Record<string, EmmaIngredient[]>;
+  expandedIngredient: string | null;
+  toggleIngredient: (reference: string) => void;
+}
+
+// Component to display a category group
+const CategoryGroup: React.FC<CategoryGroupProps> = ({ 
+  category, 
+  typeGroups,
+  expandedIngredient,
+  toggleIngredient
+}) => {
+  // Get types in a preferred order
+  const types = useMemo(() => {
+    const preferredOrder = ["Texture", "Active", "Perfume", "Base", "Other"];
+    return Object.keys(typeGroups).sort((a, b) => {
+      return preferredOrder.indexOf(a) - preferredOrder.indexOf(b);
+    });
+  }, [typeGroups]);
+
+  return (
+    <div className="mb-6">
+      <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+        <FolderOpen className="h-5 w-5 text-primary" />
+        {category}
+        <Badge variant="outline" className="ml-2">{
+          Object.values(typeGroups).flat().length
+        } items</Badge>
+      </h3>
+      
+      <div className="pl-4 space-y-4">
+        {types.map(type => (
+          <TypeGroup 
+            key={`${category}-${type}`}
+            type={type}
+            ingredients={typeGroups[type]}
+            expandedIngredient={expandedIngredient}
+            toggleIngredient={toggleIngredient}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+interface TypeGroupProps {
+  type: string;
+  ingredients: EmmaIngredient[];
+  expandedIngredient: string | null;
+  toggleIngredient: (reference: string) => void;
+}
+
+// Component to display a type group within a category
+const TypeGroup: React.FC<TypeGroupProps> = ({ 
+  type, 
+  ingredients,
+  expandedIngredient,
+  toggleIngredient
+}) => {
+  return (
+    <div className="mb-4">
+      <h4 className="text-md font-medium mb-2 flex items-center gap-2">
+        <Tags className="h-4 w-4 text-primary" />
+        {type}
+        <Badge variant="outline" className="ml-2">{ingredients.length}</Badge>
+      </h4>
+      
+      <div className="pl-3 space-y-3">
+        {ingredients.map(ingredient => (
           <IngredientCard 
             key={ingredient.Reference}
             ingredient={ingredient}
@@ -51,7 +179,7 @@ export const EmmaIngredientsTable: React.FC<EmmaIngredientsTableProps> = ({
           />
         ))}
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 
@@ -67,7 +195,7 @@ const IngredientCard: React.FC<IngredientCardProps> = ({
   toggleIngredient 
 }) => {
   return (
-    <div className="mb-3 border rounded-lg overflow-hidden bg-card">
+    <div className="border rounded-lg overflow-hidden bg-card">
       {/* Card Header - Always visible */}
       <div 
         className="p-4 flex items-start justify-between cursor-pointer hover:bg-muted/50"
@@ -76,9 +204,6 @@ const IngredientCard: React.FC<IngredientCardProps> = ({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold">{ingredient.Reference}</h3>
-            {ingredient.Category && (
-              <Badge variant="outline" className="ml-2">{ingredient.Category}</Badge>
-            )}
           </div>
           <p className="text-sm text-muted-foreground">{ingredient.Description}</p>
           
