@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/auth";
@@ -18,6 +17,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { getSiteUrl } from "@/integrations/supabase/client";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -29,11 +29,29 @@ const Auth = () => {
   const location = useLocation();
   const { toast } = useToast();
   
-  // Check for hash in URL - this indicates an auth redirect
-  const hasAuthRedirect = location.hash && (
-    location.hash.includes('access_token') || 
-    location.hash.includes('error')
-  );
+  // Check for code or hash in URL - this indicates an auth redirect
+  const hasAuthRedirect = location.search.includes('code=') || 
+                          (location.hash && (
+                            location.hash.includes('access_token') || 
+                            location.hash.includes('error')
+                          ));
+  
+  // Log important auth-related information on page load
+  useEffect(() => {
+    console.log("Auth page loaded");
+    console.log("Current URL:", window.location.href);
+    console.log("Site URL from config:", getSiteUrl());
+    console.log("Has auth redirect:", hasAuthRedirect);
+    console.log("User authenticated:", !!user);
+    
+    if (location.search) {
+      console.log("URL search params:", location.search);
+    }
+    
+    if (location.hash) {
+      console.log("URL hash:", location.hash);
+    }
+  }, [location, hasAuthRedirect, user]);
   
   // Effect to detect hash changes for auth redirects
   useEffect(() => {
@@ -44,6 +62,7 @@ const Auth = () => {
       
       // Add timeout to reset if redirect handling fails
       const timeout = setTimeout(() => {
+        console.log("Redirect handling timeout reached, resetting state");
         setIsRedirecting(false);
         setIsLoading(false);
       }, 10000);
@@ -73,8 +92,8 @@ const Auth = () => {
 
   // Check if we're coming from an email link redirect
   const isEmailRedirect = typeof window !== 'undefined' && 
-    window.location.hash && 
-    window.location.hash.includes('type=signup');
+    (window.location.search.includes('code=') ||
+    (window.location.hash && window.location.hash.includes('type=signup')));
 
   // Redirect to dashboard if user is already logged in
   // Only redirect if there's no auth redirect in progress

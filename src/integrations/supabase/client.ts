@@ -8,10 +8,12 @@ const supabaseKey = getPublicApiKey();
 
 // Get the current origin
 const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
+
 // Check if we're in production (actual domain) vs development or preview
-const isProduction = currentOrigin.includes('emma.facultyofskin.com') || 
-                    currentOrigin.includes('faculty') || 
-                    process.env.NODE_ENV === 'production';
+const isProduction = 
+  currentOrigin.includes('emma.facultyofskin.com') || 
+  currentOrigin.includes('faculty') || 
+  process.env.NODE_ENV === 'production';
 
 // Define site URL - use production URL in production, current origin otherwise
 const siteUrl = isProduction 
@@ -35,11 +37,6 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
     storage: localStorage,
     flowType: 'pkce', // Using PKCE flow instead of implicit for better security
-  },
-  global: {
-    headers: {
-      'X-Supabase-Auth-Redirect': redirectUrl
-    }
   }
 });
 
@@ -47,27 +44,20 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
 export const getSiteUrl = () => siteUrl;
 export const getRedirectUrl = () => redirectUrl;
 
-// Function to set up redirects
-export const setupRedirects = () => {
-  // Explicitly set the URL to redirect to after email verification
+// Initialize the auth configuration
+export const initializeAuth = () => {
+  console.log("Initializing auth configuration");
+  
+  // Set up auth state listener for logging and debugging
   supabase.auth.onAuthStateChange((event, session) => {
     console.log('Auth state change:', event, session?.user?.email);
-    
-    // If we have a session after signup/login/email verification
-    if (session) {
-      // Make sure we're on the right page after authentication
-      const currentPath = window.location.pathname;
-      if (currentPath === '/auth') {
-        setTimeout(() => {
-          window.location.href = `${siteUrl}/dashboard`;
-        }, 1000); // Short delay to allow the auth page to handle the session first
-      }
-    }
   });
+  
+  console.log('Auth configuration initialized');
 };
 
-// Initialize redirects
-setupRedirects();
+// Initialize auth configuration
+initializeAuth();
 
 // Log the configuration for debugging purposes
 console.log('Supabase client initialized with site URL:', siteUrl);

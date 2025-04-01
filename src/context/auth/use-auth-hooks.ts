@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase, getSiteUrl, getRedirectUrl } from "@/integrations/supabase/client";
@@ -50,6 +51,7 @@ export const useAuthSignUp = () => {
     try {
       console.log("Signing up with email:", email);
       console.log("Using redirect URL:", redirectTo);
+      
       const { data, error } = await supabase.auth.signUp({ 
         email, 
         password,

@@ -20,6 +20,10 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
       const searchParams = new URLSearchParams(location.search);
       const code = searchParams.get('code');
       
+      console.log("Checking for auth redirects, URL:", window.location.href);
+      console.log("Search params:", location.search);
+      console.log("Auth code in URL:", code || "none");
+      
       if (code) {
         console.log("Auth code detected in URL:", code);
         try {
@@ -135,8 +139,10 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
       }
     };
 
-    // Handle auth redirect
-    handleAuthRedirect();
+    // Handle auth redirect with a slight delay to ensure all parameters are properly loaded
+    setTimeout(() => {
+      handleAuthRedirect();
+    }, 100);
     
     // Clear any auth errors when component mounts or route changes
     return () => {
