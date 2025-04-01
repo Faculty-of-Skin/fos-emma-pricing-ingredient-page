@@ -69,6 +69,12 @@ export const ProductsCategoryGroup = ({
     });
   }, [products, activeFilter, shouldShowFilters]);
   
+  // Determine if this category should have scrolling
+  const shouldScroll = shouldShowFilters;
+  
+  // Set a fixed height for scrollable areas
+  const scrollHeight = shouldScroll ? "max-h-[400px]" : undefined;
+  
   const content = (
     <>
       <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
@@ -96,10 +102,13 @@ export const ProductsCategoryGroup = ({
     </>
   );
 
+  // Use the fixed height for scrolling or the passed maxHeight prop if available
+  const finalScrollHeight = maxHeight || scrollHeight;
+
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
-      {maxHeight ? (
-        <ScrollArea className={`pr-4 ${maxHeight}`}>
+      {finalScrollHeight ? (
+        <ScrollArea className={`pr-4 ${finalScrollHeight}`}>
           {content}
         </ScrollArea>
       ) : (
