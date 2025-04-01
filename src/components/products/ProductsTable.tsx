@@ -83,19 +83,6 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
     !isEquipmentCategory(cat) && 
     !isMiddleRowCategory(cat) && 
     !isBottomRowCategory(cat));
-  
-  // Get specific categories for the middle row
-  const faceCapsules = middleRowCategories.find(cat => cat === "Face Capsules");
-  const bodyCapsules = middleRowCategories.find(cat => cat === "Body Capsules");
-  
-  // Get specific categories for the bottom row, ensuring Marketing is first
-  const marketing = sortedCategories.find(cat => cat === "Marketing");
-  const accessories = sortedCategories.find(cat => cat === "Accessories");
-
-  // Force reordering for the bottom row
-  const bottomRowItems = [];
-  if (marketing) bottomRowItems.push(marketing);
-  if (accessories) bottomRowItems.push(accessories);
 
   return (
     <div className="space-y-8">
@@ -114,53 +101,43 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
 
       {/* Middle row - Face Capsules and Body Capsules (two columns) with scrolling */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {faceCapsules && (
+        {middleRowCategories.map(category => (
           <ProductsCategoryGroup 
-            key={faceCapsules}
-            category={faceCapsules}
-            products={groupedProducts[faceCapsules]}
+            key={category}
+            category={category}
+            products={groupedProducts[category]}
             isUsingFallbackData={isUsingFallbackData}
             maxHeight="max-h-[500px]"
           />
-        )}
-        
-        {bodyCapsules && (
-          <ProductsCategoryGroup 
-            key={bodyCapsules}
-            category={bodyCapsules}
-            products={groupedProducts[bodyCapsules]}
-            isUsingFallbackData={isUsingFallbackData}
-            maxHeight="max-h-[500px]"
-          />
-        )}
+        ))}
       </div>
 
-      {/* Bottom row - Marketing and Accessories (two columns) FORCED ORDER */}
-      {bottomRowItems.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {marketing && (
-            <div className="col-span-1">
-              <ProductsCategoryGroup 
-                key={marketing}
-                category={marketing}
-                products={groupedProducts[marketing]}
-                isUsingFallbackData={isUsingFallbackData}
-              />
-            </div>
-          )}
-          
-          {accessories && (
-            <div className="col-span-1">
-              <ProductsCategoryGroup 
-                key={accessories}
-                category={accessories}
-                products={groupedProducts[accessories]}
-                isUsingFallbackData={isUsingFallbackData}
-              />
-            </div>
-          )}
-        </div>
-      )}
+      {/* Bottom row - Marketing and Accessories (FORCED ORDER) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* MARKETING ALWAYS FIRST (LEFT) */}
+        {sortedCategories.includes("Marketing") && (
+          <div className="col-span-1">
+            <ProductsCategoryGroup 
+              key="Marketing"
+              category="Marketing"
+              products={groupedProducts["Marketing"]}
+              isUsingFallbackData={isUsingFallbackData}
+            />
+          </div>
+        )}
+        
+        {/* ACCESSORIES ALWAYS SECOND (RIGHT) */}
+        {sortedCategories.includes("Accessories") && (
+          <div className="col-span-1">
+            <ProductsCategoryGroup 
+              key="Accessories"
+              category="Accessories"
+              products={groupedProducts["Accessories"]}
+              isUsingFallbackData={isUsingFallbackData}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Any other categories */}
       {otherCategories.length > 0 && (
