@@ -1,45 +1,36 @@
 
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, Calendar } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { LifeBuoy, Mail, MessageCircle } from "lucide-react";
 
 export const SupportCard = () => {
-  const { toast } = useToast();
-
-  const handleEmailClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.open('mailto:ade@facultyofskin.com', '_blank');
-    toast({
-      title: "Email Client Opened",
-      description: "Opening your email client to contact us.",
-    });
-  };
-
   return (
-    <Card className="brutal-card border-2 border-dashed">
-      <CardContent className="p-6">
-        <h3 className="font-semibold mb-2">Need Help?</h3>
-        <p className="text-sm text-brutal-gray mb-4">
-          Contact our support team for assistance with your Emma products or services.
-        </p>
-        <div className="space-y-2">
+    <Card className="brutal-card border-4 border-brutal-black bg-brutal-white transform transition-transform duration-100 hover:translate-x-1 hover:translate-y-1">
+      <CardHeader>
+        <CardTitle className="text-xl font-semibold flex items-center gap-2 font-mono uppercase">
+          <LifeBuoy className="h-5 w-5" /> Support
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          <p className="text-sm">Need help with something? Our support team is here to assist you.</p>
+          
           <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={handleEmailClick}
+            className="w-full border-2 border-brutal-black bg-brutal-white text-brutal-black hover:bg-brutal-black hover:text-brutal-white font-mono uppercase tracking-wider"
+            onClick={() => window.open('mailto:support@emma-beauty.com')}
           >
             <Mail className="mr-2 h-4 w-4" />
-            Email Us
+            Email Support
           </Button>
+          
           <Button 
             variant="outline" 
-            className="w-full"
-            onClick={() => window.open('https://meetings.hubspot.com/faculty-of-skin/spa-sense', '_blank')}
+            className="w-full border-2 border-brutal-black text-brutal-black hover:bg-brutal-black hover:text-brutal-white font-mono uppercase tracking-wider"
+            onClick={() => window.open('https://discord.gg/emma-beauty', '_blank')}
           >
-            <Calendar className="mr-2 h-4 w-4" />
-            Schedule a Call
+            <MessageCircle className="mr-2 h-4 w-4" />
+            Community Discord
           </Button>
         </div>
       </CardContent>

@@ -19,19 +19,19 @@ const Dashboard = () => {
   
   return (
     <DashboardLayout>
-      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
         {/* Welcome Banner */}
-        <div className="mb-6">
-          <WelcomeBanner firstName={firstName} />
-        </div>
+        <WelcomeBanner firstName={firstName} />
         
         {/* Quick Access Tiles */}
-        <div className="mb-8">
+        <div>
+          <h2 className="text-xl font-bold mb-4 font-mono uppercase">Quick Access</h2>
           <QuickAccess />
         </div>
         
         {/* Summary Stats */}
-        <div className="mb-8">
+        <div>
+          <h2 className="text-xl font-bold mb-4 font-mono uppercase">Key Metrics</h2>
           <DashboardStats />
         </div>
         

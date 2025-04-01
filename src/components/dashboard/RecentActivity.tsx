@@ -15,11 +15,11 @@ export const RecentActivity = () => {
   const getIconForType = (type: string) => {
     switch (type) {
       case "chart":
-        return <BarChart3 className="h-4 w-4 text-blue-500" />;
+        return <BarChart3 className="h-4 w-4 text-brutal-charcoal" />;
       case "product":
-        return <Package className="h-4 w-4 text-green-500" />;
+        return <Package className="h-4 w-4 text-brutal-charcoal" />;
       default:
-        return <History className="h-4 w-4 text-purple-500" />;
+        return <History className="h-4 w-4 text-brutal-charcoal" />;
     }
   };
   
@@ -33,12 +33,12 @@ export const RecentActivity = () => {
   };
   
   return (
-    <Card className="brutal-card shadow-md">
+    <Card className="brutal-card shadow-md border-4 border-brutal-black bg-brutal-white transform transition-transform duration-100 hover:translate-x-1 hover:translate-y-1">
       <CardHeader className="pb-2">
-        <CardTitle className="text-xl font-semibold flex items-center gap-2">
-          <Activity className="h-5 w-5 text-blue-600" /> Recent Activity
+        <CardTitle className="text-xl font-semibold flex items-center gap-2 font-mono uppercase">
+          <Activity className="h-5 w-5 text-brutal-charcoal" /> Recent Activity
         </CardTitle>
-        <CardDescription>Your latest actions and updates</CardDescription>
+        <CardDescription className="text-brutal-gray">Your latest actions and updates</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -57,10 +57,10 @@ export const RecentActivity = () => {
           </div>
         ) : error ? (
           // Error state
-          <div className="text-center py-6 text-yellow-600 flex flex-col items-center">
+          <div className="text-center py-6 text-brutal-dark flex flex-col items-center">
             <AlertTriangle className="h-8 w-8 mb-2" />
             <p className="mb-2">Failed to load recent activity</p>
-            <Button size="sm" variant="outline" onClick={() => refetch()}>
+            <Button size="sm" className="brutal-button text-xs py-1 px-3" onClick={() => refetch()}>
               Try Again
             </Button>
           </div>
@@ -81,7 +81,7 @@ export const RecentActivity = () => {
           // No activities found
           <div className="text-center py-8 text-brutal-gray flex flex-col items-center gap-2">
             <Clock className="h-8 w-8 opacity-50" />
-            <p>No recent activity</p>
+            <p className="font-mono uppercase">No recent activity</p>
             <p className="text-sm">Your recent actions will appear here</p>
           </div>
         )}

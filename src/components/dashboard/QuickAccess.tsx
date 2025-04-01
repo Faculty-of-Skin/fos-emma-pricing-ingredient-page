@@ -17,7 +17,7 @@ interface QuickAccessItemProps {
   title: string;
   description: string;
   path: string;
-  gradient: string;
+  color: string;
 }
 
 const QuickAccessItem: React.FC<QuickAccessItemProps> = ({
@@ -25,18 +25,18 @@ const QuickAccessItem: React.FC<QuickAccessItemProps> = ({
   title,
   description,
   path,
-  gradient,
+  color,
 }) => {
   return (
     <Link to={path} className="group">
-      <Card className="hover:shadow-md transition-all duration-300 h-full border-2 border-gray-100">
+      <Card className="border-4 border-brutal-black bg-brutal-white h-full transform transition-transform duration-100 hover:translate-x-1 hover:translate-y-1">
         <CardContent className="p-4">
-          <div className={`w-12 h-12 rounded-lg mb-3 flex items-center justify-center ${gradient}`}>
+          <div className={`w-12 h-12 rounded-none mb-3 flex items-center justify-center border-2 border-brutal-black ${color}`}>
             {icon}
           </div>
-          <h2 className="text-base font-semibold mb-1 group-hover:text-blue-600 transition-colors">{title}</h2>
-          <p className="text-sm text-muted-foreground mb-2">{description}</p>
-          <div className="flex items-center text-xs text-blue-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+          <h2 className="text-base font-semibold mb-1 font-mono uppercase group-hover:text-brutal-dark transition-colors">{title}</h2>
+          <p className="text-sm text-brutal-gray mb-2">{description}</p>
+          <div className="flex items-center text-xs text-brutal-charcoal font-mono font-medium opacity-0 group-hover:opacity-100 transition-opacity">
             Go to {title.toLowerCase()} <ArrowRight className="ml-1 h-3 w-3" />
           </div>
         </CardContent>
@@ -48,39 +48,39 @@ const QuickAccessItem: React.FC<QuickAccessItemProps> = ({
 export const QuickAccess: React.FC = () => {
   const quickAccessItems = [
     {
-      icon: <LayoutDashboard className="h-6 w-6 text-white" />,
+      icon: <LayoutDashboard className="h-6 w-6 text-brutal-black" />,
       title: "Dashboard",
       description: "View overall insights",
       path: "/dashboard",
-      gradient: "bg-gradient-to-br from-blue-500 to-blue-600",
+      color: "bg-brutal-white",
     },
     {
-      icon: <Briefcase className="h-6 w-6 text-white" />,
+      icon: <Briefcase className="h-6 w-6 text-brutal-black" />,
       title: "Products",
       description: "Manage your products",
       path: "/products",
-      gradient: "bg-gradient-to-br from-green-500 to-green-600",
+      color: "bg-brutal-white",
     },
     {
-      icon: <Calendar className="h-6 w-6 text-white" />,
+      icon: <Calendar className="h-6 w-6 text-brutal-black" />,
       title: "Forecasts",
       description: "View sales forecasts",
       path: "/forecasts",
-      gradient: "bg-gradient-to-br from-amber-500 to-amber-600",
+      color: "bg-brutal-white",
     },
     {
-      icon: <Database className="h-6 w-6 text-white" />,
+      icon: <Database className="h-6 w-6 text-brutal-black" />,
       title: "Emma Ingredients",
       description: "Browse the ingredients database",
       path: "/emma-ingredients",
-      gradient: "bg-gradient-to-br from-purple-500 to-purple-600",
+      color: "bg-brutal-white",
     },
     {
-      icon: <Settings className="h-6 w-6 text-white" />,
+      icon: <Settings className="h-6 w-6 text-brutal-black" />,
       title: "Settings",
       description: "Configure app settings",
       path: "/account-settings",
-      gradient: "bg-gradient-to-br from-slate-500 to-slate-600",
+      color: "bg-brutal-white",
     },
   ];
 
