@@ -9,7 +9,9 @@ import { EmmaIngredientsLoading } from "./EmmaIngredientsLoading";
 import { EmmaIngredientsCategoryTable } from "./EmmaIngredientsCategoryTable";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Search } from "lucide-react";
+import { RefreshCw, Search, Filter, Leaf, Sparkles, Droplets } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export const EmmaIngredientsSplit: React.FC = () => {
   const { 
@@ -131,23 +133,54 @@ export const EmmaIngredientsSplit: React.FC = () => {
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="relative max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search ingredients..."
-            className="pl-8 w-[300px]"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      <div className="bg-gradient-to-r from-slate-50 to-white p-4 rounded-lg mb-6 border border-slate-100 shadow-sm">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="relative flex-1 w-full md:max-w-md">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+              <Search className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <Input
+              type="search"
+              placeholder="Search by name, INCI list, or description..."
+              className="pl-9 pr-4 py-2 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <Card className="border border-slate-200 bg-white p-1 flex items-center gap-2">
+              <div className="flex items-center gap-1 px-2">
+                <Leaf className="h-4 w-4 text-emerald-500" /> 
+                <span className="text-xs font-medium">{textureIngredients.length}</span>
+              </div>
+              <Separator orientation="vertical" className="h-6" />
+              <div className="flex items-center gap-1 px-2">
+                <Sparkles className="h-4 w-4 text-blue-500" /> 
+                <span className="text-xs font-medium">{activeIngredients.length}</span>
+              </div>
+              <Separator orientation="vertical" className="h-6" />
+              <div className="flex items-center gap-1 px-2">
+                <Droplets className="h-4 w-4 text-violet-500" /> 
+                <span className="text-xs font-medium">{perfumeIngredients.length}</span>
+              </div>
+            </Card>
+            
+            <Button variant="outline" size="sm" onClick={refetch} className="gap-2 bg-white">
+              <RefreshCw className="h-4 w-4" /> 
+              <span className="hidden md:inline">Refresh</span>
+            </Button>
+          </div>
         </div>
-        <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
-          <RefreshCw className="h-4 w-4" /> Refresh
-        </Button>
+        
+        {searchQuery && (
+          <div className="mt-4 text-sm text-muted-foreground">
+            Found {filteredIngredientsWithoutEquipment.length} ingredients matching "{searchQuery}"
+          </div>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <EmmaIngredientsCategoryTable 
           title="Texture Capsules" 
           ingredients={textureIngredients} 
