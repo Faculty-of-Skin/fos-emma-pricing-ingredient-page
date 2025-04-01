@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/auth";
 import { 
   Card, 
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { AuthRedirectHandler } from "@/components/auth/AuthRedirectHandler";
+import { Toaster } from "@/components/ui/toaster";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -21,6 +22,10 @@ const Auth = () => {
   const [authError, setAuthError] = useState<string | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check for hash in URL - this indicates an auth redirect
+  const hasAuthRedirect = location.hash && location.hash.includes('access_token');
   
   // Handle form submission
   const handleFormSubmit = () => {
@@ -41,7 +46,8 @@ const Auth = () => {
   }, []);
 
   // Redirect to dashboard if user is already logged in
-  if (user) {
+  // Only redirect if there's no auth redirect in progress
+  if (user && !hasAuthRedirect) {
     console.log("User is logged in, redirecting to dashboard");
     return <Navigate to="/dashboard" replace />;
   }
@@ -67,6 +73,12 @@ const Auth = () => {
             </CardHeader>
             
             <CardContent>
+              {authError && (
+                <div className="mb-4 p-3 bg-red-100 text-red-800 rounded">
+                  {authError}
+                </div>
+              )}
+              
               <AuthForm 
                 isSignUp={isSignUp}
                 isLoading={isLoading}
@@ -98,6 +110,8 @@ const Auth = () => {
           </Card>
         </div>
       </div>
+      
+      <Toaster />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { AuthProvider } from "./context/auth";
 import { CurrencyProvider } from "./context/CurrencyContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { ProtectedRoute, AdminRoute } from "./components/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 // Pages
 import Index from './pages/Index';
@@ -67,6 +68,7 @@ const App = () => {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
+              <Toaster />
             </NotificationProvider>
           </CurrencyProvider>
         </AuthProvider>
