@@ -9,12 +9,14 @@ const supabaseKey = getPublicApiKey();
 // Get the current origin
 const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
 // Check if we're in production (actual domain) vs development or preview
-const isProduction = currentOrigin.includes('emma.facultyofskin.com');
+const isProduction = currentOrigin.includes('emma.facultyofskin.com') || 
+                    currentOrigin.includes('faculty') || 
+                    process.env.NODE_ENV === 'production';
 
 // Define site URL - use production URL in production, current origin otherwise
 const siteUrl = isProduction 
   ? 'https://emma.facultyofskin.com' 
-  : currentOrigin;
+  : currentOrigin || 'http://localhost:3000';
 
 // The redirect URL for authentication
 const redirectUrl = `${siteUrl}/auth`;
@@ -23,6 +25,7 @@ console.log('Configuring Supabase with redirect URL:', redirectUrl);
 console.log('Site URL:', siteUrl);
 console.log('Current origin:', currentOrigin);
 console.log('Is production:', isProduction);
+console.log('Environment:', process.env.NODE_ENV);
 
 // Create a custom Supabase client with appropriate configuration
 export const supabase = createClient(supabaseUrl, supabaseKey, {
@@ -39,6 +42,10 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     }
   }
 });
+
+// Export the site URL and redirect URL for use in other parts of the app
+export const getSiteUrl = () => siteUrl;
+export const getRedirectUrl = () => redirectUrl;
 
 // Function to set up redirects
 export const setupRedirects = () => {

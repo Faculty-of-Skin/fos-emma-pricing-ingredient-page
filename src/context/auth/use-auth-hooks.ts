@@ -1,17 +1,8 @@
-
 import { useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getSiteUrl, getRedirectUrl } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Profile } from "./types";
-
-// Get the site URL for redirects
-const getSiteUrl = () => {
-  if (typeof window === 'undefined') return '';
-  const currentOrigin = window.location.origin;
-  const isProduction = currentOrigin.includes('emma.facultyofskin.com');
-  return isProduction ? 'https://emma.facultyofskin.com' : currentOrigin;
-};
 
 export const useAuthSignIn = () => {
   const { toast } = useToast();
@@ -53,11 +44,12 @@ export const useAuthSignIn = () => {
 
 export const useAuthSignUp = () => {
   const { toast } = useToast();
-  const redirectTo = `${getSiteUrl()}/auth`;
+  const redirectTo = getRedirectUrl();
 
   const signUp = async (email: string, password: string, firstName = "", lastName = "") => {
     try {
       console.log("Signing up with email:", email);
+      console.log("Using redirect URL:", redirectTo);
       const { data, error } = await supabase.auth.signUp({ 
         email, 
         password,

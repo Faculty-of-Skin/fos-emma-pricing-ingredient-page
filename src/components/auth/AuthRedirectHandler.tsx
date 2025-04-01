@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getSiteUrl } from "@/integrations/supabase/client";
 
 interface AuthRedirectHandlerProps {
   setAuthError: (error: string | null) => void;
@@ -16,7 +16,50 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
   useEffect(() => {
     // Function to handle authentication redirects
     const handleAuthRedirect = async () => {
-      // Get the hash from the URL
+      // Check for code parameter in URL (email verification)
+      const searchParams = new URLSearchParams(location.search);
+      const code = searchParams.get('code');
+      
+      if (code) {
+        console.log("Auth code detected in URL:", code);
+        try {
+          // Exchange the code for a session
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+          
+          if (error) {
+            console.error("Error exchanging code for session:", error.message);
+            setAuthError(error.message);
+            toast({
+              title: "Authentication Error",
+              description: error.message,
+              variant: "destructive",
+            });
+          } else if (data.session) {
+            console.log("Session after code exchange:", data.session.user?.email);
+            
+            toast({
+              title: "Email Verified",
+              description: "Your account has been verified and you are now signed in.",
+            });
+            
+            // Redirect to dashboard after successful authentication
+            setTimeout(() => {
+              navigate('/dashboard');
+            }, 1000);
+          }
+          
+          // Clear the code from the URL to prevent issues on refresh
+          if (window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+        } catch (error: any) {
+          console.error("Error processing auth code:", error);
+          setAuthError(error.message);
+        }
+        return;
+      }
+      
+      // Get the hash from the URL (for other auth flows)
       const hash = window.location.hash;
       console.log("Current URL hash:", hash);
       
@@ -83,7 +126,6 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
       }
       
       // Check for manual redirect with search params
-      const searchParams = new URLSearchParams(location.search);
       const authEvent = searchParams.get('event');
       if (authEvent === 'signup-success') {
         toast({
