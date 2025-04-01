@@ -30,12 +30,12 @@ export const FloatingContainer = ({
 
   const positionClasses = {
     'bottom-right': 'bottom-6 right-6',
-    'top-right': 'top-20 right-6',
-    'top-center': 'top-20 left-1/2 transform -translate-x-1/2',
+    'top-right': 'top-24 md:top-20 right-6', // Increased top value to avoid overlapping with header
+    'top-center': 'top-24 md:top-20 left-1/2 transform -translate-x-1/2', // Increased top value to avoid overlapping with header
   };
 
   return (
-    <div className={`fixed z-50 ${positionClasses[position]} ${className} transition-opacity duration-300`}>
+    <div className={`fixed z-40 ${positionClasses[position]} ${className} transition-opacity duration-300`}>
       <div className="bg-brutal-white shadow-brutal px-4 py-3 border-2 border-brutal-black rounded-none">
         {children}
       </div>

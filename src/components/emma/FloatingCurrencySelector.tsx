@@ -7,7 +7,7 @@ export const FloatingCurrencySelector = () => {
   return (
     <FloatingContainer position="top-right" showOnlyWithPricing={true}>
       <div className="flex items-center gap-3">
-        <span className="text-brutal-black font-mono uppercase text-sm font-bold">Currency:</span>
+        <span className="text-brutal-black font-mono uppercase text-sm font-bold hidden md:inline">Currency:</span>
         <CurrencySelector />
       </div>
     </FloatingContainer>
