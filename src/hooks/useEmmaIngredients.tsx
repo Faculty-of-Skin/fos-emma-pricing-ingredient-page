@@ -198,7 +198,7 @@ export const useEmmaIngredients = () => {
     }
   };
 
-  // Fix the SQL test function to use the correct Supabase format
+  // SQL test function to use the correct Supabase format
   const testTableWithSQL = async () => {
     try {
       console.log("Testing table access with direct SQL query...");
