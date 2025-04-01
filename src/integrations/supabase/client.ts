@@ -6,14 +6,23 @@ import { getSupabaseUrl, getPublicApiKey } from "@/utils/supabase/constants";
 const supabaseUrl = getSupabaseUrl();
 const supabaseKey = getPublicApiKey();
 
-// Detect if we're in production or development
-const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('lovableproject.com');
+// Get the current origin
+const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
+// Check if we're in production (actual domain) vs development or preview
+const isProduction = currentOrigin.includes('emma.facultyofskin.com');
 
-// The redirect URL for authentication - using correct port for local development
-const currentUrl = window.location.origin;
-const redirectUrl = `${currentUrl}/auth`;
+// Define site URL - use production URL in production, current origin otherwise
+const siteUrl = isProduction 
+  ? 'https://emma.facultyofskin.com' 
+  : currentOrigin;
+
+// The redirect URL for authentication
+const redirectUrl = `${siteUrl}/auth`;
 
 console.log('Configuring Supabase with redirect URL:', redirectUrl);
+console.log('Site URL:', siteUrl);
+console.log('Current origin:', currentOrigin);
+console.log('Is production:', isProduction);
 
 // Create a custom Supabase client with appropriate configuration
 export const supabase = createClient(supabaseUrl, supabaseKey, {
@@ -23,6 +32,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
     storage: localStorage,
     flowType: 'pkce', // Using PKCE flow instead of implicit for better security
+    redirectTo: redirectUrl,
   },
   global: {
     headers: {
@@ -41,8 +51,10 @@ export const setupRedirects = () => {
     if (session) {
       // Make sure we're on the right page after authentication
       const currentPath = window.location.pathname;
-      if (currentPath !== '/auth' && currentPath !== '/dashboard') {
-        window.location.href = `${window.location.origin}/dashboard`;
+      if (currentPath === '/auth') {
+        setTimeout(() => {
+          window.location.href = `${siteUrl}/dashboard`;
+        }, 1000); // Short delay to allow the auth page to handle the session first
       }
     }
   });
@@ -52,4 +64,5 @@ export const setupRedirects = () => {
 setupRedirects();
 
 // Log the configuration for debugging purposes
+console.log('Supabase client initialized with site URL:', siteUrl);
 console.log('Supabase client initialized with redirect URL:', redirectUrl);

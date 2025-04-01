@@ -69,7 +69,7 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
             // Redirect to dashboard after successful authentication
             setTimeout(() => {
               navigate('/dashboard');
-            }, 500);
+            }, 1000);
           }
           
           // Clear the hash from the URL to prevent issues on refresh

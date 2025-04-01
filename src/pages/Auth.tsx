@@ -30,7 +30,10 @@ const Auth = () => {
   const { toast } = useToast();
   
   // Check for hash in URL - this indicates an auth redirect
-  const hasAuthRedirect = location.hash && location.hash.includes('access_token');
+  const hasAuthRedirect = location.hash && (
+    location.hash.includes('access_token') || 
+    location.hash.includes('error')
+  );
   
   // Effect to detect hash changes for auth redirects
   useEffect(() => {
@@ -38,6 +41,14 @@ const Auth = () => {
       console.log("Auth redirect detected, setting redirecting state");
       setIsRedirecting(true);
       setIsLoading(true);
+      
+      // Add timeout to reset if redirect handling fails
+      const timeout = setTimeout(() => {
+        setIsRedirecting(false);
+        setIsLoading(false);
+      }, 10000);
+      
+      return () => clearTimeout(timeout);
     }
   }, [hasAuthRedirect]);
   
@@ -56,12 +67,18 @@ const Auth = () => {
   useEffect(() => {
     return () => {
       setIsLoading(false);
+      setIsRedirecting(false);
     };
   }, []);
 
+  // Check if we're coming from an email link redirect
+  const isEmailRedirect = typeof window !== 'undefined' && 
+    window.location.hash && 
+    window.location.hash.includes('type=signup');
+
   // Redirect to dashboard if user is already logged in
   // Only redirect if there's no auth redirect in progress
-  if (user && !isRedirecting) {
+  if (user && !isRedirecting && !isEmailRedirect) {
     console.log("User is logged in, redirecting to dashboard");
     return <Navigate to="/dashboard" replace />;
   }
@@ -76,7 +93,7 @@ const Auth = () => {
       
       <div className="container mx-auto px-4 pt-24">
         <div className="max-w-md mx-auto py-16">
-          {isRedirecting ? (
+          {isRedirecting || isEmailRedirect ? (
             <Card className="brutal-card">
               <CardHeader>
                 <CardTitle className="text-2xl md:text-3xl font-mono uppercase font-semibold text-brutal-black text-center">
