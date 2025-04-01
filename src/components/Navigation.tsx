@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Logo } from "./navigation/Logo";
 import { NavLinks } from "./navigation/NavLinks";
@@ -14,6 +14,19 @@ export const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
 
   const handleWaitlistClick = () => {
     navigate('/join-waitlist');
@@ -35,51 +48,58 @@ export const Navigation = () => {
     }
   };
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? "brutal-nav border-b-4 border-brutal-black shadow-md" : "bg-transparent"
-    }`}>
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
-            <Logo />
-          </div>
+    <>
+      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        isScrolled ? "brutal-nav border-b-4 border-brutal-black shadow-md" : "bg-transparent"
+      }`}>
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex-shrink-0">
+              <Logo />
+            </div>
 
-          <div className="hidden md:flex items-center justify-center flex-1 mx-8">
-            <NavLinks scrollToSection={scrollToSection} />
-          </div>
+            <div className="hidden md:flex items-center justify-center flex-1 mx-8">
+              <NavLinks scrollToSection={scrollToSection} />
+            </div>
 
-          <div className="hidden md:flex items-center space-x-4">
-            {user ? (
-              <NavButton onClick={handleDashboardClick}>
-                Dashboard
-              </NavButton>
-            ) : (
-              <>
-                <NavButton onClick={handleLoginClick} variant="outline">
-                  Login
+            <div className="hidden md:flex items-center space-x-4">
+              {user ? (
+                <NavButton onClick={handleDashboardClick}>
+                  Dashboard
                 </NavButton>
-                <NavButton onClick={handleWaitlistClick}>
-                  Join Waitlist
-                </NavButton>
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  <NavButton onClick={handleLoginClick} variant="outline">
+                    Login
+                  </NavButton>
+                  <NavButton onClick={handleWaitlistClick}>
+                    Join Waitlist
+                  </NavButton>
+                </>
+              )}
+            </div>
 
-          <div className="md:hidden">
-            <MobileMenuToggle onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+            <div className="md:hidden">
+              <MobileMenuToggle onClick={() => setIsMobileMenuOpen(true)} />
+            </div>
           </div>
         </div>
+      </nav>
 
-        <MobileMenu 
-          isOpen={isMobileMenuOpen} 
-          scrollToSection={scrollToSection} 
-          handleWaitlistClick={handleWaitlistClick} 
-          showDashboard={!!user}
-          handleDashboardClick={handleDashboardClick}
-          handleLoginClick={handleLoginClick}
-        />
-      </div>
-    </nav>
+      <MobileMenu 
+        isOpen={isMobileMenuOpen} 
+        scrollToSection={scrollToSection} 
+        handleWaitlistClick={handleWaitlistClick} 
+        showDashboard={!!user}
+        handleDashboardClick={handleDashboardClick}
+        handleLoginClick={handleLoginClick}
+        onClose={closeMobileMenu}
+      />
+    </>
   );
 };

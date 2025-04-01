@@ -1,5 +1,6 @@
 
 import { NavButton } from "./NavButton";
+import { X } from "lucide-react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface MobileMenuProps {
   handleLoginClick: () => void;
   handleDashboardClick: () => void;
   showDashboard: boolean;
+  onClose: () => void;
 }
 
 export const MobileMenu = ({ 
@@ -16,45 +18,82 @@ export const MobileMenu = ({
   handleWaitlistClick,
   handleLoginClick,
   handleDashboardClick,
-  showDashboard
+  showDashboard,
+  onClose
 }: MobileMenuProps) => {
+  if (!isOpen) return null;
+  
   return (
     <div 
-      className={`md:hidden transition-all duration-300 overflow-hidden ${
-        isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-      }`}
+      className="fixed inset-0 z-50 bg-brutal-white flex flex-col md:hidden"
     >
-      <div className="py-4 flex flex-col space-y-2 pb-6">
+      <div className="flex justify-end p-4">
+        <button
+          onClick={onClose}
+          className="p-2 border-2 border-brutal-black hover:bg-brutal-black hover:text-brutal-white transition-colors"
+          aria-label="Close menu"
+        >
+          <X size={24} />
+        </button>
+      </div>
+      
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 px-4">
         <button 
-          onClick={() => scrollToSection('features')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
+          onClick={() => {
+            scrollToSection('features');
+            onClose();
+          }} 
+          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors"
         >
           Features
         </button>
+        
         <button 
-          onClick={() => scrollToSection('how-it-works')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
+          onClick={() => {
+            scrollToSection('how-it-works');
+            onClose();
+          }} 
+          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors"
         >
           How It Works
         </button>
+        
         <button 
-          onClick={() => scrollToSection('faq')} 
-          className="px-4 py-2 text-brutal-black hover:bg-brutal-gray/10 rounded"
+          onClick={() => {
+            scrollToSection('faq');
+            onClose();
+          }} 
+          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors"
         >
           FAQ
         </button>
         
-        <div className="pt-2 flex flex-col space-y-2">
+        <div className="w-full max-w-sm pt-6 flex flex-col gap-4">
           {showDashboard ? (
-            <NavButton onClick={handleDashboardClick}>
+            <NavButton onClick={() => {
+              handleDashboardClick();
+              onClose();
+            }}>
               Dashboard
             </NavButton>
           ) : (
             <>
-              <NavButton onClick={handleLoginClick} variant="outline">
+              <NavButton 
+                onClick={() => {
+                  handleLoginClick();
+                  onClose();
+                }} 
+                variant="outline"
+              >
                 Login
               </NavButton>
-              <NavButton onClick={handleWaitlistClick}>
+              
+              <NavButton 
+                onClick={() => {
+                  handleWaitlistClick();
+                  onClose();
+                }}
+              >
                 Join Waitlist
               </NavButton>
             </>
