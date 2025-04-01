@@ -1,12 +1,11 @@
-
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Briefcase,
   Calendar,
   LineChart,
+  Settings,
   Database,
-  ArrowRight
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -26,16 +25,13 @@ const QuickAccessItem: React.FC<QuickAccessItemProps> = ({
   color,
 }) => {
   return (
-    <Link to={path} className="group">
-      <Card className="border-4 border-brutal-black bg-brutal-white h-full transform transition-transform duration-100 hover:translate-x-1 hover:translate-y-1">
-        <CardContent className="p-4">
-          <div className={`w-12 h-12 rounded-none mb-3 flex items-center justify-center border-2 border-brutal-black ${color}`}>
-            {icon}
-          </div>
-          <h2 className="text-base font-semibold mb-1 font-mono uppercase group-hover:text-brutal-dark transition-colors">{title}</h2>
-          <p className="text-sm text-brutal-gray mb-2">{description}</p>
-          <div className="flex items-center text-xs text-brutal-charcoal font-mono font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-            Go to {title.toLowerCase()} <ArrowRight className="ml-1 h-3 w-3" />
+    <Link to={path}>
+      <Card className="hover:bg-accent/40 transition-colors">
+        <CardContent className="flex items-center space-x-4 p-3">
+          <div className={`p-2 rounded-md ${color}`}>{icon}</div>
+          <div>
+            <h2 className="text-sm font-semibold">{title}</h2>
+            <p className="text-xs text-muted-foreground">{description}</p>
           </div>
         </CardContent>
       </Card>
@@ -46,30 +42,45 @@ const QuickAccessItem: React.FC<QuickAccessItemProps> = ({
 export const QuickAccess: React.FC = () => {
   const quickAccessItems = [
     {
-      icon: <Briefcase className="h-6 w-6 text-brutal-black" />,
+      icon: <LineChart className="h-5 w-5" />,
+      title: "Dashboard",
+      description: "View overall insights",
+      path: "/dashboard",
+      color: "bg-blue-100",
+    },
+    {
+      icon: <Briefcase className="h-5 w-5" />,
       title: "Products",
       description: "Manage your products",
       path: "/products",
-      color: "bg-brutal-white",
+      color: "bg-green-100",
     },
     {
-      icon: <Calendar className="h-6 w-6 text-brutal-black" />,
+      icon: <Calendar className="h-5 w-5" />,
       title: "Forecasts",
       description: "View sales forecasts",
       path: "/forecasts",
-      color: "bg-brutal-white",
+      color: "bg-orange-100",
     },
     {
-      icon: <Database className="h-6 w-6 text-brutal-black" />,
+      icon: <Settings className="h-5 w-5" />,
+      title: "Settings",
+      description: "Configure app settings",
+      path: "/settings",
+      color: "bg-red-100",
+    },
+    // Add Emma Ingredients to dashboard quick access
+    {
+      icon: <Database className="h-5 w-5" />,
       title: "Emma Ingredients",
-      description: "Browse the ingredients database",
+      description: "Browse the Emma ingredients database",
       path: "/emma-ingredients",
-      color: "bg-brutal-white",
+      color: "bg-purple-100"
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {quickAccessItems.map((item) => (
         <QuickAccessItem key={item.title} {...item} />
       ))}
