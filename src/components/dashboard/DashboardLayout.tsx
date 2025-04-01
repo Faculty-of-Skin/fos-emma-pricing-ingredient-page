@@ -36,7 +36,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
     <div className="min-h-screen bg-brutal-white flex">
       {/* Mobile sidebar toggle */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-brutal-black text-white"
+        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-brutal-black text-brutal-white border-2 border-brutal-black hover:bg-brutal-black/90 transition-colors"
         onClick={toggleSidebar}
       >
         {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
@@ -46,19 +46,20 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
       <div
         className={`fixed inset-y-0 left-0 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 z-40 w-64 transition duration-200 ease-in-out brutal-nav md:sticky md:top-0 md:h-screen`}
+        } md:translate-x-0 z-40 w-64 transition duration-200 ease-in-out md:sticky md:top-0 md:h-screen
+        border-r-4 border-brutal-black bg-brutal-white`}
       >
         <div className="h-full flex flex-col">
-          <div className="p-4 border-b border-brutal-gray/20">
+          <div className="p-4 border-b-4 border-brutal-black">
             <h1 
-              className="text-xl font-bold cursor-pointer hover:text-primary transition-colors" 
+              className="text-xl font-bold cursor-pointer hover:text-brutal-charcoal transition-colors uppercase font-mono tracking-wider" 
               onClick={() => navigate("/dashboard")}
             >
               Emma Dashboard
             </h1>
           </div>
 
-          <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+          <nav className="flex-1 py-4 px-2 space-y-3 overflow-y-auto">
             <NavItem icon={<LayoutDashboard size={18} />} href="/dashboard" label="Dashboard" />
             <NavItem icon={<Package size={18} />} href="/products" label="Products" />
             <NavItem icon={<Beaker size={18} />} href="/emma-ingredients" label="Ingredients" />
@@ -69,17 +70,18 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
             )}
             
             <div className="py-2">
-              <div className="border-t border-brutal-gray/20 my-2"></div>
+              <div className="border-t-2 border-brutal-gray/20 my-2"></div>
             </div>
             
             <NavItem icon={<Settings size={18} />} href="/account-settings" label="Settings" />
           </nav>
 
-          <div className="p-4 border-t border-brutal-gray/20">
+          <div className="p-4 border-t-4 border-brutal-black">
             <Button 
               onClick={handleSignOut} 
               variant="outline" 
-              className="w-full flex items-center gap-2 text-brutal-black"
+              className="w-full flex items-center gap-2 bg-brutal-white border-2 border-brutal-black text-brutal-black 
+                hover:bg-brutal-black hover:text-brutal-white transition-colors font-mono uppercase tracking-wider"
             >
               <LogOut size={18} /> Sign Out
             </Button>
@@ -90,7 +92,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
       {/* Main content with header */}
       <div className="flex-1 flex flex-col">
         {/* Fixed header with notifications */}
-        <header className="bg-brutal-white border-b border-brutal-gray/10 sticky top-0 z-30 p-4 flex justify-end items-center">
+        <header className="bg-brutal-white border-b-4 border-brutal-black sticky top-0 z-30 p-4 flex justify-end items-center">
           <NotificationDropdown 
             notifications={notifications}
             onMarkAsRead={markAsRead}
@@ -115,9 +117,12 @@ const NavItem = ({ icon, href, label }: { icon: React.ReactNode; href: string; l
   return (
     <Button
       variant="ghost"
-      className={`w-full justify-start gap-2 ${
-        isActive ? "bg-accent font-medium" : ""
-      }`}
+      className={`w-full justify-start gap-2 font-mono text-sm transition-transform uppercase
+        ${isActive 
+          ? "bg-brutal-black text-brutal-white font-bold transform translate-x-1 translate-y-1" 
+          : "text-brutal-black hover:bg-brutal-black/10"
+        } 
+        border-2 ${isActive ? "border-brutal-black" : "border-transparent hover:border-brutal-black/50"}`}
       onClick={() => navigate(href)}
     >
       {icon}
