@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   Table,
@@ -17,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { FileText, List, Info, ChevronDown } from "lucide-react";
 
 interface EmmaIngredientsTableProps {
   ingredients: EmmaIngredient[];
@@ -81,31 +81,39 @@ interface ExpandedIngredientDetailsProps {
 const ExpandedIngredientDetails: React.FC<ExpandedIngredientDetailsProps> = ({ ingredient }) => {
   return (
     <div className="space-y-4">
+      {/* INCI List Section - Now Featured Prominently */}
+      {ingredient["INCI LIST"] && (
+        <div className="bg-white p-4 rounded-md border border-muted">
+          <div className="flex items-center gap-2 mb-3 text-primary">
+            <List className="h-5 w-5" />
+            <h3 className="text-lg font-medium">INCI List</h3>
+          </div>
+          <p className="text-sm whitespace-pre-wrap">{ingredient["INCI LIST"]}</p>
+        </div>
+      )}
+      
+      {/* Ingredient Breakdown Section - Now Featured Prominently */}
+      {ingredient["Ingredient Breakdown"] && (
+        <div className="bg-white p-4 rounded-md border border-muted">
+          <div className="flex items-center gap-2 mb-3 text-primary">
+            <FileText className="h-5 w-5" />
+            <h3 className="text-lg font-medium">Ingredient Breakdown</h3>
+          </div>
+          <p className="text-sm whitespace-pre-wrap">{ingredient["Ingredient Breakdown"]}</p>
+        </div>
+      )}
+      
+      {/* Other Details in Accordion */}
       <Accordion type="single" collapsible className="w-full">
-        {/* INCI List */}
-        {ingredient["INCI LIST"] && (
-          <AccordionItem value="inci-list">
-            <AccordionTrigger className="text-base font-medium">INCI List</AccordionTrigger>
-            <AccordionContent>
-              <p className="text-sm whitespace-pre-wrap">{ingredient["INCI LIST"]}</p>
-            </AccordionContent>
-          </AccordionItem>
-        )}
-        
-        {/* Ingredient Breakdown */}
-        {ingredient["Ingredient Breakdown"] && (
-          <AccordionItem value="ingredient-breakdown">
-            <AccordionTrigger className="text-base font-medium">Ingredient Breakdown</AccordionTrigger>
-            <AccordionContent>
-              <p className="text-sm whitespace-pre-wrap">{ingredient["Ingredient Breakdown"]}</p>
-            </AccordionContent>
-          </AccordionItem>
-        )}
-        
         {/* Fragrance Notes */}
         {ingredient["FRAGRANCE NOTES"] && (
           <AccordionItem value="fragrance-notes">
-            <AccordionTrigger className="text-base font-medium">Fragrance Notes</AccordionTrigger>
+            <AccordionTrigger className="text-base font-medium">
+              <div className="flex items-center gap-2">
+                <Info className="h-4 w-4" />
+                Fragrance Notes
+              </div>
+            </AccordionTrigger>
             <AccordionContent>
               <p className="text-sm whitespace-pre-wrap">{ingredient["FRAGRANCE NOTES"]}</p>
             </AccordionContent>
@@ -115,7 +123,12 @@ const ExpandedIngredientDetails: React.FC<ExpandedIngredientDetailsProps> = ({ i
         {/* Texture */}
         {ingredient.Texture && (
           <AccordionItem value="texture">
-            <AccordionTrigger className="text-base font-medium">Texture</AccordionTrigger>
+            <AccordionTrigger className="text-base font-medium">
+              <div className="flex items-center gap-2">
+                <Info className="h-4 w-4" />
+                Texture
+              </div>
+            </AccordionTrigger>
             <AccordionContent>
               <p className="text-sm whitespace-pre-wrap">{ingredient.Texture}</p>
             </AccordionContent>
@@ -125,7 +138,12 @@ const ExpandedIngredientDetails: React.FC<ExpandedIngredientDetailsProps> = ({ i
         {/* Benefits */}
         {ingredient.Benefit && (
           <AccordionItem value="benefits">
-            <AccordionTrigger className="text-base font-medium">Benefits</AccordionTrigger>
+            <AccordionTrigger className="text-base font-medium">
+              <div className="flex items-center gap-2">
+                <Info className="h-4 w-4" />
+                Benefits
+              </div>
+            </AccordionTrigger>
             <AccordionContent>
               <p className="text-sm whitespace-pre-wrap">{ingredient.Benefit}</p>
             </AccordionContent>
@@ -135,7 +153,12 @@ const ExpandedIngredientDetails: React.FC<ExpandedIngredientDetailsProps> = ({ i
         {/* Full Description */}
         {ingredient["Full Description"] && (
           <AccordionItem value="full-description">
-            <AccordionTrigger className="text-base font-medium">Full Description</AccordionTrigger>
+            <AccordionTrigger className="text-base font-medium">
+              <div className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Full Description
+              </div>
+            </AccordionTrigger>
             <AccordionContent>
               <p className="text-sm whitespace-pre-wrap">{ingredient["Full Description"]}</p>
             </AccordionContent>
@@ -145,7 +168,12 @@ const ExpandedIngredientDetails: React.FC<ExpandedIngredientDetailsProps> = ({ i
         {/* Final Consumer */}
         {ingredient["Final consumer"] && (
           <AccordionItem value="final-consumer">
-            <AccordionTrigger className="text-base font-medium">Final Consumer</AccordionTrigger>
+            <AccordionTrigger className="text-base font-medium">
+              <div className="flex items-center gap-2">
+                <Info className="h-4 w-4" />
+                Final Consumer
+              </div>
+            </AccordionTrigger>
             <AccordionContent>
               <p className="text-sm whitespace-pre-wrap">{ingredient["Final consumer"]}</p>
             </AccordionContent>

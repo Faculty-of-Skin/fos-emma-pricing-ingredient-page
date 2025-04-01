@@ -2,7 +2,7 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { EmmaIngredients } from "@/components/emma/ingredients/EmmaIngredients";
 import { Button } from "@/components/ui/button";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, List, FileText } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -74,9 +74,25 @@ const EmmaIngredientsPage = () => {
           </Dialog>
         </div>
         
-        <p className="text-muted-foreground mb-6">
-          Browse the complete database of Emma ingredients, including formulations, pricing, and details for different distribution channels.
-        </p>
+        <div className="mb-6">
+          <p className="text-muted-foreground">
+            Browse the complete database of Emma ingredients, including formulations, pricing, and details for different distribution channels.
+          </p>
+          
+          <div className="flex items-center gap-6 mt-4 p-4 bg-muted/30 rounded-lg">
+            <div className="flex items-center gap-2">
+              <List className="h-5 w-5 text-primary" />
+              <span className="font-medium">INCI Lists</span>
+              <span className="text-sm text-muted-foreground">Full ingredient declarations</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-primary" />
+              <span className="font-medium">Ingredient Breakdowns</span>
+              <span className="text-sm text-muted-foreground">Detailed composition information</span>
+            </div>
+          </div>
+        </div>
         
         <EmmaIngredients />
       </div>
