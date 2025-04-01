@@ -36,10 +36,11 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   }
 
   // Define category order and grouping
+  // IMPORTANT: Using the actual category names from the database
   const categoryOrder = [
     "Equipment", // Top row, full width
-    "Face Capsules", "Body Capsules", // Middle row, two columns
-    "Marketing", "Accessories" // Bottom row, two columns (Marketing on left, Accessories on right)
+    "Face capsule", "Body capsule", // Middle row, two columns
+    "Marketing item", "Accessories" // Bottom row, two columns (Marketing on left, Accessories on right)
   ];
   
   // Group products by category for better organization
@@ -62,15 +63,15 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
     return indexA - indexB;
   });
 
-  // Explicitly type the category strings to resolve TypeScript errors
-  const isEquipmentCategory = (category: string): category is "Equipment" => 
+  // Explicitly type the category strings to match actual database categories
+  const isEquipmentCategory = (category: string): boolean => 
     category === "Equipment";
   
-  const isMiddleRowCategory = (category: string): category is "Face Capsules" | "Body Capsules" => 
-    category === "Face Capsules" || category === "Body Capsules";
+  const isMiddleRowCategory = (category: string): boolean => 
+    category === "Face capsule" || category === "Body capsule";
   
-  const isBottomRowCategory = (category: string): category is "Marketing" | "Accessories" => 
-    category === "Marketing" || category === "Accessories";
+  const isBottomRowCategory = (category: string): boolean => 
+    category === "Marketing item" || category === "Accessories";
   
   // Filter categories for the top row (Equipment)
   const topRowCategories = sortedCategories.filter(cat => isEquipmentCategory(cat));
@@ -124,26 +125,30 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
         ))}
       </div>
 
-      {/* Bottom row - Marketing and Accessories - MANUALLY forced order */}
+      {/* Bottom row - Marketing item and Accessories with forced placement */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Explicitly check and render Marketing first */}
-        {sortedCategories.includes("Marketing") && (
-          <ProductsCategoryGroup 
-            key="Marketing"
-            category="Marketing"
-            products={groupedProducts["Marketing"]}
-            isUsingFallbackData={isUsingFallbackData}
-          />
+        {/* Marketing item (always on the left) */}
+        {sortedCategories.includes("Marketing item") && (
+          <div className="col-span-1">
+            <ProductsCategoryGroup 
+              key="Marketing item"
+              category="Marketing item"
+              products={groupedProducts["Marketing item"]}
+              isUsingFallbackData={isUsingFallbackData}
+            />
+          </div>
         )}
         
-        {/* Explicitly check and render Accessories second */}
+        {/* Accessories (always on the right) */}
         {sortedCategories.includes("Accessories") && (
-          <ProductsCategoryGroup 
-            key="Accessories"
-            category="Accessories"
-            products={groupedProducts["Accessories"]}
-            isUsingFallbackData={isUsingFallbackData}
-          />
+          <div className="col-span-1">
+            <ProductsCategoryGroup 
+              key="Accessories"
+              category="Accessories"
+              products={groupedProducts["Accessories"]}
+              isUsingFallbackData={isUsingFallbackData}
+            />
+          </div>
         )}
       </div>
 
