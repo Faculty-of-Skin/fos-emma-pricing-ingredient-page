@@ -1,8 +1,8 @@
 
-import React from "react";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import React, { useState } from "react";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Droplets } from "lucide-react";
+import { Check, Droplets, ChevronDown, ChevronUp } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { EmmaIngredient } from "@/types/emmaIngredients";
 
@@ -22,6 +22,20 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
     header: 'bg-gradient-to-r from-purple-50 to-purple-100',
     icon: <Droplets className="h-5 w-5 text-purple-600" />
   };
+  
+  const [showAll, setShowAll] = useState(false);
+  const displayCount = showAll ? fragranceIngredients.length : 5;
+  const displayIngredients = fragranceIngredients.slice(0, displayCount);
+  
+  // Extract first few ingredients from INCI list to show as preview
+  const getIngredientsPreview = (inciList: string | undefined, fragranceNotes: string | undefined) => {
+    if (fragranceNotes) return `Notes: ${fragranceNotes}`;
+    if (!inciList) return "No ingredients available";
+    
+    const ingredients = inciList.split(',').map(i => i.trim());
+    const previewIngredients = ingredients.slice(0, 3);
+    return previewIngredients.join(', ') + (ingredients.length > 3 ? '...' : '');
+  };
 
   return (
     <Card className={`border-l-4 ${fragranceStyles.border} hover:shadow-md transition-shadow`}>
@@ -36,30 +50,31 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
       </CardHeader>
       <CardContent className="pt-4">
         {fragranceIngredients.length > 0 ? (
-          <ScrollArea className="h-[200px] pr-1 rounded-md border border-purple-100 bg-purple-50/20">
-            <div className="space-y-2 p-2">
-              {fragranceIngredients.map(ingredient => (
-                <Button
-                  key={ingredient.Reference}
-                  variant={selectedFragranceRef === ingredient.Reference ? "default" : "outline"}
-                  size="sm"
-                  className={`w-full justify-start text-left ${selectedFragranceRef === ingredient.Reference ? 'bg-purple-600 hover:bg-purple-700' : 'border-dashed bg-white'}`}
-                  onClick={() => onFragranceChange(ingredient.Reference)}
-                >
-                  <div className="w-full overflow-hidden">
-                    <ScrollArea className="w-full max-w-full">
-                      <div className="flex items-center gap-2 whitespace-nowrap">
-                        {selectedFragranceRef === ingredient.Reference && <Check className="h-4 w-4 flex-shrink-0" />}
-                        <span className="font-medium flex-shrink-0">{ingredient.Reference}</span>
-                        <span className="text-muted-foreground flex-shrink-0">•</span>
-                        <span className="truncate">{ingredient.Description}</span>
-                      </div>
-                    </ScrollArea>
+          <div className="space-y-2">
+            {displayIngredients.map(ingredient => (
+              <Button
+                key={ingredient.Reference}
+                variant={selectedFragranceRef === ingredient.Reference ? "default" : "outline"}
+                size="sm"
+                className={`w-full justify-start text-left ${selectedFragranceRef === ingredient.Reference ? 'bg-purple-600 hover:bg-purple-700' : 'border-dashed bg-white'} py-3`}
+                onClick={() => onFragranceChange(ingredient.Reference)}
+              >
+                <div className="w-full">
+                  <div className="flex items-center gap-2">
+                    {selectedFragranceRef === ingredient.Reference && <Check className="h-4 w-4 flex-shrink-0" />}
+                    <span className="font-medium">{ingredient.Reference}</span>
+                    <span className="text-muted-foreground">•</span>
+                    <span className="truncate">{ingredient.Description}</span>
                   </div>
-                </Button>
-              ))}
-            </div>
-          </ScrollArea>
+                  <p className={`text-xs mt-1 line-clamp-1 ${
+                    selectedFragranceRef === ingredient.Reference ? 'text-white/70' : 'text-muted-foreground'
+                  }`}>
+                    {getIngredientsPreview(ingredient["INCI LIST"], ingredient["FRAGRANCE NOTES"])}
+                  </p>
+                </div>
+              </Button>
+            ))}
+          </div>
         ) : (
           <div className="text-center py-4 text-muted-foreground">
             <p>No fragrance capsules available</p>
@@ -75,6 +90,26 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
           </div>
         )}
       </CardContent>
+      {fragranceIngredients.length > 5 && (
+        <CardFooter className="pt-2 pb-4 px-4">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-xs w-full flex items-center justify-center gap-1"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? (
+              <>
+                Show less <ChevronUp className="h-3 w-3" />
+              </>
+            ) : (
+              <>
+                Show all {fragranceIngredients.length} capsules <ChevronDown className="h-3 w-3" />
+              </>
+            )}
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };
