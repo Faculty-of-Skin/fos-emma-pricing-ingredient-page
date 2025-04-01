@@ -19,18 +19,13 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [formSubmitTime, setFormSubmitTime] = useState<number | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
-  
-  // Track submission time to enforce cooldown
-  const canSubmit = !formSubmitTime || (Date.now() - formSubmitTime > 5000);
   
   // Handle form submission
   const handleFormSubmit = () => {
     setIsLoading(true);
     setAuthError(null);
-    setFormSubmitTime(Date.now());
     
     // The loading state will be reset when auth state changes or on error
     setTimeout(() => {
@@ -76,7 +71,7 @@ const Auth = () => {
                 isSignUp={isSignUp}
                 isLoading={isLoading}
                 authError={authError}
-                canSubmit={canSubmit}
+                canSubmit={true}
                 onSubmitSuccess={handleFormSubmit}
                 onToggleMode={() => {
                   setIsSignUp(!isSignUp);
