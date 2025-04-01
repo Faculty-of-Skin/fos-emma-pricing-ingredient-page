@@ -5,6 +5,7 @@ import { ProductsTableHeader } from "./ProductsTableHeader";
 import { ProductsTableRow } from "./ProductsTableRow";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CapsuleFilters } from "./CapsuleFilters";
+import { ChevronDown } from "lucide-react";
 
 type Product = {
   id: string;
@@ -39,13 +40,14 @@ export const ProductsCategoryGroup = ({
   maxHeight
 }: ProductsCategoryGroupProps) => {
   const [activeFilter, setActiveFilter] = useState<FilterOption>("all");
+  const [showAll, setShowAll] = useState(false);
   
-  // Check if this category should have filters (Face or Body capsules)
-  const shouldShowFilters = category === "Face capsule" || category === "Body capsule";
+  // Check if this category should have filters and pagination (Face or Body capsules)
+  const isCapsuleCategory = category === "Face capsule" || category === "Body capsule";
   
   // Determine available filter types based on product descriptions
   const availableTypes = useMemo(() => {
-    if (!shouldShowFilters) return [] as FilterOption[];
+    if (!isCapsuleCategory) return [] as FilterOption[];
     
     const types = new Set<FilterOption>();
     products.forEach(product => {
@@ -57,31 +59,36 @@ export const ProductsCategoryGroup = ({
     });
     
     return Array.from(types);
-  }, [products, shouldShowFilters]);
+  }, [products, isCapsuleCategory]);
   
   // Filter products based on active filter
   const filteredProducts = useMemo(() => {
-    if (!shouldShowFilters || activeFilter === "all") return products;
+    if (!isCapsuleCategory || activeFilter === "all") return products;
     
     return products.filter(product => {
       const firstWord = product.description.split(' ')[0].toLowerCase();
       return firstWord === activeFilter.toLowerCase();
     });
-  }, [products, activeFilter, shouldShowFilters]);
+  }, [products, activeFilter, isCapsuleCategory]);
   
-  // Force scrolling for Face capsule and Body capsule categories
-  const forceCapsuleScroll = category === "Face capsule" || category === "Body capsule";
+  // For capsule categories, show only 5 products initially, unless showAll is true
+  const displayProducts = useMemo(() => {
+    if (!isCapsuleCategory || showAll) return filteredProducts;
+    return filteredProducts.slice(0, 5);
+  }, [filteredProducts, isCapsuleCategory, showAll]);
   
-  // Always apply a small height for Face/Body capsules to ensure scrolling is visible
-  // Reduced to a very small height to ensure scrolling appears even with minimal content
-  const scrollHeight = forceCapsuleScroll ? "max-h-[250px]" : undefined;
+  // Calculate if we need to show the "Show more" button
+  const hasMoreProducts = isCapsuleCategory && filteredProducts.length > 5;
+  
+  // Always apply a fixed height for Face/Body capsules to ensure scrolling works
+  const scrollHeight = isCapsuleCategory ? "max-h-[350px]" : undefined;
   
   // Content to display inside or outside of scroll area
   const content = (
     <>
       <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
       
-      {shouldShowFilters && availableTypes.length > 0 && (
+      {isCapsuleCategory && availableTypes.length > 0 && (
         <CapsuleFilters 
           onFilterChange={setActiveFilter} 
           activeFilter={activeFilter}
@@ -92,7 +99,7 @@ export const ProductsCategoryGroup = ({
       <Table className="w-full">
         <ProductsTableHeader />
         <TableBody>
-          {filteredProducts.map((product) => (
+          {displayProducts.map((product) => (
             <ProductsTableRow 
               key={product.id} 
               product={product} 
@@ -101,6 +108,18 @@ export const ProductsCategoryGroup = ({
           ))}
         </TableBody>
       </Table>
+      
+      {hasMoreProducts && (
+        <div className="w-full flex justify-center mt-4">
+          <button 
+            onClick={() => setShowAll(!showAll)} 
+            className="flex items-center gap-1 px-3 py-1 text-sm border rounded-full hover:bg-gray-50 transition-colors"
+          >
+            {showAll ? "Show less" : `Show all ${filteredProducts.length} products`}
+            <ChevronDown className={`h-4 w-4 transition-transform ${showAll ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+      )}
     </>
   );
 
@@ -109,8 +128,8 @@ export const ProductsCategoryGroup = ({
 
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
-      {forceCapsuleScroll || finalScrollHeight ? (
-        <ScrollArea className={finalScrollHeight ? `${finalScrollHeight}` : "max-h-[250px]"}>
+      {isCapsuleCategory || finalScrollHeight ? (
+        <ScrollArea className={finalScrollHeight ? `${finalScrollHeight}` : "max-h-[350px]"}>
           {content}
         </ScrollArea>
       ) : (
