@@ -47,6 +47,14 @@ export const EmmaIngredients: React.FC = () => {
     console.log("Table row count:", rowCount);
   }, [ingredients, connectionStatus, rawData, rowCount]);
 
+  // Filter out equipment and accessories categories
+  const filteredIngredientsWithoutEquipment = ingredients.filter(
+    (ingredient) => {
+      const category = ingredient.Category?.toLowerCase() || "";
+      return !category.includes("equipment") && !category.includes("accessories") && !category.includes("accessory");
+    }
+  );
+
   const toggleIngredient = (reference: string) => {
     if (expandedIngredient === reference) {
       setExpandedIngredient(null);
@@ -55,7 +63,7 @@ export const EmmaIngredients: React.FC = () => {
     }
   };
 
-  const filteredIngredients = ingredients.filter((ingredient) => {
+  const filteredIngredients = filteredIngredientsWithoutEquipment.filter((ingredient) => {
     const matchesSearch =
       searchQuery === "" ||
       ingredient.Reference.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -68,9 +76,15 @@ export const EmmaIngredients: React.FC = () => {
     return matchesSearch && matchesCategory;
   });
 
+  // Get unique categories excluding equipment and accessories
   const uniqueCategories = [
     "all",
-    ...Array.from(new Set(ingredients.map((ingredient) => ingredient.Category))).filter(Boolean),
+    ...Array.from(
+      new Set(
+        filteredIngredientsWithoutEquipment
+          .map((ingredient) => ingredient.Category)
+      )
+    ).filter(Boolean),
   ];
 
   if (isLoading) {
@@ -104,7 +118,7 @@ export const EmmaIngredients: React.FC = () => {
     );
   }
 
-  if (ingredients.length === 0) {
+  if (filteredIngredientsWithoutEquipment.length === 0) {
     return (
       <>
         <EmmaIngredientsEmpty
@@ -149,14 +163,14 @@ export const EmmaIngredients: React.FC = () => {
           />
 
           <EmmaIngredientsSummary
-            ingredients={ingredients}
+            ingredients={filteredIngredientsWithoutEquipment}
             filteredIngredients={filteredIngredients}
             connectionStatus={connectionStatus}
             onShowDebugDialog={() => setShowDebugDialog(true)}
           />
 
           <EmmaIngredientsTable
-            ingredients={ingredients}
+            ingredients={filteredIngredientsWithoutEquipment}
             filteredIngredients={filteredIngredients}
             expandedIngredient={expandedIngredient}
             toggleIngredient={toggleIngredient}
@@ -164,7 +178,7 @@ export const EmmaIngredients: React.FC = () => {
         </CardContent>
         <CardFooter className="justify-between">
           <p className="text-sm text-muted-foreground">
-            Total: {ingredients.length} ingredients
+            Total: {filteredIngredientsWithoutEquipment.length} ingredients
           </p>
           <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
             <RefreshCw className="h-4 w-4" /> Refresh
