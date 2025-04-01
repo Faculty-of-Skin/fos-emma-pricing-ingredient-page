@@ -39,8 +39,9 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
 interface EmmaIngredientsSummaryProps {
   ingredients: EmmaIngredient[];
   filteredIngredients: EmmaIngredient[];
-  connectionStatus: 'unknown' | 'success' | 'failed';
-  onShowDebugDialog: () => void;
+  connectionStatus?: 'unknown' | 'success' | 'failed';
+  onShowDebugDialog?: () => void;
+  isAdmin: boolean;
 }
 
 export const EmmaIngredientsSummary: React.FC<EmmaIngredientsSummaryProps> = ({
@@ -48,18 +49,23 @@ export const EmmaIngredientsSummary: React.FC<EmmaIngredientsSummaryProps> = ({
   filteredIngredients,
   connectionStatus,
   onShowDebugDialog,
+  isAdmin
 }) => {
   return (
     <div className="mb-4 flex items-center justify-between">
       <p className="text-sm text-muted-foreground">
         Showing {filteredIngredients.length} of {ingredients.length} ingredients
       </p>
-      <div className="flex items-center gap-2">
-        <ConnectionStatusIndicator connectionStatus={connectionStatus} />
-        <Button variant="outline" size="sm" onClick={onShowDebugDialog}>
-          <Info className="h-4 w-4" />
-        </Button>
-      </div>
+      {isAdmin && connectionStatus && (
+        <div className="flex items-center gap-2">
+          <ConnectionStatusIndicator connectionStatus={connectionStatus} />
+          {onShowDebugDialog && (
+            <Button variant="outline" size="sm" onClick={onShowDebugDialog}>
+              <Info className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

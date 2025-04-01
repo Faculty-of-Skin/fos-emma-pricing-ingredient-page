@@ -1,24 +1,12 @@
 
 import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { RefreshCw } from "lucide-react";
 import { useEmmaIngredients } from "@/hooks/useEmmaIngredients";
-import { Button } from "@/components/ui/button";
-import { EmmaIngredientsTable } from "./EmmaIngredientsTable";
-import { EmmaIngredientsSearch } from "./EmmaIngredientsSearch";
-import { EmmaIngredientsSummary } from "./EmmaIngredientsSummary";
+import { useAuth } from "@/context/AuthContext";
+import { EmmaIngredientsContent } from "./EmmaIngredientsContent";
 import { EmmaIngredientsDebugDialog } from "./EmmaIngredientsDebugDialog";
 import { EmmaIngredientsError } from "./EmmaIngredientsError";
 import { EmmaIngredientsEmpty } from "./EmmaIngredientsEmpty";
 import { EmmaIngredientsLoading } from "./EmmaIngredientsLoading";
-import { EmmaIngredientsContent } from "./EmmaIngredientsContent";
 
 export const EmmaIngredientsContainer: React.FC = () => {
   const { 
@@ -35,6 +23,7 @@ export const EmmaIngredientsContainer: React.FC = () => {
     checkRowCount
   } = useEmmaIngredients();
 
+  const { isAdmin } = useAuth();
   const [showDebugDialog, setShowDebugDialog] = useState(false);
   
   // Filter out equipment and accessories categories
@@ -55,23 +44,26 @@ export const EmmaIngredientsContainer: React.FC = () => {
         <EmmaIngredientsError 
           error={error} 
           refetch={refetch} 
-          testSQL={testSQL}
+          testSQL={isAdmin ? testSQL : undefined}
           connectionStatus={connectionStatus}
-          onShowDebugDialog={() => setShowDebugDialog(true)}
+          onShowDebugDialog={isAdmin ? () => setShowDebugDialog(true) : undefined}
+          isAdmin={isAdmin}
         />
-        <EmmaIngredientsDebugDialog 
-          showDebugDialog={showDebugDialog}
-          setShowDebugDialog={setShowDebugDialog}
-          connectionStatus={connectionStatus}
-          queryDetails={queryDetails}
-          tableInfo={tableInfo}
-          rawData={rawData}
-          ingredients={ingredients}
-          refetch={refetch}
-          testSQL={testSQL}
-          rowCount={rowCount}
-          checkRowCount={checkRowCount}
-        />
+        {isAdmin && (
+          <EmmaIngredientsDebugDialog 
+            showDebugDialog={showDebugDialog}
+            setShowDebugDialog={setShowDebugDialog}
+            connectionStatus={connectionStatus}
+            queryDetails={queryDetails}
+            tableInfo={tableInfo}
+            rawData={rawData}
+            ingredients={ingredients}
+            refetch={refetch}
+            testSQL={testSQL}
+            rowCount={rowCount}
+            checkRowCount={checkRowCount}
+          />
+        )}
       </>
     );
   }
@@ -81,23 +73,26 @@ export const EmmaIngredientsContainer: React.FC = () => {
       <>
         <EmmaIngredientsEmpty
           refetch={refetch}
-          testSQL={testSQL}
+          testSQL={isAdmin ? testSQL : undefined}
           connectionStatus={connectionStatus}
-          onShowDebugDialog={() => setShowDebugDialog(true)}
+          onShowDebugDialog={isAdmin ? () => setShowDebugDialog(true) : undefined}
+          isAdmin={isAdmin}
         />
-        <EmmaIngredientsDebugDialog 
-          showDebugDialog={showDebugDialog}
-          setShowDebugDialog={setShowDebugDialog}
-          connectionStatus={connectionStatus}
-          queryDetails={queryDetails}
-          tableInfo={tableInfo}
-          rawData={rawData}
-          ingredients={ingredients}
-          refetch={refetch}
-          testSQL={testSQL}
-          rowCount={rowCount}
-          checkRowCount={checkRowCount}
-        />
+        {isAdmin && (
+          <EmmaIngredientsDebugDialog 
+            showDebugDialog={showDebugDialog}
+            setShowDebugDialog={setShowDebugDialog}
+            connectionStatus={connectionStatus}
+            queryDetails={queryDetails}
+            tableInfo={tableInfo}
+            rawData={rawData}
+            ingredients={ingredients}
+            refetch={refetch}
+            testSQL={testSQL}
+            rowCount={rowCount}
+            checkRowCount={checkRowCount}
+          />
+        )}
       </>
     );
   }
@@ -108,22 +103,25 @@ export const EmmaIngredientsContainer: React.FC = () => {
         ingredients={filteredIngredientsWithoutEquipment}
         refetch={refetch}
         connectionStatus={connectionStatus}
-        setShowDebugDialog={setShowDebugDialog}
+        setShowDebugDialog={isAdmin ? setShowDebugDialog : undefined}
+        isAdmin={isAdmin}
       />
       
-      <EmmaIngredientsDebugDialog 
-        showDebugDialog={showDebugDialog}
-        setShowDebugDialog={setShowDebugDialog}
-        connectionStatus={connectionStatus}
-        queryDetails={queryDetails}
-        tableInfo={tableInfo}
-        rawData={rawData}
-        ingredients={ingredients}
-        refetch={refetch}
-        testSQL={testSQL}
-        rowCount={rowCount}
-        checkRowCount={checkRowCount}
-      />
+      {isAdmin && (
+        <EmmaIngredientsDebugDialog 
+          showDebugDialog={showDebugDialog}
+          setShowDebugDialog={setShowDebugDialog}
+          connectionStatus={connectionStatus}
+          queryDetails={queryDetails}
+          tableInfo={tableInfo}
+          rawData={rawData}
+          ingredients={ingredients}
+          refetch={refetch}
+          testSQL={testSQL}
+          rowCount={rowCount}
+          checkRowCount={checkRowCount}
+        />
+      )}
     </>
   );
 };

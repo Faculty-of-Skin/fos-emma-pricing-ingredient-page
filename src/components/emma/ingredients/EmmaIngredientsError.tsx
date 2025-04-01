@@ -14,9 +14,10 @@ import { ConnectionStatusIndicator } from "./EmmaIngredientsSummary";
 interface EmmaIngredientsErrorProps {
   error: string;
   refetch: () => void;
-  testSQL: () => void;
+  testSQL?: () => void;
   connectionStatus: 'unknown' | 'success' | 'failed';
-  onShowDebugDialog: () => void;
+  onShowDebugDialog?: () => void;
+  isAdmin: boolean;
 }
 
 export const EmmaIngredientsError: React.FC<EmmaIngredientsErrorProps> = ({
@@ -25,6 +26,7 @@ export const EmmaIngredientsError: React.FC<EmmaIngredientsErrorProps> = ({
   testSQL,
   connectionStatus,
   onShowDebugDialog,
+  isAdmin
 }) => {
   return (
     <Card className="brutal-card mt-8">
@@ -34,9 +36,11 @@ export const EmmaIngredientsError: React.FC<EmmaIngredientsErrorProps> = ({
           <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
             <RefreshCw className="h-4 w-4" /> Retry
           </Button>
-          <Button variant="outline" size="sm" onClick={testSQL} className="gap-2">
-            <Database className="h-4 w-4" /> Test SQL
-          </Button>
+          {isAdmin && testSQL && (
+            <Button variant="outline" size="sm" onClick={testSQL} className="gap-2">
+              <Database className="h-4 w-4" /> Test SQL
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
@@ -45,12 +49,16 @@ export const EmmaIngredientsError: React.FC<EmmaIngredientsErrorProps> = ({
           <AlertTitle>Error loading ingredients</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
-        <ConnectionStatusIndicator connectionStatus={connectionStatus} />
-        <div className="mt-4">
-          <Button variant="outline" onClick={onShowDebugDialog}>
-            Show Debug Information
-          </Button>
-        </div>
+        {isAdmin && (
+          <ConnectionStatusIndicator connectionStatus={connectionStatus} />
+        )}
+        {isAdmin && onShowDebugDialog && (
+          <div className="mt-4">
+            <Button variant="outline" onClick={onShowDebugDialog}>
+              Show Debug Information
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -12,9 +12,10 @@ import { ConnectionStatusIndicator } from "./EmmaIngredientsSummary";
 
 interface EmmaIngredientsEmptyProps {
   refetch: () => void;
-  testSQL: () => void;
+  testSQL?: () => void;
   connectionStatus: 'unknown' | 'success' | 'failed';
-  onShowDebugDialog: () => void;
+  onShowDebugDialog?: () => void;
+  isAdmin: boolean;
 }
 
 export const EmmaIngredientsEmpty: React.FC<EmmaIngredientsEmptyProps> = ({
@@ -22,6 +23,7 @@ export const EmmaIngredientsEmpty: React.FC<EmmaIngredientsEmptyProps> = ({
   testSQL,
   connectionStatus,
   onShowDebugDialog,
+  isAdmin
 }) => {
   return (
     <Card className="brutal-card mt-8">
@@ -31,12 +33,16 @@ export const EmmaIngredientsEmpty: React.FC<EmmaIngredientsEmptyProps> = ({
           <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
             <RefreshCw className="h-4 w-4" /> Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={testSQL} className="gap-2">
-            <Database className="h-4 w-4" /> Test SQL
-          </Button>
-          <Button variant="outline" size="sm" onClick={onShowDebugDialog}>
-            <Info className="h-4 w-4" /> Debug
-          </Button>
+          {isAdmin && testSQL && (
+            <Button variant="outline" size="sm" onClick={testSQL} className="gap-2">
+              <Database className="h-4 w-4" /> Test SQL
+            </Button>
+          )}
+          {isAdmin && onShowDebugDialog && (
+            <Button variant="outline" size="sm" onClick={onShowDebugDialog}>
+              <Info className="h-4 w-4" /> Debug
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
@@ -48,23 +54,27 @@ export const EmmaIngredientsEmpty: React.FC<EmmaIngredientsEmptyProps> = ({
           <p className="text-center text-muted-foreground mb-6 max-w-md">
             There might be an issue connecting to the database or the emma_ingredients table is empty.
           </p>
-          <div className="mb-6">
-            <ConnectionStatusIndicator connectionStatus={connectionStatus} />
-          </div>
-          <div className="space-y-4 w-full max-w-md">
-            <p className="text-sm text-muted-foreground">
-              Some possible causes:
-            </p>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-2">
-              <li>The emma_ingredients table doesn't exist in your database</li>
-              <li>The table exists but has no data</li>
-              <li>There may be permission issues accessing the table</li>
-              <li>The connection to Supabase may be misconfigured</li>
-              <li>Column names in the database don't match expected names</li>
-              <li>Check Row Level Security policies on the table</li>
-              <li>The schema of the table might not match your code</li>
-            </ul>
-          </div>
+          {isAdmin && (
+            <div className="mb-6">
+              <ConnectionStatusIndicator connectionStatus={connectionStatus} />
+            </div>
+          )}
+          {isAdmin && (
+            <div className="space-y-4 w-full max-w-md">
+              <p className="text-sm text-muted-foreground">
+                Some possible causes:
+              </p>
+              <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-2">
+                <li>The emma_ingredients table doesn't exist in your database</li>
+                <li>The table exists but has no data</li>
+                <li>There may be permission issues accessing the table</li>
+                <li>The connection to Supabase may be misconfigured</li>
+                <li>Column names in the database don't match expected names</li>
+                <li>Check Row Level Security policies on the table</li>
+                <li>The schema of the table might not match your code</li>
+              </ul>
+            </div>
+          )}
           <Button onClick={refetch} className="gap-2 mt-6">
             <RefreshCw className="h-4 w-4" /> Refresh Data
           </Button>

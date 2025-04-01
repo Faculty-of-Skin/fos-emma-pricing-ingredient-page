@@ -19,14 +19,16 @@ interface EmmaIngredientsContentProps {
   ingredients: EmmaIngredient[];
   refetch: () => void;
   connectionStatus: 'unknown' | 'success' | 'failed';
-  setShowDebugDialog: (show: boolean) => void;
+  setShowDebugDialog?: (show: boolean) => void;
+  isAdmin: boolean;
 }
 
 export const EmmaIngredientsContent: React.FC<EmmaIngredientsContentProps> = ({
   ingredients,
   refetch,
   connectionStatus,
-  setShowDebugDialog
+  setShowDebugDialog,
+  isAdmin
 }) => {
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -83,8 +85,9 @@ export const EmmaIngredientsContent: React.FC<EmmaIngredientsContentProps> = ({
         <EmmaIngredientsSummary
           ingredients={ingredients}
           filteredIngredients={filteredIngredients}
-          connectionStatus={connectionStatus}
-          onShowDebugDialog={() => setShowDebugDialog(true)}
+          connectionStatus={isAdmin ? connectionStatus : undefined}
+          onShowDebugDialog={setShowDebugDialog ? () => setShowDebugDialog(true) : undefined}
+          isAdmin={isAdmin}
         />
 
         <EmmaIngredientsTable
