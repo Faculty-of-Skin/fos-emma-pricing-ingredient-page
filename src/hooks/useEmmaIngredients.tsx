@@ -155,23 +155,31 @@ export const useEmmaIngredients = () => {
     }
   };
 
-  // Add a function to directly test the table via SQL
+  // Fix the SQL test function to use the correct Supabase format
   const testTableWithSQL = async () => {
     try {
       console.log("Testing table access with direct SQL query...");
       
-      // Fall back to a direct query
-      const { data: rawData, error: rawError } = await supabase
+      // Instead of using count(*), which causes parsing errors,
+      // use a simple select and check if the table exists
+      const { data, error } = await supabase
         .from('emma_ingredients')
-        .select('count(*)');
+        .select('Reference', { count: 'exact' })
+        .limit(1);
       
-      if (rawError) {
-        console.error("Direct SQL count query failed:", rawError);
+      if (error) {
+        console.error("SQL test query failed:", error);
+        toast.error("SQL test failed: " + error.message);
       } else {
-        console.log("Table row count:", rawData);
+        console.log("Table accessibility test successful. Found data:", data);
+        toast.success("SQL test successful");
       }
+      
+      return { data, error };
     } catch (err) {
       console.error("Error testing table with SQL:", err);
+      toast.error("SQL test failed with an unexpected error");
+      return { data: null, error: err };
     }
   };
 
