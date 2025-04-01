@@ -9,7 +9,7 @@ const supabaseKey = getPublicApiKey();
 // Detect if we're in production or development
 const isProduction = window.location.hostname !== 'localhost';
 
-// The redirect URL for authentication
+// The redirect URL for authentication - using correct port for local development
 const redirectUrl = isProduction 
   ? `${window.location.origin}/auth` 
   : 'http://localhost:8080/auth';
