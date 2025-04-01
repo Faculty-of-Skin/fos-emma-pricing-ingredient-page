@@ -17,6 +17,7 @@ export type EmmaIngredient = {
   "Full Description"?: string;
   Importer?: number;
   Distributor?: number;
+  "Final consumer"?: string;
 };
 
 export const useEmmaIngredients = () => {
@@ -24,9 +25,12 @@ export const useEmmaIngredients = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'success' | 'failed'>('unknown');
+  const [rawData, setRawData] = useState<any[] | null>(null);
 
   const checkConnection = async () => {
     try {
+      console.log("Checking Supabase connection...");
+      
       // Perform a simple query to check connection status
       const { data, error } = await supabase.from('emma_ingredients').select('Reference').limit(1);
       
@@ -60,9 +64,8 @@ export const useEmmaIngredients = () => {
         return;
       }
       
-      console.log("Fetching emma ingredients from database...");
+      console.log("Fetching all rows from emma_ingredients table...");
       
-      // Use the exact table name as shown in Supabase
       const { data, error } = await supabase
         .from("emma_ingredients")
         .select("*");
@@ -74,7 +77,9 @@ export const useEmmaIngredients = () => {
         return;
       }
       
-      console.log("Fetched ingredients:", data);
+      // Log the raw data to inspect what's coming back
+      console.log("Raw data from emma_ingredients:", data);
+      setRawData(data);
       
       if (!data || data.length === 0) {
         console.log("No data returned from emma_ingredients table");
@@ -96,9 +101,11 @@ export const useEmmaIngredients = () => {
         "Order quantity": item["Order quantity"] || "",
         "Full Description": item["Full Description"] || "",
         Importer: item.Importer || null,
-        Distributor: item.Distributor || null
+        Distributor: item.Distributor || null,
+        "Final consumer": item["Final consumer"] || ""
       }));
       
+      console.log("Mapped ingredients:", mappedIngredients);
       setIngredients(mappedIngredients);
     } catch (error: any) {
       console.error("Unexpected error fetching emma ingredients:", error);
@@ -118,6 +125,7 @@ export const useEmmaIngredients = () => {
     isLoading,
     error,
     refetch: fetchIngredients,
-    connectionStatus
+    connectionStatus,
+    rawData
   };
 };
