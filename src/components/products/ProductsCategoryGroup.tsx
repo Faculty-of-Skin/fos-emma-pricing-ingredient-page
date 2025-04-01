@@ -71,9 +71,11 @@ export const ProductsCategoryGroup = ({
     });
   }, [products, activeFilter, isCapsuleCategory]);
   
-  // For capsule categories, show only 5 products initially, unless showAll is true
+  // For capsule categories, show exactly 5 products initially, unless showAll is true
   const displayProducts = useMemo(() => {
     if (!isCapsuleCategory || showAll) return filteredProducts;
+
+    // Always show exactly 5 products if available
     return filteredProducts.slice(0, 5);
   }, [filteredProducts, isCapsuleCategory, showAll]);
   
@@ -110,7 +112,7 @@ export const ProductsCategoryGroup = ({
       </Table>
       
       {hasMoreProducts && (
-        <div className="w-full flex justify-center mt-4">
+        <div className="w-full flex justify-center mt-4 mb-2">
           <button 
             onClick={() => setShowAll(!showAll)} 
             className="flex items-center gap-1 px-3 py-1 text-sm border rounded-full hover:bg-gray-50 transition-colors"
@@ -128,7 +130,7 @@ export const ProductsCategoryGroup = ({
 
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
-      {isCapsuleCategory || finalScrollHeight ? (
+      {isCapsuleCategory ? (
         <ScrollArea className={finalScrollHeight ? `${finalScrollHeight}` : "max-h-[350px]"}>
           {content}
         </ScrollArea>
