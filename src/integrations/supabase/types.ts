@@ -25,6 +25,7 @@ export type Database = {
           "Order quantity": string | null
           Reference: string
           Texture: string | null
+          Type: string | null
         }
         Insert: {
           "Beauty institute"?: number | null
@@ -41,6 +42,7 @@ export type Database = {
           "Order quantity"?: string | null
           Reference: string
           Texture?: string | null
+          Type?: string | null
         }
         Update: {
           "Beauty institute"?: number | null
@@ -57,6 +59,7 @@ export type Database = {
           "Order quantity"?: string | null
           Reference?: string
           Texture?: string | null
+          Type?: string | null
         }
         Relationships: []
       }

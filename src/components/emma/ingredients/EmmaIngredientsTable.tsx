@@ -38,6 +38,7 @@ export const EmmaIngredientsTable: React.FC<EmmaIngredientsTableProps> = ({
             <TableHead className="w-32">Reference</TableHead>
             <TableHead>Description</TableHead>
             <TableHead className="w-36">Category</TableHead>
+            <TableHead>INCI List</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -54,10 +55,13 @@ export const EmmaIngredientsTable: React.FC<EmmaIngredientsTableProps> = ({
                     <Badge variant="outline">{ingredient.Category}</Badge>
                   )}
                 </TableCell>
+                <TableCell className="max-w-md truncate">
+                  {ingredient["INCI LIST"]}
+                </TableCell>
               </TableRow>
               {expandedIngredient === ingredient.Reference && (
                 <TableRow className="bg-muted/30">
-                  <TableCell colSpan={3} className="p-4">
+                  <TableCell colSpan={4} className="p-4">
                     <ExpandedIngredientDetails ingredient={ingredient} />
                   </TableCell>
                 </TableRow>
