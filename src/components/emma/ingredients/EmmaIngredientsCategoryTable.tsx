@@ -90,11 +90,11 @@ const IngredientRow: React.FC<{ ingredient: EmmaIngredient }> = ({ ingredient })
                       </p>
                     </div>
                   )}
-                  {ingredient.Properties && (
+                  {ingredient["Ingredient Breakdown"] && (
                     <div>
-                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">Properties:</h4>
+                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">Ingredient Breakdown:</h4>
                       <p className="text-sm font-mono text-brutal-charcoal whitespace-pre-wrap">
-                        {ingredient.Properties}
+                        {ingredient["Ingredient Breakdown"]}
                       </p>
                     </div>
                   )}
