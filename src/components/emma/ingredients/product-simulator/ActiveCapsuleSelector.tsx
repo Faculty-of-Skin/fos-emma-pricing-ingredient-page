@@ -46,11 +46,11 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
                   className={`w-full justify-start text-left ${selectedActiveRefs.includes(ingredient.Reference) ? 'bg-blue-600 hover:bg-blue-700' : 'border-dashed bg-white'}`}
                   onClick={() => onActiveChange(ingredient.Reference)}
                 >
-                  <div className="flex items-center gap-2">
-                    {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4" />}
-                    <span className="font-medium">{ingredient.Reference}</span>
-                    <span className="text-muted-foreground">•</span>
-                    <span>{ingredient.Description}</span>
+                  <div className="flex items-center gap-2 min-w-0">
+                    {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4 flex-shrink-0" />}
+                    <span className="font-medium flex-shrink-0">{ingredient.Reference}</span>
+                    <span className="text-muted-foreground flex-shrink-0">•</span>
+                    <span className="overflow-hidden text-ellipsis">{ingredient.Description}</span>
                   </div>
                 </Button>
               ))}
