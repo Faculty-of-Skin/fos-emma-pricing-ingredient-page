@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 
 const authSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -38,6 +39,27 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user, signIn, signUp } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  // Check for hash parameters that might indicate a redirect from Supabase auth
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && (hash.includes('access_token') || hash.includes('error'))) {
+      // Let Supabase handle processing the hash
+      // It will update the auth state via onAuthStateChange
+      if (hash.includes('error')) {
+        const errorParam = new URLSearchParams(hash.substring(1)).get('error_description');
+        if (errorParam) {
+          toast({
+            title: "Authentication Error",
+            description: decodeURIComponent(errorParam),
+            variant: "destructive",
+          });
+        }
+      }
+    }
+  }, [toast]);
 
   const form = useForm<AuthFormValues>({
     resolver: zodResolver(authSchema),
