@@ -8,7 +8,7 @@ import {
   fetchRowCount, 
   fetchIngredients,
   testTableWithSQL
-} from "@/utils/emmaIngredients/dbOperations";
+} from "@/utils/emmaIngredients";
 
 export type { EmmaIngredient } from "@/types/emmaIngredients";
 
