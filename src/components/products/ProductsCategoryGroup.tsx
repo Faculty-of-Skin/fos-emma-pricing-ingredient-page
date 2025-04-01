@@ -83,8 +83,10 @@ export const ProductsCategoryGroup = ({
   // Calculate if we need to show the "Show more" button
   const hasMoreProducts = isCapsuleCategory && filteredProducts.length > 5;
 
-  // Toggle show all products
-  const handleToggleShowAll = () => {
+  // Toggle show all products without scrolling the page
+  const handleToggleShowAll = (e: React.MouseEvent) => {
+    // Prevent default to avoid page navigation/scrolling
+    e.preventDefault();
     console.log("Toggling show all from", showAll, "to", !showAll);
     setShowAll(prev => !prev);
   };
@@ -106,21 +108,19 @@ export const ProductsCategoryGroup = ({
       
       {isCapsuleCategory ? (
         <div className="flex flex-col">
-          <div className={fixedHeight ? "overflow-auto" : ""}>
-            <ScrollArea className={fixedHeight}>
-              <Table className="w-full">
-                <ProductsTableHeader />
-                <TableBody>
-                  {displayProducts.map((product) => (
-                    <ProductsTableRow 
-                      key={product.id} 
-                      product={product} 
-                      isUsingFallbackData={isUsingFallbackData} 
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </ScrollArea>
+          <div className={`${fixedHeight ? "overflow-auto" : ""} transition-all duration-300`}>
+            <Table className="w-full">
+              <ProductsTableHeader />
+              <TableBody>
+                {displayProducts.map((product) => (
+                  <ProductsTableRow 
+                    key={product.id} 
+                    product={product} 
+                    isUsingFallbackData={isUsingFallbackData} 
+                  />
+                ))}
+              </TableBody>
+            </Table>
           </div>
           
           {hasMoreProducts && (
