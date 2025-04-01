@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   Settings,
+  Flask,
 } from "lucide-react";
 import { NotificationDropdown } from "./NotificationDropdown";
 import { useNotifications } from "@/context/NotificationContext";
@@ -56,6 +57,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
             <NavItem icon={<LayoutDashboard size={18} />} href="/dashboard" label="Dashboard" />
             <NavItem icon={<Package size={18} />} href="/products" label="Products" />
             <NavItem icon={<BarChart3 size={18} />} href="/forecasts" label="Forecasts" />
+            <NavItem icon={<Flask size={18} />} href="/emma-ingredients" label="Ingredients" />
             
             {isAdmin && (
               <NavItem icon={<UserCog size={18} />} href="/admin" label="Admin" />
