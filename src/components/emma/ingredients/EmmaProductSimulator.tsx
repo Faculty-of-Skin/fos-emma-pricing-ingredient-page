@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from "react";
 import { 
   Card, 
@@ -43,7 +42,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
   const [selectedActiveRefs, setSelectedActiveRefs] = useState<string[]>([]);
   const [selectedFragranceRef, setSelectedFragranceRef] = useState<string | null>(null);
 
-  // Filter ingredients by type and product type (face/body)
   const textureIngredients = useMemo(() => 
     ingredients.filter(ingredient => {
       const category = ingredient.Category?.toLowerCase() || "";
@@ -80,12 +78,10 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
     }), 
   [ingredients, productType]);
 
-  // Get the selected ingredients based on reference
   const selectedTexture = textureIngredients.find(i => i.Reference === selectedTextureRef) || null;
   const selectedActives = activeIngredients.filter(i => selectedActiveRefs.includes(i.Reference));
   const selectedFragrance = fragranceIngredients.find(i => i.Reference === selectedFragranceRef) || null;
 
-  // Combined INCI list and other properties
   const combinedInciList = useMemo(() => {
     const incis: string[] = [];
     
@@ -106,7 +102,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
     return incis.join("\n\n");
   }, [selectedTexture, selectedActives, selectedFragrance]);
 
-  // Handle selections
   const handleTextureChange = (value: string) => {
     setSelectedTextureRef(value);
   };
@@ -115,7 +110,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
     if (selectedActiveRefs.includes(value)) {
       setSelectedActiveRefs(selectedActiveRefs.filter(ref => ref !== value));
     } else {
-      // Only allow up to 2 active ingredients
       if (selectedActiveRefs.length < 2) {
         setSelectedActiveRefs([...selectedActiveRefs, value]);
       }
@@ -137,7 +131,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
     resetSelections();
   };
 
-  // Visual helper to determine capsule type styling
   const getCapsuleTypeStyles = (type: 'texture' | 'active' | 'fragrance') => {
     switch (type) {
       case 'texture':
@@ -192,7 +185,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Texture Capsule Selection */}
           <Card className={`border-l-4 ${textureStyles.border} hover:shadow-md transition-shadow`}>
             <CardHeader className={`${textureStyles.header} pb-3`}>
               <div className="flex items-center gap-2">
@@ -239,7 +231,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
             </CardContent>
           </Card>
 
-          {/* Active Capsule Selection */}
           <Card className={`border-l-4 ${activeStyles.border} hover:shadow-md transition-shadow`}>
             <CardHeader className={`${activeStyles.header} pb-3`}>
               <div className="flex items-center gap-2">
@@ -285,7 +276,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
             </CardContent>
           </Card>
 
-          {/* Fragrance Capsule Selection */}
           <Card className={`border-l-4 ${fragranceStyles.border} hover:shadow-md transition-shadow`}>
             <CardHeader className={`${fragranceStyles.header} pb-3`}>
               <div className="flex items-center gap-2">
@@ -341,7 +331,6 @@ export const EmmaProductSimulator: React.FC<EmmaProductSimulatorProps> = ({ ingr
         </div>
       </div>
 
-      {/* Final Product Formula Result */}
       <Card className="border shadow-lg overflow-hidden">
         <CardHeader className={`bg-gradient-to-r from-slate-800 to-slate-700 text-white`}>
           <div className="flex items-center gap-3">

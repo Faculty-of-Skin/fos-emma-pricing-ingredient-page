@@ -2,7 +2,7 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { EmmaIngredientsSplit } from "@/components/emma/ingredients/EmmaIngredientsSplit";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, List, FileText, Leaf, Sparkles, Droplets, Beaker, Flask } from "lucide-react";
+import { HelpCircle, List, FileText, Leaf, Sparkles, Droplets, Beaker, FlaskConical } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -155,7 +155,7 @@ const EmmaIngredientsPage = () => {
                 <div className="p-8">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-slate-800 to-slate-600 flex items-center justify-center">
-                      <Flask className="h-5 w-5 text-white" />
+                      <FlaskConical className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold">Formula Creator</h2>
