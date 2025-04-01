@@ -17,9 +17,14 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
     storage: localStorage,
     flowType: 'implicit',
-    // The redirectTo should be directly here, not in an options object
-    redirectTo: isProduction 
-      ? `${window.location.origin}/auth` 
-      : 'http://localhost:8080/auth',
   },
+  global: {
+    // Put redirectTo URL here instead of in auth object
+    // This is the correct location according to Supabase types
+    headers: {
+      'X-Supabase-Auth-Redirect-To': isProduction 
+        ? `${window.location.origin}/auth` 
+        : 'http://localhost:8080/auth',
+    },
+  }
 });
