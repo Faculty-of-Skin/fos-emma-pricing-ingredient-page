@@ -82,9 +82,15 @@ export const ProductsCategoryGroup = ({
   
   // Calculate if we need to show the "Show more" button
   const hasMoreProducts = isCapsuleCategory && filteredProducts.length > 5;
+
+  // Toggle show all products
+  const handleToggleShowAll = () => {
+    console.log("Toggling show all from", showAll, "to", !showAll);
+    setShowAll(prev => !prev);
+  };
   
   // Default fixed height for capsule categories to ensure scrolling
-  const fixedHeight = isCapsuleCategory ? (maxHeight || "max-h-[300px]") : "";
+  const fixedHeight = isCapsuleCategory && !showAll ? (maxHeight || "max-h-[300px]") : "";
   
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
@@ -100,25 +106,27 @@ export const ProductsCategoryGroup = ({
       
       {isCapsuleCategory ? (
         <div className="flex flex-col">
-          <ScrollArea className={fixedHeight}>
-            <Table className="w-full">
-              <ProductsTableHeader />
-              <TableBody>
-                {displayProducts.map((product) => (
-                  <ProductsTableRow 
-                    key={product.id} 
-                    product={product} 
-                    isUsingFallbackData={isUsingFallbackData} 
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+          <div className={fixedHeight ? "overflow-auto" : ""}>
+            <ScrollArea className={fixedHeight}>
+              <Table className="w-full">
+                <ProductsTableHeader />
+                <TableBody>
+                  {displayProducts.map((product) => (
+                    <ProductsTableRow 
+                      key={product.id} 
+                      product={product} 
+                      isUsingFallbackData={isUsingFallbackData} 
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          </div>
           
           {hasMoreProducts && (
             <div className="w-full flex justify-center mt-4">
               <button 
-                onClick={() => setShowAll(!showAll)} 
+                onClick={handleToggleShowAll} 
                 className="flex items-center gap-1 px-3 py-1 text-sm border rounded-full hover:bg-gray-50 transition-colors"
               >
                 {showAll ? "Show less" : `Show all ${filteredProducts.length} products`}
