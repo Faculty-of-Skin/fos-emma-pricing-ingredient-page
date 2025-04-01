@@ -87,10 +87,23 @@ export const ProductsCategoryGroup = ({
   const handleToggleShowAll = (e: React.MouseEvent) => {
     // Prevent default to avoid page navigation/scrolling
     e.preventDefault();
-    e.stopPropagation(); // Stop event propagation
-    console.log("Toggling show all from", showAll, "to", !showAll);
+    e.stopPropagation(); 
     setShowAll(prev => !prev);
   };
+  
+  // Calculate the appropriate height for the scrollable area
+  const scrollAreaHeight = useMemo(() => {
+    if (!isCapsuleCategory) return maxHeight || "auto";
+    
+    // For capsule categories with "Show more" toggled on
+    if (showAll) {
+      // Calculate height based on number of products, but cap at 600px
+      return `${Math.min(filteredProducts.length * 53 + 40, 600)}px`;
+    }
+    
+    // Default height for collapsed view
+    return "300px";
+  }, [isCapsuleCategory, showAll, filteredProducts.length, maxHeight]);
   
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
@@ -106,13 +119,14 @@ export const ProductsCategoryGroup = ({
       
       {isCapsuleCategory ? (
         <div className="flex flex-col">
-          {/* Using a container with relative positioning for the ScrollArea */}
+          {/* Scrollable area for capsule categories */}
           <div className="relative">
             <ScrollArea 
               className="w-full border rounded-md" 
               style={{ 
-                height: showAll ? `${Math.min(filteredProducts.length * 53 + 40, 600)}px` : '300px',
-                transition: 'height 0.3s ease-in-out'
+                height: scrollAreaHeight,
+                transition: 'height 0.3s ease-in-out',
+                overflowY: 'auto'
               }}
             >
               <Table className="w-full">
