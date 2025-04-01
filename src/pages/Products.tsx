@@ -1,3 +1,4 @@
+
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsFilter } from "@/components/products/ProductsFilter";
@@ -5,7 +6,6 @@ import { ProductsTable } from "@/components/products/ProductsTable";
 import { ProductsSummary } from "@/components/products/ProductsSummary";
 import { ProductsError } from "@/components/products/ProductsError";
 import { EmptyProducts } from "@/components/products/EmptyProducts";
-import { ProductIngredients } from "@/components/products/ProductIngredients";
 import { useProducts } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Database, RefreshCw, Info } from "lucide-react";
@@ -152,8 +152,6 @@ const Products = () => {
           searchQuery={searchQuery}
           isUsingFallbackData={isUsingFallbackData}
         />
-        
-        <ProductIngredients />
       </div>
     </DashboardLayout>
   );
