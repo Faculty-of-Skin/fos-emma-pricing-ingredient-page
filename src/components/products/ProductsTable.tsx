@@ -78,14 +78,18 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   // Filter categories for the middle row (Face Capsules, Body Capsules)
   const middleRowCategories = sortedCategories.filter(cat => isMiddleRowCategory(cat));
   
-  // Filter categories for the bottom row (Accessories, Marketing)
-  const bottomRowCategories = sortedCategories.filter(cat => isBottomRowCategory(cat));
-  
   // All other categories that don't fit the predefined structure
   const otherCategories = sortedCategories.filter(cat => 
     !isEquipmentCategory(cat) && 
     !isMiddleRowCategory(cat) && 
     !isBottomRowCategory(cat));
+  
+  // Get specific categories for the middle row
+  const faceCapsules = middleRowCategories.find(cat => cat === "Face Capsules");
+  const bodyCapsules = middleRowCategories.find(cat => cat === "Body Capsules");
+  
+  // Filter categories for the bottom row (Accessories, Marketing)
+  const bottomRowCategories = sortedCategories.filter(cat => isBottomRowCategory(cat));
 
   return (
     <div className="space-y-8">
@@ -102,16 +106,27 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
         ))}
       </div>
 
-      {/* Middle row - Face Capsules and Body Capsules (two columns) */}
+      {/* Middle row - Face Capsules and Body Capsules (two columns) with scrolling */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {middleRowCategories.map(category => (
+        {faceCapsules && (
           <ProductsCategoryGroup 
-            key={category}
-            category={category}
-            products={groupedProducts[category]}
+            key={faceCapsules}
+            category={faceCapsules}
+            products={groupedProducts[faceCapsules]}
             isUsingFallbackData={isUsingFallbackData}
+            maxHeight="max-h-[500px]"
           />
-        ))}
+        )}
+        
+        {bodyCapsules && (
+          <ProductsCategoryGroup 
+            key={bodyCapsules}
+            category={bodyCapsules}
+            products={groupedProducts[bodyCapsules]}
+            isUsingFallbackData={isUsingFallbackData}
+            maxHeight="max-h-[500px]"
+          />
+        )}
       </div>
 
       {/* Bottom row - Accessories and Marketing (two columns) */}

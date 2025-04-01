@@ -2,6 +2,7 @@
 import { Table, TableBody } from "@/components/ui/table";
 import { ProductsTableHeader } from "./ProductsTableHeader";
 import { ProductsTableRow } from "./ProductsTableRow";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Product = {
   id: string;
@@ -23,16 +24,18 @@ interface ProductsCategoryGroupProps {
   products: Product[];
   isUsingFallbackData: boolean;
   className?: string;
+  maxHeight?: string;
 }
 
 export const ProductsCategoryGroup = ({ 
   category, 
   products, 
   isUsingFallbackData,
-  className = "" 
+  className = "",
+  maxHeight
 }: ProductsCategoryGroupProps) => {
-  return (
-    <div className={`brutal-card p-4 overflow-x-auto ${className}`}>
+  const content = (
+    <>
       <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
       <Table className="w-full">
         <ProductsTableHeader />
@@ -46,6 +49,18 @@ export const ProductsCategoryGroup = ({
           ))}
         </TableBody>
       </Table>
+    </>
+  );
+
+  return (
+    <div className={`brutal-card p-4 overflow-hidden ${className}`}>
+      {maxHeight ? (
+        <ScrollArea className={`pr-4 ${maxHeight}`}>
+          {content}
+        </ScrollArea>
+      ) : (
+        content
+      )}
     </div>
   );
 };
