@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -16,7 +16,8 @@ import {
   RefreshCw,
   Loader2,
   AlertCircle,
-  Search
+  Search,
+  Database
 } from "lucide-react";
 import { useEmmaIngredients, EmmaIngredient } from "@/hooks/useEmmaIngredients";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,10 @@ export const EmmaIngredients = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const { formatPrice, convertPrice } = useCurrency();
+  
+  useEffect(() => {
+    console.log("EmmaIngredients loaded with data:", ingredients);
+  }, [ingredients]);
 
   const toggleIngredient = (reference: string) => {
     if (expandedIngredient === reference) {
@@ -107,13 +112,25 @@ export const EmmaIngredients = () => {
   if (ingredients.length === 0) {
     return (
       <Card className="brutal-card mt-8">
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl">Emma Ingredients</CardTitle>
+          <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
+            <RefreshCw className="h-4 w-4" /> Refresh
+          </Button>
         </CardHeader>
         <CardContent>
-          <p className="text-center text-muted-foreground py-6">
-            No ingredient data available
-          </p>
+          <div className="flex flex-col items-center py-12">
+            <Database className="h-12 w-12 text-muted-foreground mb-4" />
+            <p className="text-center text-lg font-medium mb-2">
+              No ingredient data available
+            </p>
+            <p className="text-center text-muted-foreground mb-6 max-w-md">
+              There might be an issue connecting to the database or the emma_ingredients table is empty.
+            </p>
+            <Button onClick={refetch} className="gap-2">
+              <RefreshCw className="h-4 w-4" /> Refresh Data
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );
