@@ -20,6 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface EmmaIngredientsCategoryTableProps {
   title: string;
@@ -35,6 +36,7 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
   fullWidth = false
 }) => {
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<string>("face");
 
   const toggleIngredient = (reference: string) => {
     if (expandedIngredient === reference) {
@@ -44,16 +46,34 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
     }
   };
 
+  // Filter ingredients by face/body
+  const filteredIngredients = ingredients.filter(ingredient => {
+    const desc = ingredient.Description.toLowerCase();
+    if (categoryFilter === "face") {
+      return !desc.includes("body") || desc.includes("face");
+    } else if (categoryFilter === "body") {
+      return desc.includes("body");
+    }
+    return true;
+  });
+
   return (
     <Card className={`${fullWidth ? 'col-span-full' : ''}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold">{title}</CardTitle>
-          <Badge variant="outline">{ingredients.length}</Badge>
+          <Badge variant="outline">{filteredIngredients.length}</Badge>
         </div>
       </CardHeader>
       <CardContent>
-        {ingredients.length === 0 ? (
+        <Tabs defaultValue="face" onValueChange={setCategoryFilter} className="mb-4">
+          <TabsList className="grid w-44 grid-cols-2">
+            <TabsTrigger value="face">Face</TabsTrigger>
+            <TabsTrigger value="body">Body</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        
+        {filteredIngredients.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">{emptyMessage}</div>
         ) : (
           <ScrollArea className={`${fullWidth ? 'h-[400px]' : 'h-[350px]'}`}>
@@ -66,7 +86,7 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {ingredients.map((ingredient) => (
+                {filteredIngredients.map((ingredient) => (
                   <React.Fragment key={ingredient.Reference}>
                     <TableRow>
                       <TableCell className="font-medium">{ingredient.Reference}</TableCell>
