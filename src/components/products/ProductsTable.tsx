@@ -62,22 +62,30 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
     return indexA - indexB;
   });
 
+  // Explicitly type the category strings to resolve TypeScript errors
+  const isEquipmentCategory = (category: string): category is "Equipment" => 
+    category === "Equipment";
+  
+  const isMiddleRowCategory = (category: string): category is "Face Capsules" | "Body Capsules" => 
+    category === "Face Capsules" || category === "Body Capsules";
+  
+  const isBottomRowCategory = (category: string): category is "Accessories" | "Marketing" => 
+    category === "Accessories" || category === "Marketing";
+  
   // Filter categories for the top row (Equipment)
-  const topRowCategories = sortedCategories.filter(cat => cat === "Equipment");
+  const topRowCategories = sortedCategories.filter(cat => isEquipmentCategory(cat));
   
   // Filter categories for the middle row (Face Capsules, Body Capsules)
-  const middleRowCategories = sortedCategories.filter(cat => 
-    cat === "Face Capsules" || cat === "Body Capsules");
+  const middleRowCategories = sortedCategories.filter(cat => isMiddleRowCategory(cat));
   
   // Filter categories for the bottom row (Accessories, Marketing)
-  const bottomRowCategories = sortedCategories.filter(cat => 
-    cat === "Accessories" || cat === "Marketing");
+  const bottomRowCategories = sortedCategories.filter(cat => isBottomRowCategory(cat));
   
   // All other categories that don't fit the predefined structure
   const otherCategories = sortedCategories.filter(cat => 
-    !topRowCategories.includes(cat) && 
-    !middleRowCategories.includes(cat) && 
-    !bottomRowCategories.includes(cat));
+    !isEquipmentCategory(cat) && 
+    !isMiddleRowCategory(cat) && 
+    !isBottomRowCategory(cat));
 
   return (
     <div className="space-y-8">
