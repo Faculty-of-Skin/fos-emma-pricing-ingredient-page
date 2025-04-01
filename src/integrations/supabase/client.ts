@@ -12,13 +12,16 @@ const isProduction = window.location.hostname !== 'localhost';
 // Create a custom Supabase client with appropriate configuration
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
-    // Use the actual site URL for redirects
-    redirectTo: isProduction 
-      ? `${window.location.origin}/auth` 
-      : 'http://localhost:8080/auth',
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    storage: localStorage
+    storage: localStorage,
+    flowType: 'implicit',
+    options: {
+      // Use the actual site URL for redirects
+      redirectTo: isProduction 
+        ? `${window.location.origin}/auth` 
+        : 'http://localhost:8080/auth',
+    }
   },
 });
