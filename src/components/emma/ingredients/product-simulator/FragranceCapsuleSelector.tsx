@@ -46,14 +46,14 @@ export const FragranceCapsuleSelector: React.FC<FragranceCapsulesProps> = ({
                   className={`w-full justify-start text-left ${selectedFragranceRef === ingredient.Reference ? 'bg-purple-600 hover:bg-purple-700' : 'border-dashed bg-white'}`}
                   onClick={() => onFragranceChange(ingredient.Reference)}
                 >
-                  <ScrollArea orientation="horizontal" className="w-full">
+                  <div className="w-full overflow-hidden">
                     <div className="flex items-center gap-2 whitespace-nowrap">
                       {selectedFragranceRef === ingredient.Reference && <Check className="h-4 w-4 flex-shrink-0" />}
                       <span className="font-medium flex-shrink-0">{ingredient.Reference}</span>
                       <span className="text-muted-foreground flex-shrink-0">•</span>
                       <span>{ingredient.Description}</span>
                     </div>
-                  </ScrollArea>
+                  </div>
                 </Button>
               ))}
             </div>
