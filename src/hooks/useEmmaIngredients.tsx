@@ -31,8 +31,8 @@ export const useEmmaIngredients = () => {
     key: string;
     tableName: string;
   }>({
-    url: supabase.supabaseUrl,
-    key: supabase.supabaseKey,
+    url: import.meta.env.VITE_SUPABASE_URL || '',
+    key: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
     tableName: 'emma_ingredients'
   });
   const [tableInfo, setTableInfo] = useState<any>(null);
@@ -77,19 +77,9 @@ export const useEmmaIngredients = () => {
       const columnInfo = Object.keys(data?.length ? data[0] : {});
       console.log("Column information for emma_ingredients:", columnInfo);
       
-      // Try introspection query to get more details about the table
-      const { data: introspectionData, error: introspectionError } = await supabase
-        .rpc('get_columns_for_table', { table_name: 'emma_ingredients' })
-        .catch(() => ({ data: null, error: { message: 'Function not available' } }));
-      
-      console.log("Table introspection results:", introspectionData || "Not available");
-      if (introspectionError) {
-        console.log("Introspection error:", introspectionError);
-      }
-      
       setTableInfo({
         columnInfo,
-        introspectionData: introspectionData || null
+        introspectionData: null
       });
     } catch (err) {
       console.error("Error getting table information:", err);
@@ -136,39 +126,6 @@ export const useEmmaIngredients = () => {
         return;
       }
       
-      // Check if the first item has lowercase column names instead of the expected format
-      const firstItem = data[0];
-      const hasLowercaseColumns = 
-        firstItem.reference !== undefined && 
-        firstItem.Reference === undefined;
-      
-      if (hasLowercaseColumns) {
-        console.log("Warning: Table has lowercase column names instead of expected capitalized format");
-        console.log("Converting column names to expected format");
-        
-        // Convert lowercase column names to the expected format
-        const convertedData = data.map(item => ({
-          Reference: item.reference || "",
-          Description: item.description || "",
-          Category: item.category || "",
-          "INCI LIST": item.inci_list || "",
-          "FRAGRANCE NOTES": item.fragrance_notes || "",
-          "Ingredient Breakdown": item.ingredient_breakdown || "",
-          Benefit: item.benefit || "",
-          Texture: item.texture || "",
-          "Beauty institute": item.beauty_institute || null,
-          "Order quantity": item.order_quantity || "",
-          "Full Description": item.full_description || "",
-          Importer: item.importer || null,
-          Distributor: item.distributor || null,
-          "Final consumer": item.final_consumer || ""
-        }));
-        
-        console.log("Converted data:", convertedData);
-        setIngredients(convertedData);
-        return;
-      }
-      
       // Map the data to ensure it matches our EmmaIngredient type
       const mappedIngredients = data.map(item => ({
         Reference: item.Reference || "",
@@ -202,28 +159,16 @@ export const useEmmaIngredients = () => {
   const testTableWithSQL = async () => {
     try {
       console.log("Testing table access with direct SQL query...");
-      const { data, error } = await supabase.rpc('test_emma_ingredients_table')
-        .catch(() => {
-          console.log("RPC function not available, trying direct query");
-          return { data: null, error: { message: 'Function not available' } };
-        });
       
-      if (error && error.message !== 'Function not available') {
-        console.error("SQL test failed:", error);
-      } else if (data) {
-        console.log("SQL test result:", data);
+      // Fall back to a direct query
+      const { data: rawData, error: rawError } = await supabase
+        .from('emma_ingredients')
+        .select('count(*)');
+      
+      if (rawError) {
+        console.error("Direct SQL count query failed:", rawError);
       } else {
-        console.log("Trying direct SQL query instead of RPC");
-        // Fall back to a direct query
-        const { data: rawData, error: rawError } = await supabase
-          .from('emma_ingredients')
-          .select('count(*)');
-        
-        if (rawError) {
-          console.error("Direct SQL count query failed:", rawError);
-        } else {
-          console.log("Table row count:", rawData);
-        }
+        console.log("Table row count:", rawData);
       }
     } catch (err) {
       console.error("Error testing table with SQL:", err);
