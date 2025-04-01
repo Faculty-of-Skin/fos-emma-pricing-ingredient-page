@@ -1,4 +1,3 @@
-
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsFilter } from "@/components/products/ProductsFilter";
@@ -8,7 +7,7 @@ import { ProductsError } from "@/components/products/ProductsError";
 import { EmptyProducts } from "@/components/products/EmptyProducts";
 import { useProducts } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Database, RefreshCw, Info } from "lucide-react";
+import { AlertCircle, Database, RefreshCw, Info, LayoutGrid } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -59,7 +58,10 @@ const Products = () => {
       <div className="sticky top-0 z-10 bg-brutal-white border-b border-brutal-gray/10 shadow-sm">
         <div className="container mx-auto px-4 max-w-7xl py-4">
           <div className="flex items-center justify-between">
-            <ProductsHeader title="Products" />
+            <div className="flex items-center gap-2">
+              <ProductsHeader title="Products" />
+              <LayoutGrid className="h-5 w-5 text-brutal-charcoal" />
+            </div>
             <div className="flex gap-4 items-center">
               <div className="flex items-center gap-2">
                 <span className="text-brutal-charcoal font-mono uppercase text-sm">Currency:</span>

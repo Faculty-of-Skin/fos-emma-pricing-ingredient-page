@@ -2,6 +2,7 @@
 import { ProductsLoadingState } from "./ProductsLoadingState";
 import { ProductsEmptyState } from "./ProductsEmptyState";
 import { ProductsCategoryGroup } from "./ProductsCategoryGroup";
+import { Grid } from "lucide-react";
 
 type Product = {
   id: string;
@@ -34,6 +35,13 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
     return <ProductsEmptyState onRefresh={onRefresh} />;
   }
 
+  // Define category order and grouping
+  const categoryOrder = [
+    "Equipment", // Top row, full width
+    "Face Capsules", "Body Capsules", // Middle row, two columns
+    "Accessories", "Marketing" // Bottom row, two columns
+  ];
+  
   // Group products by category for better organization
   const groupedProducts = products.reduce((acc, product) => {
     if (!acc[product.category]) {
@@ -43,19 +51,86 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
     return acc;
   }, {} as Record<string, Product[]>);
 
-  // Sort categories alphabetically
-  const sortedCategories = Object.keys(groupedProducts).sort();
+  // Sort categories according to the defined order, put any undefined categories at the end
+  const sortedCategories = Object.keys(groupedProducts).sort((a, b) => {
+    const indexA = categoryOrder.indexOf(a);
+    const indexB = categoryOrder.indexOf(b);
+    
+    if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+
+  // Filter categories for the top row (Equipment)
+  const topRowCategories = sortedCategories.filter(cat => cat === "Equipment");
+  
+  // Filter categories for the middle row (Face Capsules, Body Capsules)
+  const middleRowCategories = sortedCategories.filter(cat => 
+    cat === "Face Capsules" || cat === "Body Capsules");
+  
+  // Filter categories for the bottom row (Accessories, Marketing)
+  const bottomRowCategories = sortedCategories.filter(cat => 
+    cat === "Accessories" || cat === "Marketing");
+  
+  // All other categories that don't fit the predefined structure
+  const otherCategories = sortedCategories.filter(cat => 
+    !topRowCategories.includes(cat) && 
+    !middleRowCategories.includes(cat) && 
+    !bottomRowCategories.includes(cat));
 
   return (
     <div className="space-y-8">
-      {sortedCategories.map(category => (
-        <ProductsCategoryGroup 
-          key={category}
-          category={category}
-          products={groupedProducts[category]}
-          isUsingFallbackData={isUsingFallbackData}
-        />
-      ))}
+      {/* Top row - Equipment (full width) */}
+      <div className="w-full">
+        {topRowCategories.map(category => (
+          <ProductsCategoryGroup 
+            key={category}
+            category={category}
+            products={groupedProducts[category]}
+            isUsingFallbackData={isUsingFallbackData}
+            className="w-full"
+          />
+        ))}
+      </div>
+
+      {/* Middle row - Face Capsules and Body Capsules (two columns) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {middleRowCategories.map(category => (
+          <ProductsCategoryGroup 
+            key={category}
+            category={category}
+            products={groupedProducts[category]}
+            isUsingFallbackData={isUsingFallbackData}
+          />
+        ))}
+      </div>
+
+      {/* Bottom row - Accessories and Marketing (two columns) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {bottomRowCategories.map(category => (
+          <ProductsCategoryGroup 
+            key={category}
+            category={category}
+            products={groupedProducts[category]}
+            isUsingFallbackData={isUsingFallbackData}
+          />
+        ))}
+      </div>
+
+      {/* Any other categories */}
+      {otherCategories.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {otherCategories.map(category => (
+            <ProductsCategoryGroup 
+              key={category}
+              category={category}
+              products={groupedProducts[category]}
+              isUsingFallbackData={isUsingFallbackData}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

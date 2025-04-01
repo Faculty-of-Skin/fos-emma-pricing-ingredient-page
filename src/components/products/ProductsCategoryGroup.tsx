@@ -22,15 +22,17 @@ interface ProductsCategoryGroupProps {
   category: string;
   products: Product[];
   isUsingFallbackData: boolean;
+  className?: string;
 }
 
 export const ProductsCategoryGroup = ({ 
   category, 
   products, 
-  isUsingFallbackData 
+  isUsingFallbackData,
+  className = "" 
 }: ProductsCategoryGroupProps) => {
   return (
-    <div key={category} className="brutal-card p-4 overflow-x-auto w-full">
+    <div className={`brutal-card p-4 overflow-x-auto ${className}`}>
       <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
       <Table className="w-full">
         <ProductsTableHeader />
