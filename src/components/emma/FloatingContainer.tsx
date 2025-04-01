@@ -30,8 +30,8 @@ export const FloatingContainer = ({
 
   const positionClasses = {
     'bottom-right': 'bottom-6 right-6',
-    'top-right': 'top-24 md:top-20 right-6', // Increased top value to avoid overlapping with header
-    'top-center': 'top-24 md:top-20 left-1/2 transform -translate-x-1/2', // Increased top value to avoid overlapping with header
+    'top-right': 'top-32 md:top-28 right-6', // Further increased top value to avoid overlapping with header
+    'top-center': 'top-32 md:top-28 left-1/2 transform -translate-x-1/2', // Further increased top value to avoid overlapping with header
   };
 
   return (
