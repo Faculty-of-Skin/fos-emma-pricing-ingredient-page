@@ -17,11 +17,9 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
     storage: localStorage,
     flowType: 'implicit',
-    options: {
-      // Use the actual site URL for redirects
-      redirectTo: isProduction 
-        ? `${window.location.origin}/auth` 
-        : 'http://localhost:8080/auth',
-    }
+    // The redirectTo should be directly here, not in an options object
+    redirectTo: isProduction 
+      ? `${window.location.origin}/auth` 
+      : 'http://localhost:8080/auth',
   },
 });
