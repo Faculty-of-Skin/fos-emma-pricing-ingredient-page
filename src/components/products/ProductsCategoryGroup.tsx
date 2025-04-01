@@ -82,8 +82,8 @@ export const ProductsCategoryGroup = ({
   // Calculate if we need to show the "Show more" button
   const hasMoreProducts = isCapsuleCategory && filteredProducts.length > 5;
   
-  // Always apply a fixed height for Face/Body capsules to ensure scrolling works
-  const scrollHeight = isCapsuleCategory ? "max-h-[350px]" : undefined;
+  // Always apply a fixed height for Face/Body capsules (smaller height to force scrolling)
+  const scrollHeight = "max-h-[250px]";
   
   // Content to display inside or outside of scroll area
   const content = (
@@ -125,13 +125,13 @@ export const ProductsCategoryGroup = ({
     </>
   );
 
-  // Use the provided maxHeight prop or our default scrollHeight
+  // Use the provided maxHeight prop or our default scrollHeight (always use a fixed height for capsules)
   const finalScrollHeight = maxHeight || scrollHeight;
 
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
       {isCapsuleCategory ? (
-        <ScrollArea className={finalScrollHeight ? `${finalScrollHeight}` : "max-h-[350px]"}>
+        <ScrollArea className={finalScrollHeight}>
           {content}
         </ScrollArea>
       ) : (

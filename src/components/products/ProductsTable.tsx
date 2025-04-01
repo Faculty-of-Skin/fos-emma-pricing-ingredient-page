@@ -121,7 +121,7 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
             products={groupedProducts[category]}
             isUsingFallbackData={isUsingFallbackData}
             // Set a consistent height for the scrollable area
-            maxHeight="max-h-[350px]"
+            maxHeight="max-h-[250px]"
           />
         ))}
       </div>
