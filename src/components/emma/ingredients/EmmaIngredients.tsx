@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   Table,
@@ -199,7 +200,7 @@ export const EmmaIngredients = () => {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 id="search"
-                placeholder="Search by name, reference or category..."
+                placeholder="Search by reference, description or category..."
                 className="pl-8"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -239,10 +240,13 @@ export const EmmaIngredients = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-36">Reference</TableHead>
+                <TableHead className="w-32">Reference</TableHead>
                 <TableHead>Description</TableHead>
-                <TableHead className="w-32">Category</TableHead>
-                <TableHead className="w-32 text-right">Beauty Institute Price</TableHead>
+                <TableHead className="w-36">Category</TableHead>
+                <TableHead className="w-36">Order Quantity</TableHead>
+                <TableHead className="w-28 text-right">Beauty Institute</TableHead>
+                <TableHead className="w-28 text-right">Distributor</TableHead>
+                <TableHead className="w-28 text-right">Importer</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -259,15 +263,26 @@ export const EmmaIngredients = () => {
                         <Badge variant="outline">{ingredient.Category}</Badge>
                       )}
                     </TableCell>
+                    <TableCell>{ingredient["Order quantity"] || "EMPTY"}</TableCell>
                     <TableCell className="text-right">
                       {ingredient["Beauty institute"] 
                         ? formatPrice(convertPrice(ingredient["Beauty institute"])) 
                         : "-"}
                     </TableCell>
+                    <TableCell className="text-right">
+                      {ingredient.Distributor 
+                        ? formatPrice(convertPrice(ingredient.Distributor)) 
+                        : "-"}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {ingredient.Importer 
+                        ? formatPrice(convertPrice(ingredient.Importer)) 
+                        : "-"}
+                    </TableCell>
                   </TableRow>
                   {expandedIngredient === ingredient.Reference && (
                     <TableRow className="bg-muted/30">
-                      <TableCell colSpan={4} className="p-4">
+                      <TableCell colSpan={7} className="p-4">
                         <div className="space-y-3">
                           {ingredient["Ingredient Breakdown"] && (
                             <div>
@@ -301,13 +316,6 @@ export const EmmaIngredients = () => {
                             <div>
                               <h4 className="font-semibold mb-1">Texture</h4>
                               <p className="text-sm">{ingredient.Texture}</p>
-                            </div>
-                          )}
-                          
-                          {ingredient["Order quantity"] && (
-                            <div>
-                              <h4 className="font-semibold mb-1">Order Quantity</h4>
-                              <p className="text-sm">{ingredient["Order quantity"]}</p>
                             </div>
                           )}
                           
