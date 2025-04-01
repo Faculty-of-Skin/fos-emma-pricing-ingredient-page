@@ -1,16 +1,10 @@
 
-import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 import { EmmaIngredient } from "@/types/emmaIngredients";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface EmmaIngredientsCategoryTableProps {
   title: string;
@@ -23,110 +17,80 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
   title,
   ingredients,
   emptyMessage,
-  fullWidth = false
+  fullWidth = false,
 }) => {
-  const [expandedIngredient, setExpandedIngredient] = React.useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
-  const toggleIngredient = (reference: string) => {
-    if (expandedIngredient === reference) {
-      setExpandedIngredient(null);
-    } else {
-      setExpandedIngredient(reference);
-    }
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
   };
 
-  return (
-    <Card className={`shadow-sm ${fullWidth ? 'col-span-full' : ''}`}>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-xl font-bold">{title}</CardTitle>
-        <CardDescription>
-          {ingredients.length} {ingredients.length === 1 ? 'ingredient' : 'ingredients'} available
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {ingredients.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+  if (ingredients.length === 0) {
+    return (
+      <Card className={`${fullWidth ? "col-span-2" : ""}`}>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg flex justify-between items-center">
+            {title}
+            <span className="text-sm text-muted-foreground">(0)</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-4 text-muted-foreground">
             {emptyMessage}
           </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">Reference</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {ingredients.map((ingredient) => (
-                  <React.Fragment key={ingredient.Reference}>
-                    <TableRow className="hover:bg-muted/50">
-                      <TableHead className="font-medium">{ingredient.Reference}</TableHead>
-                      <TableHead>{ingredient.Description}</TableHead>
-                      <TableHead className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleIngredient(ingredient.Reference)}
-                          className="h-8 w-8 p-0"
-                        >
-                          {expandedIngredient === ingredient.Reference ? (
-                            <ChevronUp className="h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </TableHead>
-                    </TableRow>
-                    {expandedIngredient === ingredient.Reference && (
-                      <TableRow>
-                        <TableHead colSpan={3} className="bg-muted/30 p-4">
-                          <div className="space-y-2 py-2">
-                            <div>
-                              <span className="font-medium">Category:</span>{" "}
-                              {ingredient.Category || "N/A"}
-                            </div>
-                            {ingredient["INCI LIST"] && (
-                              <div>
-                                <span className="font-medium">INCI List:</span>{" "}
-                                {ingredient["INCI LIST"]}
-                              </div>
-                            )}
-                            {ingredient["FRAGRANCE NOTES"] && (
-                              <div>
-                                <span className="font-medium">Fragrance Notes:</span>{" "}
-                                {ingredient["FRAGRANCE NOTES"]}
-                              </div>
-                            )}
-                            {ingredient["Full Description"] && (
-                              <div>
-                                <span className="font-medium">Full Description:</span>{" "}
-                                {ingredient["Full Description"]}
-                              </div>
-                            )}
-                            {ingredient.Benefit && (
-                              <div>
-                                <span className="font-medium">Benefit:</span>{" "}
-                                {ingredient.Benefit}
-                              </div>
-                            )}
-                            {ingredient.Texture && (
-                              <div>
-                                <span className="font-medium">Texture:</span>{" "}
-                                {ingredient.Texture}
-                              </div>
-                            )}
-                          </div>
-                        </TableHead>
-                      </TableRow>
-                    )}
-                  </React.Fragment>
-                ))}
-              </TableBody>
-            </Table>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className={`${fullWidth ? "col-span-2" : ""}`}>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg flex justify-between items-center">
+          {title}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">({ingredients.length})</span>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-8 w-8 p-0" 
+              onClick={toggleExpanded}
+            >
+              {expanded ? 
+                <ChevronUp className="h-4 w-4" /> : 
+                <ChevronDown className="h-4 w-4" />
+              }
+            </Button>
           </div>
-        )}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ScrollArea className={`${expanded ? "h-[400px]" : "h-[200px]"}`}>
+          <div className="space-y-2">
+            {ingredients.map((ingredient) => (
+              <div key={ingredient.Reference} className="border rounded-md p-3 hover:bg-accent/50 transition-colors">
+                <div className="flex justify-between">
+                  <div>
+                    <h4 className="font-medium">{ingredient.Reference}</h4>
+                    <p className="text-sm text-muted-foreground">{ingredient.Description}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                      {ingredient.Category?.includes("face") ? "Face" : ingredient.Category?.includes("body") ? "Body" : "General"}
+                    </span>
+                  </div>
+                </div>
+                
+                {ingredient["INCI LIST"] && (
+                  <div className="mt-2 text-xs">
+                    <p className="font-medium text-muted-foreground">INCI:</p>
+                    <p className="line-clamp-2">{ingredient["INCI LIST"]}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

@@ -13,7 +13,7 @@ export const SimulatorHeader: React.FC<SimulatorHeaderProps> = ({
   onProductTypeChange
 }) => {
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
       <div className="flex items-center gap-3">
         <FlaskConical className="h-7 w-7 text-primary" />
         <div>
