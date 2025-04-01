@@ -6,7 +6,15 @@ import { Separator } from "@/components/ui/separator";
 import { EmmaIngredient } from "@/types/emmaIngredients";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FlaskConical, List, Leaf, Sparkles, Droplets, ArrowRight } from "lucide-react";
+import { FlaskConical, List, Leaf, Sparkles, Droplets, ArrowRight, CreditCard } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
+
+// Base prices in EUR
+const PRICES = {
+  texture: 5.86,
+  active: 5.56,
+  fragrance: 3.38
+};
 
 interface FormulaDisplayProps {
   selectedTexture: EmmaIngredient | null;
@@ -19,6 +27,8 @@ export const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
   selectedActives, 
   selectedFragrance 
 }) => {
+  const { formatPrice, convertPrice } = useCurrency();
+  
   const textureStyles = {
     badge: 'bg-green-100 text-green-800',
     icon: <Leaf className="h-3 w-3 text-green-600" />
@@ -33,6 +43,27 @@ export const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
     badge: 'bg-purple-100 text-purple-800',
     icon: <Droplets className="h-3 w-3 text-purple-600" />
   };
+
+  // Calculate the total price based on selected capsules
+  const calculateTotalPrice = () => {
+    let total = 0;
+    
+    if (selectedTexture) {
+      total += PRICES.texture;
+    }
+    
+    if (selectedActives.length > 0) {
+      total += PRICES.active * selectedActives.length;
+    }
+    
+    if (selectedFragrance) {
+      total += PRICES.fragrance;
+    }
+    
+    return total;
+  };
+
+  const totalPrice = calculateTotalPrice();
 
   if (!selectedTexture) {
     return (
@@ -83,27 +114,43 @@ export const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
       </CardHeader>
       <CardContent className="p-0">
         <div className="p-5 bg-gradient-to-br from-slate-50 to-white">
-          <div className="flex flex-wrap gap-2 mb-4">
-            {selectedTexture && (
-              <Badge variant="outline" className={`${textureStyles.badge} flex items-center gap-1`}>
-                {textureStyles.icon}
-                <span>{selectedTexture.Reference}</span>
-              </Badge>
-            )}
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex flex-wrap gap-2">
+              {selectedTexture && (
+                <Badge variant="outline" className={`${textureStyles.badge} flex items-center gap-1`}>
+                  {textureStyles.icon}
+                  <span>{selectedTexture.Reference}</span>
+                </Badge>
+              )}
+              
+              {selectedActives.map(active => (
+                <Badge key={active.Reference} variant="outline" className={`${activeStyles.badge} flex items-center gap-1`}>
+                  <Sparkles className="h-3 w-3 text-blue-600" />
+                  <span>{active.Reference}</span>
+                </Badge>
+              ))}
+              
+              {selectedFragrance && (
+                <Badge variant="outline" className={`${fragranceStyles.badge} flex items-center gap-1`}>
+                  <Droplets className="h-3 w-3 text-purple-600" />
+                  <span>{selectedFragrance.Reference}</span>
+                </Badge>
+              )}
+            </div>
             
-            {selectedActives.map(active => (
-              <Badge key={active.Reference} variant="outline" className={`${activeStyles.badge} flex items-center gap-1`}>
-                <Sparkles className="h-3 w-3 text-blue-600" />
-                <span>{active.Reference}</span>
-              </Badge>
-            ))}
-            
-            {selectedFragrance && (
-              <Badge variant="outline" className={`${fragranceStyles.badge} flex items-center gap-1`}>
-                <Droplets className="h-3 w-3 text-purple-600" />
-                <span>{selectedFragrance.Reference}</span>
-              </Badge>
-            )}
+            <div className="bg-white border rounded-lg px-4 py-2 shadow-sm">
+              <div className="flex items-center gap-2">
+                <CreditCard className="h-4 w-4 text-primary" />
+                <span className="text-lg font-bold text-primary" data-price-element="true">
+                  {formatPrice(convertPrice(totalPrice))}
+                </span>
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                <span>{selectedTexture ? 1 : 0} Texture</span>
+                <span> • {selectedActives.length} Active</span>
+                <span> • {selectedFragrance ? 1 : 0} Fragrance</span>
+              </div>
+            </div>
           </div>
 
           <Accordion type="single" collapsible className="w-full">
@@ -166,10 +213,17 @@ export const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
           </div>
         </div>
       </CardContent>
-      <CardFooter className="bg-slate-50 border-t px-5 py-3">
+      <CardFooter className="bg-slate-50 border-t px-5 py-3 flex justify-between items-center">
         <p className="text-xs text-slate-500">
           <strong>Formula Guide:</strong> One texture capsule is required. You may add up to two active capsules and one fragrance capsule.
         </p>
+        
+        <div className="flex items-center gap-1">
+          <span className="text-xs text-slate-700 font-medium">Total:</span>
+          <span className="text-xs font-bold text-primary" data-price-element="true">
+            {formatPrice(convertPrice(totalPrice))}
+          </span>
+        </div>
       </CardFooter>
     </>
   );

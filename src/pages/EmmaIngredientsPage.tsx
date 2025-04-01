@@ -15,7 +15,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useEmmaIngredients } from "@/hooks/useEmmaIngredients";
 import { EmmaProductSimulator } from "@/components/emma/ingredients/product-simulator/EmmaProductSimulator";
 import { Separator } from "@/components/ui/separator";
-import { TreatmentSetSection } from "@/components/emma/TreatmentSetSection";
 
 const EmmaIngredientsPage = () => {
   const { isAdmin } = useAuth();
@@ -172,8 +171,6 @@ const EmmaIngredientsPage = () => {
               <EmmaIngredientsSplit />
             </div>
           </div>
-          
-          <TreatmentSetSection />
           
           {!isLoading && !error && filteredIngredientsWithoutEquipment.length > 0 && (
             <div className="overflow-hidden">
