@@ -15,6 +15,7 @@ import EmmaPricing from './pages/EmmaPricing';
 import JoinWaitlist from './pages/JoinWaitlist';
 import WaitlistRedirect from './pages/WaitlistRedirect';
 import Auth from './pages/Auth';
+import EmailConfirmation from './pages/EmailConfirmation';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Forecasts from './pages/Forecasts';
@@ -49,6 +50,7 @@ const App = () => {
                   <Route path="/join-waitlist" element={<JoinWaitlist />} />
                   <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/email-confirmation" element={<EmailConfirmation />} />
                   
                   {/* Protected routes - require authentication */}
                   <Route element={<ProtectedRoute />}>

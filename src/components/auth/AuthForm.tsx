@@ -8,6 +8,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { AuthFormValues, authSchema } from "@/utils/auth/validation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -36,6 +37,7 @@ export const AuthForm = ({
 }: AuthFormProps) => {
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
   const [lastAttemptTime, setLastAttemptTime] = useState<number | null>(null);
   
@@ -118,6 +120,9 @@ export const AuthForm = ({
       if (isSignUp) {
         console.log("Attempting signup with:", values.email);
         await signUp(values.email, values.password, values.firstName || "", values.lastName || "");
+        
+        // Redirect to email confirmation page after successful signup
+        navigate('/email-confirmation');
       } else {
         console.log("Attempting signin with:", values.email);
         await signIn(values.email, values.password);
