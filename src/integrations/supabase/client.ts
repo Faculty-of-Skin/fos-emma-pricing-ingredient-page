@@ -9,6 +9,11 @@ const supabaseKey = getPublicApiKey();
 // Detect if we're in production or development
 const isProduction = window.location.hostname !== 'localhost';
 
+// The redirect URL for authentication
+const redirectUrl = isProduction 
+  ? `${window.location.origin}/auth` 
+  : 'http://localhost:8080/auth';
+
 // Create a custom Supabase client with appropriate configuration
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
@@ -17,8 +22,13 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
     storage: localStorage,
     flowType: 'implicit',
-    redirectTo: isProduction 
-      ? `${window.location.origin}/auth` 
-      : 'http://localhost:8080/auth',
+  },
+  global: {
+    headers: {
+      'X-Supabase-Auth-Redirect': redirectUrl
+    }
   }
 });
+
+// Log the configuration for debugging purposes
+console.log('Supabase client initialized with redirect URL:', redirectUrl);
