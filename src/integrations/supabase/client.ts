@@ -32,7 +32,6 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: true,
     storage: localStorage,
     flowType: 'pkce', // Using PKCE flow instead of implicit for better security
-    redirectTo: redirectUrl,
   },
   global: {
     headers: {
