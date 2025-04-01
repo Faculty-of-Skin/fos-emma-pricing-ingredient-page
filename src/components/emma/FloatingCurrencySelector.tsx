@@ -6,8 +6,8 @@ import { CurrencySelector } from './CurrencySelector';
 export const FloatingCurrencySelector = () => {
   return (
     <FloatingContainer position="top-right" showOnlyWithPricing={true}>
-      <div className="flex items-center gap-2">
-        <span className="text-brutal-charcoal font-mono uppercase text-sm">Currency:</span>
+      <div className="flex items-center gap-3">
+        <span className="text-brutal-black font-mono uppercase text-sm font-bold">Currency:</span>
         <CurrencySelector />
       </div>
     </FloatingContainer>

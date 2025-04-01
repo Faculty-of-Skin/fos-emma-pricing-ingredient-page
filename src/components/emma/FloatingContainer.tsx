@@ -36,7 +36,7 @@ export const FloatingContainer = ({
 
   return (
     <div className={`fixed z-50 ${positionClasses[position]} ${className} transition-opacity duration-300`}>
-      <div className="bg-brutal-white shadow-brutal border-2 border-brutal-black rounded-lg p-2">
+      <div className="bg-brutal-white shadow-brutal px-4 py-3 border-2 border-brutal-black rounded-none">
         {children}
       </div>
     </div>
