@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const authSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -40,14 +41,19 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   
   // Check for hash parameters that might indicate a redirect from Supabase auth
   useEffect(() => {
     const hash = window.location.hash;
+    console.log("Current URL hash:", hash);
+    
+    // Check for access token in URL (Supabase auth callback)
     if (hash && (hash.includes('access_token') || hash.includes('error'))) {
-      // Let Supabase handle processing the hash
-      // It will update the auth state via onAuthStateChange
+      console.log("Auth callback detected in URL");
+      
+      // If there's an error, display it
       if (hash.includes('error')) {
         const errorParam = new URLSearchParams(hash.substring(1)).get('error_description');
         if (errorParam) {
@@ -59,7 +65,17 @@ const Auth = () => {
         }
       }
     }
-  }, [toast]);
+    
+    // Check for manual redirect with search params
+    const searchParams = new URLSearchParams(location.search);
+    const authEvent = searchParams.get('event');
+    if (authEvent === 'signup-success') {
+      toast({
+        title: "Sign Up Successful",
+        description: "Please check your email for verification instructions.",
+      });
+    }
+  }, [location, toast]);
 
   const form = useForm<AuthFormValues>({
     resolver: zodResolver(authSchema),
@@ -74,9 +90,14 @@ const Auth = () => {
   const onSubmit = async (values: AuthFormValues) => {
     setIsLoading(true);
     try {
+      console.log("Submitting auth form:", isSignUp ? "signup" : "signin");
+      
       if (isSignUp) {
-        await signUp(values.email, values.password, values.firstName || "", values.lastName || "");
+        console.log("Attempting signup with:", values.email);
+        const result = await signUp(values.email, values.password, values.firstName || "", values.lastName || "");
+        console.log("Signup result:", result);
       } else {
+        console.log("Attempting signin with:", values.email);
         await signIn(values.email, values.password);
       }
     } catch (error) {
@@ -88,6 +109,7 @@ const Auth = () => {
 
   // Redirect to dashboard if user is already logged in
   if (user) {
+    console.log("User is logged in, redirecting to dashboard");
     return <Navigate to="/dashboard" replace />;
   }
 
