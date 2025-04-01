@@ -133,17 +133,22 @@ export const EmmaIngredientsSplit: React.FC = () => {
     <>
       <div className="mb-4 flex items-center justify-between">
         <div className="relative max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-brutal-black" />
           <Input
             type="search"
-            placeholder="Search ingredients..."
-            className="pl-8 w-[300px]"
+            placeholder="SEARCH INGREDIENTS..."
+            className="pl-8 w-[300px] border-4 border-brutal-black bg-brutal-white font-mono uppercase text-brutal-black placeholder:text-brutal-black/50"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
-          <RefreshCw className="h-4 w-4" /> Refresh
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={refetch} 
+          className="gap-2 border-4 border-brutal-black bg-brutal-white text-brutal-black hover:bg-brutal-black hover:text-brutal-white font-mono uppercase tracking-wider transform transition-transform hover:translate-x-1 hover:translate-y-1"
+        >
+          <RefreshCw className="h-4 w-4" /> REFRESH
         </Button>
       </div>
 

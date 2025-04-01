@@ -155,13 +155,13 @@ export const ProductIngredients = () => {
                         <div className="flex flex-col space-y-4">
                           <div className="border-2 border-brutal-black p-3 bg-brutal-white">
                             <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1">Ingredients:</h4>
-                            <p className="text-sm whitespace-pre-wrap">
+                            <p className="text-sm whitespace-pre-wrap font-mono">
                               {ingredient.ingredients}
                             </p>
                           </div>
                           <div className="border-2 border-brutal-black p-3 bg-brutal-white">
                             <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1">Properties:</h4>
-                            <p className="text-sm whitespace-pre-wrap">
+                            <p className="text-sm whitespace-pre-wrap font-mono">
                               {ingredient.properties}
                             </p>
                           </div>

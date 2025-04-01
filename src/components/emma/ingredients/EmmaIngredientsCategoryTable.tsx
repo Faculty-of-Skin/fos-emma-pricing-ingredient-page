@@ -1,7 +1,7 @@
 
-import React, { useState } from "react";
-import { EmmaIngredient } from "@/hooks/useEmmaIngredients";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmmaIngredient } from "@/hooks/useEmmaIngredients";
 import {
   Table,
   TableBody,
@@ -10,20 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { 
-  InfoIcon, 
-  ChevronDown, 
-  ChevronUp, 
-  FileText, 
-  List,
-  Sparkles,
-  ExternalLink
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface EmmaIngredientsCategoryTableProps {
   title: string;
@@ -36,184 +31,87 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
   title,
   ingredients,
   emptyMessage,
-  fullWidth = false
+  fullWidth = false,
 }) => {
-  const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string>("face");
-
-  const toggleIngredient = (reference: string) => {
-    if (expandedIngredient === reference) {
-      setExpandedIngredient(null);
-    } else {
-      setExpandedIngredient(reference);
-    }
-  };
-
-  // Filter products based on Category column values for face/body capsules
-  const filteredIngredients = ingredients.filter(ingredient => {
-    const category = ingredient.Category?.toLowerCase() || "";
-    
-    if (categoryFilter === "face") {
-      return category.includes("face capsule") || 
-             (category.includes("capsule") && !category.includes("body capsule")) ||
-             (!category.includes("capsule") && !category.includes("body"));
-    } else if (categoryFilter === "body") {
-      return category.includes("body capsule") || 
-             (category.includes("body") && !category.includes("face"));
-    }
-    
-    return true;
-  });
-
-  // Determine color theme based on title
-  const getThemeColor = () => {
-    if (title.includes("Texture")) return "green";
-    if (title.includes("Active")) return "blue";
-    if (title.includes("Fragrance")) return "purple";
-    return "primary";
-  };
-  
-  const themeColor = getThemeColor();
-  const bgColorClass = `bg-${themeColor}-50`;
-  const textColorClass = `text-${themeColor}-600`;
-  const borderColorClass = `border-${themeColor}-100`;
-
   return (
-    <Card className={`${fullWidth ? 'col-span-full' : ''} overflow-hidden border-slate-200`}>
-      <CardHeader className={`pb-3 ${themeColor === 'green' ? 'bg-green-50' : themeColor === 'blue' ? 'bg-blue-50' : themeColor === 'purple' ? 'bg-purple-50' : ''}`}>
-        <div className="flex items-center justify-between">
-          <CardTitle className={`text-lg font-semibold flex items-center gap-2 ${themeColor === 'green' ? 'text-green-700' : themeColor === 'blue' ? 'text-blue-700' : themeColor === 'purple' ? 'text-purple-700' : ''}`}>
-            <Sparkles className="h-4 w-4" />
-            {title}
-          </CardTitle>
-          <Badge variant="outline" className={`${themeColor === 'green' ? 'bg-green-100 text-green-800' : themeColor === 'blue' ? 'bg-blue-100 text-blue-800' : themeColor === 'purple' ? 'bg-purple-100 text-purple-800' : ''}`}>
-            {filteredIngredients.length}
-          </Badge>
-        </div>
+    <Card className={cn(
+      "border-4 border-brutal-black bg-brutal-white transform transition-transform hover:translate-x-1 hover:translate-y-1",
+      fullWidth && "col-span-1 md:col-span-2"
+    )}>
+      <CardHeader className="border-b-4 border-brutal-black px-4 py-3">
+        <CardTitle className="text-lg font-mono uppercase tracking-wider text-brutal-black">{title}</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="p-4 border-b bg-slate-50">
-          <Tabs defaultValue="face" onValueChange={setCategoryFilter} className="w-full">
-            <TabsList className="grid w-full max-w-xs grid-cols-2">
-              <TabsTrigger value="face" className="text-sm">Face Capsules</TabsTrigger>
-              <TabsTrigger value="body" className="text-sm">Body Capsules</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-        
-        {filteredIngredients.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">{emptyMessage}</div>
+        {ingredients.length > 0 ? (
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent border-b-4 border-brutal-black bg-brutal-charcoal">
+                <TableHead className="w-[100px] font-mono uppercase text-brutal-white">Ref</TableHead>
+                <TableHead className="font-mono uppercase text-brutal-white">Name</TableHead>
+                <TableHead className="w-[100px] text-right font-mono uppercase text-brutal-white"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {ingredients.map((ingredient) => (
+                <IngredientRow key={ingredient.Reference} ingredient={ingredient} />
+              ))}
+            </TableBody>
+          </Table>
         ) : (
-          <ScrollArea className={`${fullWidth ? 'h-[400px]' : 'h-[350px]'}`}>
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="w-1/4 font-medium">Reference</TableHead>
-                  <TableHead className="w-2/3 font-medium">Description</TableHead>
-                  <TableHead className="w-1/12 text-right"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredIngredients.map((ingredient) => (
-                  <React.Fragment key={ingredient.Reference}>
-                    <TableRow className="group cursor-pointer" onClick={() => toggleIngredient(ingredient.Reference)}>
-                      <TableCell className="font-medium">
-                        {ingredient.Reference}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span>{ingredient.Description}</span>
-                          {ingredient["INCI LIST"] && (
-                            <span className="text-xs text-muted-foreground mt-1 line-clamp-1 opacity-70">
-                              {ingredient["INCI LIST"]}
-                            </span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          {expandedIngredient === ingredient.Reference ? (
-                            <ChevronUp className="h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                    {expandedIngredient === ingredient.Reference && (
-                      <TableRow>
-                        <TableCell colSpan={3} className={`bg-slate-50 p-6 border-t border-b ${borderColorClass}`}>
-                          <div className="space-y-4">
-                            <div className="flex items-center">
-                              <Badge className={`${themeColor === 'green' ? 'bg-green-100 text-green-800' : themeColor === 'blue' ? 'bg-blue-100 text-blue-800' : themeColor === 'purple' ? 'bg-purple-100 text-purple-800' : ''} mr-2`}>
-                                {ingredient.Reference}
-                              </Badge>
-                              <h3 className="text-sm font-medium">{ingredient.Description}</h3>
-                            </div>
-                            
-                            <Separator />
-                            
-                            {ingredient["INCI LIST"] && (
-                              <div className="bg-white p-4 rounded-md border">
-                                <div className="flex items-center gap-2 mb-2 text-primary">
-                                  <List className="h-4 w-4" />
-                                  <h4 className="font-medium">INCI List</h4>
-                                </div>
-                                <p className="text-sm whitespace-pre-wrap">{ingredient["INCI LIST"]}</p>
-                              </div>
-                            )}
-                            
-                            {ingredient["Ingredient Breakdown"] && (
-                              <div className="bg-white p-4 rounded-md border">
-                                <div className="flex items-center gap-2 mb-2 text-primary">
-                                  <FileText className="h-4 w-4" />
-                                  <h4 className="font-medium">Ingredient Breakdown</h4>
-                                </div>
-                                <p className="text-sm whitespace-pre-wrap">{ingredient["Ingredient Breakdown"]}</p>
-                              </div>
-                            )}
-
-                            {ingredient["FRAGRANCE NOTES"] && (
-                              <div className="bg-white p-4 rounded-md border">
-                                <div className="flex items-center gap-2 mb-2 text-primary">
-                                  <InfoIcon className="h-4 w-4" />
-                                  <h4 className="font-medium">Fragrance Notes</h4>
-                                </div>
-                                <p className="text-sm whitespace-pre-wrap">{ingredient["FRAGRANCE NOTES"]}</p>
-                              </div>
-                            )}
-
-                            {ingredient.Benefit && (
-                              <div className="bg-white p-4 rounded-md border">
-                                <div className="flex items-center gap-2 mb-2 text-primary">
-                                  <Sparkles className="h-4 w-4" />
-                                  <h4 className="font-medium">Benefits</h4>
-                                </div>
-                                <p className="text-sm whitespace-pre-wrap">{ingredient.Benefit}</p>
-                              </div>
-                            )}
-                            
-                            <div className="flex justify-end mt-4">
-                              <Button variant="outline" size="sm" className="gap-1 text-xs">
-                                <ExternalLink className="h-3 w-3" />
-                                View Details
-                              </Button>
-                            </div>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </React.Fragment>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+          <div className="text-center py-8 text-brutal-charcoal font-mono uppercase">
+            {emptyMessage}
+          </div>
         )}
       </CardContent>
     </Card>
+  );
+};
+
+const IngredientRow: React.FC<{ ingredient: EmmaIngredient }> = ({ ingredient }) => {
+  return (
+    <React.Fragment>
+      <TableRow className="hover:bg-brutal-white/80 border-b-2 border-brutal-black">
+        <TableCell className="font-mono font-medium text-brutal-black">{ingredient.Reference}</TableCell>
+        <TableCell className="font-mono text-brutal-black">{ingredient.Description}</TableCell>
+        <TableCell className="p-0">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value={ingredient.Reference} className="border-0">
+              <AccordionTrigger className="py-3 px-4 hover:no-underline hover:bg-brutal-charcoal hover:text-brutal-white">
+                <span className="sr-only">Toggle Details</span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-brutal-black transition-transform duration-200" />
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="px-4 py-3 space-y-3 bg-brutal-white border-t-2 border-brutal-black">
+                  {ingredient["INCI LIST"] && (
+                    <div>
+                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">INCI List:</h4>
+                      <p className="text-sm font-mono text-brutal-charcoal whitespace-pre-wrap">
+                        {ingredient["INCI LIST"]}
+                      </p>
+                    </div>
+                  )}
+                  {ingredient.Properties && (
+                    <div>
+                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">Properties:</h4>
+                      <p className="text-sm font-mono text-brutal-charcoal whitespace-pre-wrap">
+                        {ingredient.Properties}
+                      </p>
+                    </div>
+                  )}
+                  {ingredient.Category && (
+                    <div>
+                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">Category:</h4>
+                      <p className="text-sm font-mono text-brutal-charcoal">
+                        {ingredient.Category}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
   );
 };

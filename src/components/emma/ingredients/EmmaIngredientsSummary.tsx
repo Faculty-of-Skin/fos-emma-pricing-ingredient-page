@@ -14,23 +14,23 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
   switch (connectionStatus) {
     case 'success':
       return (
-        <div className="flex items-center text-green-600">
+        <div className="flex items-center text-green-600 font-mono">
           <CheckCircle className="h-5 w-5 mr-2" />
-          <span>Connected to database</span>
+          <span>CONNECTED TO DATABASE</span>
         </div>
       );
     case 'failed':
       return (
-        <div className="flex items-center text-red-600">
+        <div className="flex items-center text-red-600 font-mono">
           <XCircle className="h-5 w-5 mr-2" />
-          <span>Connection failed</span>
+          <span>CONNECTION FAILED</span>
         </div>
       );
     default:
       return (
-        <div className="flex items-center text-muted-foreground">
+        <div className="flex items-center text-brutal-charcoal font-mono">
           <Database className="h-5 w-5 mr-2" />
-          <span>Checking connection...</span>
+          <span>CHECKING CONNECTION...</span>
         </div>
       );
   }
@@ -52,15 +52,20 @@ export const EmmaIngredientsSummary: React.FC<EmmaIngredientsSummaryProps> = ({
   isAdmin
 }) => {
   return (
-    <div className="mb-4 flex items-center justify-between">
-      <p className="text-sm text-muted-foreground">
-        Showing {filteredIngredients.length} of {ingredients.length} ingredients
+    <div className="mb-4 flex items-center justify-between p-3 border-2 border-brutal-black bg-brutal-white">
+      <p className="text-sm text-brutal-black font-mono uppercase">
+        SHOWING {filteredIngredients.length} OF {ingredients.length} INGREDIENTS
       </p>
       {isAdmin && connectionStatus && (
         <div className="flex items-center gap-2">
           <ConnectionStatusIndicator connectionStatus={connectionStatus} />
           {onShowDebugDialog && (
-            <Button variant="outline" size="sm" onClick={onShowDebugDialog}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={onShowDebugDialog}
+              className="border-2 border-brutal-black bg-brutal-white text-brutal-black hover:bg-brutal-black hover:text-brutal-white font-mono transform transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+            >
               <Info className="h-4 w-4" />
             </Button>
           )}
