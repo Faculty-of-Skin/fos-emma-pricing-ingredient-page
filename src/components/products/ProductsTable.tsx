@@ -78,11 +78,23 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   // Filter categories for the middle row (Face Capsules, Body Capsules)
   const middleRowCategories = sortedCategories.filter(cat => isMiddleRowCategory(cat));
   
+  // Filter categories for the bottom row (Marketing, Accessories)
+  const bottomRowCategories = sortedCategories.filter(cat => isBottomRowCategory(cat));
+  
   // All other categories that don't fit the predefined structure
   const otherCategories = sortedCategories.filter(cat => 
     !isEquipmentCategory(cat) && 
     !isMiddleRowCategory(cat) && 
     !isBottomRowCategory(cat));
+
+  // Debug log to track categories
+  console.log("Categories found:", {
+    sorted: sortedCategories,
+    top: topRowCategories,
+    middle: middleRowCategories,
+    bottom: bottomRowCategories,
+    other: otherCategories
+  });
 
   return (
     <div className="space-y-8">
@@ -112,30 +124,26 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
         ))}
       </div>
 
-      {/* Bottom row - Marketing and Accessories (FORCED ORDER) */}
+      {/* Bottom row - Marketing and Accessories - MANUALLY forced order */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* MARKETING ALWAYS FIRST (LEFT) */}
+        {/* Explicitly check and render Marketing first */}
         {sortedCategories.includes("Marketing") && (
-          <div className="col-span-1">
-            <ProductsCategoryGroup 
-              key="Marketing"
-              category="Marketing"
-              products={groupedProducts["Marketing"]}
-              isUsingFallbackData={isUsingFallbackData}
-            />
-          </div>
+          <ProductsCategoryGroup 
+            key="Marketing"
+            category="Marketing"
+            products={groupedProducts["Marketing"]}
+            isUsingFallbackData={isUsingFallbackData}
+          />
         )}
         
-        {/* ACCESSORIES ALWAYS SECOND (RIGHT) */}
+        {/* Explicitly check and render Accessories second */}
         {sortedCategories.includes("Accessories") && (
-          <div className="col-span-1">
-            <ProductsCategoryGroup 
-              key="Accessories"
-              category="Accessories"
-              products={groupedProducts["Accessories"]}
-              isUsingFallbackData={isUsingFallbackData}
-            />
-          </div>
+          <ProductsCategoryGroup 
+            key="Accessories"
+            category="Accessories"
+            products={groupedProducts["Accessories"]}
+            isUsingFallbackData={isUsingFallbackData}
+          />
         )}
       </div>
 
