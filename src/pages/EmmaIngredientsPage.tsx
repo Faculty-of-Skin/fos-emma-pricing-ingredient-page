@@ -12,9 +12,20 @@ import {
   DialogTrigger 
 } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
+import { useEmmaIngredients } from "@/hooks/useEmmaIngredients";
+import { EmmaProductSimulator } from "@/components/emma/ingredients/EmmaProductSimulator";
 
 const EmmaIngredientsPage = () => {
   const { isAdmin } = useAuth();
+  const { ingredients, isLoading, error } = useEmmaIngredients();
+  
+  // Filter out equipment and accessories
+  const filteredIngredientsWithoutEquipment = !isLoading && !error ? ingredients.filter(
+    (ingredient) => {
+      const category = ingredient.Category?.toLowerCase() || "";
+      return !category.includes("equipment") && !category.includes("accessories") && !category.includes("accessory");
+    }
+  ) : [];
 
   return (
     <DashboardLayout>
@@ -95,6 +106,10 @@ const EmmaIngredientsPage = () => {
         </div>
         
         <EmmaIngredientsSplit />
+        
+        {!isLoading && !error && filteredIngredientsWithoutEquipment.length > 0 && (
+          <EmmaProductSimulator ingredients={filteredIngredientsWithoutEquipment} />
+        )}
       </div>
     </DashboardLayout>
   );
