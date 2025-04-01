@@ -6,9 +6,10 @@ import { Settings, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { CurrencyToggleGroup } from "@/components/emma/CurrencyToggleGroup";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const AccountCard = () => {
-  const { user, profile } = useAuth();
+  const { user, profile, isLoading } = useAuth();
   const navigate = useNavigate();
   
   return (
@@ -22,11 +23,19 @@ export const AccountCard = () => {
         <div className="space-y-4">
           <div>
             <p className="text-sm font-medium text-brutal-gray">Email</p>
-            <p className="text-brutal-black">{user?.email}</p>
+            {isLoading ? (
+              <Skeleton className="h-5 w-full" />
+            ) : (
+              <p className="text-brutal-black">{user?.email}</p>
+            )}
           </div>
           <div>
             <p className="text-sm font-medium text-brutal-gray">Account Type</p>
-            <p className="text-brutal-black capitalize">{profile?.role || "Loading..."}</p>
+            {isLoading ? (
+              <Skeleton className="h-5 w-32" />
+            ) : (
+              <p className="text-brutal-black capitalize">{profile?.role || "customer"}</p>
+            )}
           </div>
           <div>
             <p className="text-sm font-medium text-brutal-gray">Currency</p>

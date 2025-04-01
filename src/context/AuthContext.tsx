@@ -48,11 +48,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Try to create a profile if it doesn't exist
+  const createProfileIfNotExists = async (userId: string) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .insert([{ id: userId, role: 'customer' }]);
+      
+      if (!error) {
+        console.log('Created new profile for user');
+        return { id: userId, role: 'customer' } as Profile;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error creating profile:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
         try {
           setProfileError(null);
+          
+          // First try to get the profile
           const { data, error } = await supabase
             .from('profiles')
             .select('*')
@@ -61,14 +81,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
           if (error) {
             console.error('Error fetching profile:', error);
-            setProfile(null);
+            
+            // If profile doesn't exist, try to create one
+            if (error.code === 'PGRST116') {
+              const newProfile = await createProfileIfNotExists(user.id);
+              if (newProfile) {
+                setProfile(newProfile);
+                return;
+              }
+            }
+            
+            // Set default profile with customer role if can't fetch or create
+            setProfile({ id: user.id, role: 'customer' });
             setProfileError(error);
           } else {
             setProfile(data as Profile);
           }
         } catch (error: any) {
-          console.error('Error fetching profile:', error);
-          setProfile(null);
+          console.error('Error in profile fetch process:', error);
+          // Fallback to default profile with customer role
+          setProfile({ id: user.id, role: 'customer' });
           setProfileError(error);
         }
       } else {
