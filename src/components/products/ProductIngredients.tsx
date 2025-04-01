@@ -46,9 +46,9 @@ export const ProductIngredients = () => {
 
   if (isLoading) {
     return (
-      <Card className="brutal-card mt-8">
+      <Card className="mt-8">
         <CardHeader>
-          <CardTitle className="text-xl">Product Ingredients</CardTitle>
+          <CardTitle>Product Ingredients</CardTitle>
         </CardHeader>
         <CardContent className="flex justify-center py-12">
           <div className="flex flex-col items-center">
@@ -62,9 +62,9 @@ export const ProductIngredients = () => {
 
   if (error) {
     return (
-      <Card className="brutal-card mt-8">
+      <Card className="mt-8">
         <CardHeader>
-          <CardTitle className="text-xl">Product Ingredients</CardTitle>
+          <CardTitle>Product Ingredients</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center py-6">
@@ -86,9 +86,9 @@ export const ProductIngredients = () => {
 
   if (ingredients.length === 0) {
     return (
-      <Card className="brutal-card mt-8">
+      <Card className="mt-8">
         <CardHeader>
-          <CardTitle className="text-xl">Product Ingredients</CardTitle>
+          <CardTitle>Product Ingredients</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-center text-muted-foreground py-6">
@@ -100,9 +100,9 @@ export const ProductIngredients = () => {
   }
 
   return (
-    <Card className="brutal-card mt-8">
+    <Card className="mt-8">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-xl">Product Ingredients</CardTitle>
+        <CardTitle>Product Ingredients</CardTitle>
         <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
           <RefreshCw className="h-4 w-4" /> Refresh
         </Button>

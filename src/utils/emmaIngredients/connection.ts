@@ -1,6 +1,5 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 /**
  * Checks if the Supabase connection is working
@@ -39,16 +38,13 @@ export const testTableWithSQL = async (): Promise<{ data: any, error: any }> => 
     
     if (error) {
       console.error("SQL test query failed:", error);
-      toast.error("SQL test failed: " + error.message);
     } else {
       console.log("Table accessibility test successful. Found data:", data);
-      toast.success("SQL test successful");
     }
     
     return { data, error };
   } catch (err) {
     console.error("Error testing table with SQL:", err);
-    toast.error("SQL test failed with an unexpected error");
     return { data: null, error: err };
   }
 };

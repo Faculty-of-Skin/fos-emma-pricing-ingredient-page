@@ -1,6 +1,5 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 /**
  * Gets information about the table structure
@@ -46,22 +45,13 @@ export const fetchRowCount = async (): Promise<number | null> => {
     
     if (error) {
       console.error("Row count check failed:", error);
-      toast.error("Failed to count rows: " + error.message);
       return null;
     }
     
     console.log("Table row count:", count);
-    
-    if (count === 0) {
-      toast.warning("The emma_ingredients table exists but contains no data");
-    } else if (count && count > 0) {
-      toast.success(`Found ${count} rows in emma_ingredients table`);
-    }
-    
     return count;
   } catch (err) {
     console.error("Error counting rows:", err);
-    toast.error("Failed to count rows due to an unexpected error");
     return null;
   }
 };

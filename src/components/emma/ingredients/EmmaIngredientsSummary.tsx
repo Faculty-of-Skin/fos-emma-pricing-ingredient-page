@@ -1,6 +1,6 @@
 
 import React from "react";
-import { RefreshCw, Database, CheckCircle, XCircle, Info } from "lucide-react";
+import { Database, CheckCircle, XCircle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmmaIngredient } from "@/hooks/useEmmaIngredients";
 

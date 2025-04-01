@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { EmmaIngredient, ConnectionStatus, EmmaIngredientsQueryDetails } from "@/types/emmaIngredients";
-import { toast } from "sonner";
 import { 
   checkConnection, 
   getTableInfo, 
@@ -37,7 +36,6 @@ export const useEmmaIngredients = () => {
       
       if (!isConnected) {
         setError("Could not connect to database. Please check your Supabase connection.");
-        toast.error("Database connection failed");
         return;
       }
       
@@ -58,12 +56,10 @@ export const useEmmaIngredients = () => {
       
       if (result.error) {
         setError(result.error);
-        toast.error("Failed to load emma ingredients");
       }
     } catch (error: any) {
       console.error("Unexpected error in useEmmaIngredients:", error);
       setError(error.message || "An unexpected error occurred");
-      toast.error("Failed to load emma ingredients");
     } finally {
       setIsLoading(false);
     }

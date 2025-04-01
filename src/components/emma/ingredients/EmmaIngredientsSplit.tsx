@@ -147,7 +147,7 @@ export const EmmaIngredientsSplit: React.FC = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <EmmaIngredientsCategoryTable 
           title="Texture Capsules" 
           ingredients={textureIngredients} 
