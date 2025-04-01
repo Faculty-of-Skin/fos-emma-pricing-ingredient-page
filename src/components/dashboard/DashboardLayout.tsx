@@ -56,8 +56,8 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
             <NavItem icon={<LayoutDashboard size={18} />} href="/dashboard" label="Dashboard" />
             <NavItem icon={<Package size={18} />} href="/products" label="Products" />
-            <NavItem icon={<BarChart3 size={18} />} href="/forecasts" label="Forecasts" />
             <NavItem icon={<Beaker size={18} />} href="/emma-ingredients" label="Ingredients" />
+            <NavItem icon={<BarChart3 size={18} />} href="/forecasts" label="Forecasts" />
             
             {isAdmin && (
               <NavItem icon={<UserCog size={18} />} href="/admin" label="Admin" />
