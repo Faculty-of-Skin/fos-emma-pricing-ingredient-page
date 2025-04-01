@@ -17,33 +17,33 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
   selectedActiveRefs,
   onActiveChange
 }) => {
-  const activeStyles = {
-    border: 'border-blue-100',
-    header: 'bg-gradient-to-r from-blue-50 to-blue-100',
-    icon: <Sparkles className="h-5 w-5 text-blue-600" />
-  };
-
   return (
-    <Card className={`border-l-4 ${activeStyles.border} hover:shadow-md transition-shadow`}>
-      <CardHeader className={`${activeStyles.header} pb-3`}>
+    <Card className="border-l-4 border-blue-400 hover:shadow-md transition-shadow rounded-xl overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 pb-3">
         <div className="flex items-center gap-2">
-          {activeStyles.icon}
+          <div className="bg-blue-100 p-1.5 rounded-full shadow-sm">
+            <Sparkles className="h-5 w-5 text-blue-600" />
+          </div>
           <div>
-            <h3 className="text-sm font-semibold">Active Capsules</h3>
-            <p className="text-xs text-muted-foreground">Optional: Select up to 2</p>
+            <h3 className="text-sm font-semibold text-slate-800">Active Capsules</h3>
+            <p className="text-xs text-slate-500">Optional: Select up to 2</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="pt-4">
         {activeIngredients.length > 0 ? (
-          <ScrollArea className="h-[200px] pr-1 rounded-md border border-blue-100 bg-blue-50/20">
+          <ScrollArea className="h-[200px] pr-1 rounded-md border border-blue-200 bg-blue-50/20">
             <div className="space-y-2 p-2">
               {activeIngredients.map(ingredient => (
                 <Button
                   key={ingredient.Reference}
                   variant={selectedActiveRefs.includes(ingredient.Reference) ? "default" : "outline"}
                   size="sm"
-                  className={`w-full justify-start text-left ${selectedActiveRefs.includes(ingredient.Reference) ? 'bg-blue-600 hover:bg-blue-700' : 'border-dashed bg-white'}`}
+                  className={`w-full justify-start text-left ${
+                    selectedActiveRefs.includes(ingredient.Reference) 
+                      ? 'bg-blue-600 hover:bg-blue-700 shadow-sm' 
+                      : 'border-dashed bg-white hover:border-blue-300 hover:bg-blue-50'
+                  } rounded-lg transition-all`}
                   onClick={() => onActiveChange(ingredient.Reference)}
                 >
                   <div className="w-full overflow-hidden">
@@ -61,13 +61,13 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
             </div>
           </ScrollArea>
         ) : (
-          <div className="text-center py-4 text-muted-foreground">
+          <div className="text-center py-4 text-slate-500 bg-blue-50/20 rounded-md border border-blue-100">
             <p>No active capsules available</p>
           </div>
         )}
         
         {selectedActiveRefs.length > 0 && (
-          <div className="mt-4 p-3 bg-blue-50/50 rounded-md border border-blue-100">
+          <div className="mt-4 p-3 bg-blue-50 rounded-md border border-blue-100 shadow-sm">
             <p className="text-sm font-medium text-slate-800">{selectedActiveRefs.length} active capsule(s) selected</p>
             <p className="text-xs text-slate-500 mt-1">{selectedActiveRefs.join(', ')}</p>
           </div>
