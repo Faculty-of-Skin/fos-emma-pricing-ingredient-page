@@ -50,7 +50,12 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
       >
         <div className="h-full flex flex-col">
           <div className="p-4 border-b border-brutal-gray/20">
-            <h1 className="text-xl font-bold">Emma Dashboard</h1>
+            <h1 
+              className="text-xl font-bold cursor-pointer hover:text-primary transition-colors" 
+              onClick={() => navigate("/dashboard")}
+            >
+              Emma Dashboard
+            </h1>
           </div>
 
           <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
