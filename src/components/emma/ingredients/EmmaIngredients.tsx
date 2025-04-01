@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Table,
@@ -45,7 +44,17 @@ import { useCurrency } from "@/context/CurrencyContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export const EmmaIngredients = () => {
-  const { ingredients, isLoading, error, refetch, connectionStatus, rawData } = useEmmaIngredients();
+  const { 
+    ingredients, 
+    isLoading, 
+    error, 
+    refetch, 
+    connectionStatus, 
+    rawData,
+    queryDetails,
+    tableInfo,
+    testSQL
+  } = useEmmaIngredients();
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -129,9 +138,14 @@ export const EmmaIngredients = () => {
       <Card className="brutal-card mt-8">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl">Emma Ingredients</CardTitle>
-          <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
-            <RefreshCw className="h-4 w-4" /> Retry
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
+              <RefreshCw className="h-4 w-4" /> Retry
+            </Button>
+            <Button variant="outline" size="sm" onClick={testSQL} className="gap-2">
+              <Database className="h-4 w-4" /> Test SQL
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Alert variant="destructive" className="mb-4">
@@ -158,6 +172,9 @@ export const EmmaIngredients = () => {
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
               <RefreshCw className="h-4 w-4" /> Refresh
+            </Button>
+            <Button variant="outline" size="sm" onClick={testSQL} className="gap-2">
+              <Database className="h-4 w-4" /> Test SQL
             </Button>
             <Button variant="outline" size="sm" onClick={() => setShowDebugDialog(true)}>
               <Info className="h-4 w-4" /> Debug
@@ -186,6 +203,8 @@ export const EmmaIngredients = () => {
                 <li>There may be permission issues accessing the table</li>
                 <li>The connection to Supabase may be misconfigured</li>
                 <li>Column names in the database don't match expected names</li>
+                <li>Check Row Level Security policies on the table</li>
+                <li>The schema of the table might not match your code</li>
               </ul>
             </div>
             <Button onClick={refetch} className="gap-2 mt-6">
@@ -387,6 +406,30 @@ export const EmmaIngredients = () => {
             </div>
             
             <div>
+              <h3 className="font-semibold text-md">Connection Details:</h3>
+              <div className="p-2 bg-muted rounded-md">
+                <p>Supabase URL: {queryDetails.url}</p>
+                <p>API Key (first/last 4 chars): {queryDetails.key.substring(0, 4)}...{queryDetails.key.substring(queryDetails.key.length - 4)}</p>
+                <p>Table Name: {queryDetails.tableName}</p>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-md">Table Information:</h3>
+              <div className="p-2 bg-muted rounded-md">
+                <p>Column Names: {tableInfo?.columnInfo ? tableInfo.columnInfo.join(', ') : 'Not available'}</p>
+                {tableInfo?.introspectionData && (
+                  <div className="mt-2">
+                    <p>Table Details:</p>
+                    <pre className="text-xs whitespace-pre-wrap">
+                      {JSON.stringify(tableInfo.introspectionData, null, 2)}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div>
               <h3 className="font-semibold text-md">Raw Data from Database:</h3>
               <div className="p-2 bg-muted rounded-md max-h-60 overflow-auto">
                 <pre className="text-xs whitespace-pre-wrap">
@@ -415,9 +458,23 @@ export const EmmaIngredients = () => {
                     <li>Ensure your Supabase connection details are correct</li>
                     <li>Check that Row Level Security policies allow access to this table</li>
                     <li>Try inserting a test row directly in the Supabase dashboard</li>
+                    <li>Ensure public access is enabled for this table (RLS policies)</li>
+                    <li>Check if column casing matches (uppercase vs lowercase)</li>
                   </ul>
                 </AlertDescription>
               </Alert>
+            </div>
+            
+            <div className="flex justify-end gap-2">
+              <Button variant="secondary" onClick={() => setShowDebugDialog(false)}>
+                Close
+              </Button>
+              <Button onClick={testSQL}>
+                Run SQL Test
+              </Button>
+              <Button onClick={refetch}>
+                Retry Connection
+              </Button>
             </div>
           </div>
         </DialogContent>

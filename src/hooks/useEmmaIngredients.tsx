@@ -26,6 +26,16 @@ export const useEmmaIngredients = () => {
   const [error, setError] = useState<string | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'success' | 'failed'>('unknown');
   const [rawData, setRawData] = useState<any[] | null>(null);
+  const [queryDetails, setQueryDetails] = useState<{
+    url: string;
+    key: string;
+    tableName: string;
+  }>({
+    url: supabase.supabaseUrl,
+    key: supabase.supabaseKey,
+    tableName: 'emma_ingredients'
+  });
+  const [tableInfo, setTableInfo] = useState<any>(null);
 
   const checkConnection = async () => {
     try {
@@ -50,6 +60,42 @@ export const useEmmaIngredients = () => {
     }
   };
 
+  const getTableInfo = async () => {
+    try {
+      // Get information about the table structure
+      const { data, error } = await supabase
+        .from('emma_ingredients')
+        .select('*')
+        .limit(0);
+      
+      if (error) {
+        console.error("Failed to get table information:", error);
+        return;
+      }
+      
+      // Use the returned query to get column information
+      const columnInfo = Object.keys(data?.length ? data[0] : {});
+      console.log("Column information for emma_ingredients:", columnInfo);
+      
+      // Try introspection query to get more details about the table
+      const { data: introspectionData, error: introspectionError } = await supabase
+        .rpc('get_columns_for_table', { table_name: 'emma_ingredients' })
+        .catch(() => ({ data: null, error: { message: 'Function not available' } }));
+      
+      console.log("Table introspection results:", introspectionData || "Not available");
+      if (introspectionError) {
+        console.log("Introspection error:", introspectionError);
+      }
+      
+      setTableInfo({
+        columnInfo,
+        introspectionData: introspectionData || null
+      });
+    } catch (err) {
+      console.error("Error getting table information:", err);
+    }
+  };
+
   const fetchIngredients = async () => {
     try {
       setIsLoading(true);
@@ -63,6 +109,9 @@ export const useEmmaIngredients = () => {
         toast.error("Database connection failed");
         return;
       }
+      
+      // Try to get table structure info
+      await getTableInfo();
       
       console.log("Fetching all rows from emma_ingredients table...");
       
@@ -84,6 +133,39 @@ export const useEmmaIngredients = () => {
       if (!data || data.length === 0) {
         console.log("No data returned from emma_ingredients table");
         setIngredients([]);
+        return;
+      }
+      
+      // Check if the first item has lowercase column names instead of the expected format
+      const firstItem = data[0];
+      const hasLowercaseColumns = 
+        firstItem.reference !== undefined && 
+        firstItem.Reference === undefined;
+      
+      if (hasLowercaseColumns) {
+        console.log("Warning: Table has lowercase column names instead of expected capitalized format");
+        console.log("Converting column names to expected format");
+        
+        // Convert lowercase column names to the expected format
+        const convertedData = data.map(item => ({
+          Reference: item.reference || "",
+          Description: item.description || "",
+          Category: item.category || "",
+          "INCI LIST": item.inci_list || "",
+          "FRAGRANCE NOTES": item.fragrance_notes || "",
+          "Ingredient Breakdown": item.ingredient_breakdown || "",
+          Benefit: item.benefit || "",
+          Texture: item.texture || "",
+          "Beauty institute": item.beauty_institute || null,
+          "Order quantity": item.order_quantity || "",
+          "Full Description": item.full_description || "",
+          Importer: item.importer || null,
+          Distributor: item.distributor || null,
+          "Final consumer": item.final_consumer || ""
+        }));
+        
+        console.log("Converted data:", convertedData);
+        setIngredients(convertedData);
         return;
       }
       
@@ -116,8 +198,42 @@ export const useEmmaIngredients = () => {
     }
   };
 
+  // Add a function to directly test the table via SQL
+  const testTableWithSQL = async () => {
+    try {
+      console.log("Testing table access with direct SQL query...");
+      const { data, error } = await supabase.rpc('test_emma_ingredients_table')
+        .catch(() => {
+          console.log("RPC function not available, trying direct query");
+          return { data: null, error: { message: 'Function not available' } };
+        });
+      
+      if (error && error.message !== 'Function not available') {
+        console.error("SQL test failed:", error);
+      } else if (data) {
+        console.log("SQL test result:", data);
+      } else {
+        console.log("Trying direct SQL query instead of RPC");
+        // Fall back to a direct query
+        const { data: rawData, error: rawError } = await supabase
+          .from('emma_ingredients')
+          .select('count(*)');
+        
+        if (rawError) {
+          console.error("Direct SQL count query failed:", rawError);
+        } else {
+          console.log("Table row count:", rawData);
+        }
+      }
+    } catch (err) {
+      console.error("Error testing table with SQL:", err);
+    }
+  };
+
   useEffect(() => {
     fetchIngredients();
+    // Also try direct SQL test
+    testTableWithSQL();
   }, []);
 
   return {
@@ -126,6 +242,9 @@ export const useEmmaIngredients = () => {
     error,
     refetch: fetchIngredients,
     connectionStatus,
-    rawData
+    rawData,
+    queryDetails,
+    tableInfo,
+    testSQL: testTableWithSQL
   };
 };
