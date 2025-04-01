@@ -7,7 +7,7 @@ const supabaseUrl = getSupabaseUrl();
 const supabaseKey = getPublicApiKey();
 
 // Detect if we're in production or development
-const isProduction = window.location.hostname !== 'localhost';
+const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('lovableproject.com');
 
 // The redirect URL for authentication - using correct port for local development
 const currentUrl = window.location.origin;

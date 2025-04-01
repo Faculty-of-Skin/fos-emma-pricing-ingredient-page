@@ -15,6 +15,9 @@ import { Navigation } from "@/components/Navigation";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { AuthRedirectHandler } from "@/components/auth/AuthRedirectHandler";
 import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -23,6 +26,7 @@ const Auth = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
   
   // Check for hash in URL - this indicates an auth redirect
   const hasAuthRedirect = location.hash && location.hash.includes('access_token');
@@ -74,9 +78,12 @@ const Auth = () => {
             
             <CardContent>
               {authError && (
-                <div className="mb-4 p-3 bg-red-100 text-red-800 rounded">
-                  {authError}
-                </div>
+                <Alert variant="destructive" className="mb-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    {authError}
+                  </AlertDescription>
+                </Alert>
               )}
               
               <AuthForm 
