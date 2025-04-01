@@ -92,9 +92,6 @@ export const ProductsCategoryGroup = ({
     setShowAll(prev => !prev);
   };
   
-  // Default fixed height for capsule categories to ensure scrolling
-  const fixedHeight = isCapsuleCategory && !showAll ? (maxHeight || "max-h-[300px]") : "";
-  
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
       <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
@@ -109,9 +106,15 @@ export const ProductsCategoryGroup = ({
       
       {isCapsuleCategory ? (
         <div className="flex flex-col">
-          {/* We're using ScrollArea with a fixed height to enable scrolling within the component */}
-          <div className={`${fixedHeight} overflow-visible transition-all duration-300`}>
-            <ScrollArea className="w-full" style={{ height: showAll ? 'auto' : '300px' }}>
+          {/* Using a container with relative positioning for the ScrollArea */}
+          <div className="relative">
+            <ScrollArea 
+              className="w-full border rounded-md" 
+              style={{ 
+                height: showAll ? `${Math.min(filteredProducts.length * 53 + 40, 600)}px` : '300px',
+                transition: 'height 0.3s ease-in-out'
+              }}
+            >
               <Table className="w-full">
                 <ProductsTableHeader />
                 <TableBody>

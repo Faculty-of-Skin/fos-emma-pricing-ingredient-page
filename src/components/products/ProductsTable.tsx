@@ -100,57 +100,62 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   return (
     <div className="space-y-8">
       {/* Top row - Equipment (full width) */}
-      <div className="w-full">
-        {topRowCategories.map(category => (
-          <ProductsCategoryGroup 
-            key={category}
-            category={category}
-            products={groupedProducts[category]}
-            isUsingFallbackData={isUsingFallbackData}
-            className="w-full"
-          />
-        ))}
-      </div>
+      {topRowCategories.length > 0 && (
+        <div className="w-full">
+          {topRowCategories.map(category => (
+            <ProductsCategoryGroup 
+              key={category}
+              category={category}
+              products={groupedProducts[category]}
+              isUsingFallbackData={isUsingFallbackData}
+              className="w-full"
+            />
+          ))}
+        </div>
+      )}
 
       {/* Middle row - Face Capsules and Body Capsules (two columns) with scrolling */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {middleRowCategories.map(category => (
-          <ProductsCategoryGroup 
-            key={category}
-            category={category}
-            products={groupedProducts[category]}
-            isUsingFallbackData={isUsingFallbackData}
-            maxHeight="max-h-[300px]"
-          />
-        ))}
-      </div>
+      {middleRowCategories.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {middleRowCategories.map(category => (
+            <ProductsCategoryGroup 
+              key={category}
+              category={category}
+              products={groupedProducts[category]}
+              isUsingFallbackData={isUsingFallbackData}
+            />
+          ))}
+        </div>
+      )}
 
-      {/* Bottom row - Marketing item and Accessories with forced placement */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Marketing item (always on the left) */}
-        {sortedCategories.includes("Marketing item") && (
-          <div className="col-span-1">
-            <ProductsCategoryGroup 
-              key="Marketing item"
-              category="Marketing item"
-              products={groupedProducts["Marketing item"]}
-              isUsingFallbackData={isUsingFallbackData}
-            />
-          </div>
-        )}
-        
-        {/* Accessories (always on the right) */}
-        {sortedCategories.includes("Accessories") && (
-          <div className="col-span-1">
-            <ProductsCategoryGroup 
-              key="Accessories"
-              category="Accessories"
-              products={groupedProducts["Accessories"]}
-              isUsingFallbackData={isUsingFallbackData}
-            />
-          </div>
-        )}
-      </div>
+      {/* Bottom row - Marketing item and Accessories */}
+      {bottomRowCategories.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Marketing item (always on the left if present) */}
+          {sortedCategories.includes("Marketing item") && (
+            <div className="col-span-1">
+              <ProductsCategoryGroup 
+                key="Marketing item"
+                category="Marketing item"
+                products={groupedProducts["Marketing item"]}
+                isUsingFallbackData={isUsingFallbackData}
+              />
+            </div>
+          )}
+          
+          {/* Accessories (always on the right if present) */}
+          {sortedCategories.includes("Accessories") && (
+            <div className="col-span-1">
+              <ProductsCategoryGroup 
+                key="Accessories"
+                category="Accessories"
+                products={groupedProducts["Accessories"]}
+                isUsingFallbackData={isUsingFallbackData}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Any other categories */}
       {otherCategories.length > 0 && (
