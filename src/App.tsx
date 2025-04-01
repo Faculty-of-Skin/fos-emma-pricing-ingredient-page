@@ -1,7 +1,7 @@
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
 import { CurrencyProvider } from "./context/CurrencyContext";
 import { NotificationProvider } from "./context/NotificationContext";
@@ -20,6 +20,7 @@ import Forecasts from './pages/Forecasts';
 import AdminPanel from './pages/AdminPanel';
 import AccountSettings from './pages/AccountSettings';
 import EmmaIngredientsPage from './pages/EmmaIngredientsPage';
+import NotFound from './pages/NotFound';
 
 const App = () => {
   // Create a client inside the component to ensure proper React context
@@ -62,8 +63,8 @@ const App = () => {
                     </Route>
                   </Route>
                   
-                  {/* Fallback route - redirect to home */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
+                  {/* 404 Page */}
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
             </NotificationProvider>

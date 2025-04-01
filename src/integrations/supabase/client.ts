@@ -10,9 +10,10 @@ const supabaseKey = getPublicApiKey();
 const isProduction = window.location.hostname !== 'localhost';
 
 // The redirect URL for authentication - using correct port for local development
-const redirectUrl = isProduction 
-  ? `${window.location.origin}/auth` 
-  : 'http://localhost:8080/auth';
+const currentUrl = window.location.origin;
+const redirectUrl = `${currentUrl}/auth`;
+
+console.log('Configuring Supabase with redirect URL:', redirectUrl);
 
 // Create a custom Supabase client with appropriate configuration
 export const supabase = createClient(supabaseUrl, supabaseKey, {

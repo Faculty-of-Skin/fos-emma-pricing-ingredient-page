@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AuthRedirectHandlerProps {
   setAuthError: (error: string | null) => void;
@@ -58,6 +59,21 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
           });
         }
       }
+      
+      // Process the hash with Supabase auth
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        console.log("Session after redirect:", session?.user?.email);
+        if (session) {
+          // We have a session, we can redirect or update UI
+          toast({
+            title: "Authentication Successful",
+            description: "You are now signed in.",
+          });
+        }
+      }).catch(error => {
+        console.error("Error processing auth redirect:", error);
+        setAuthError(error.message);
+      });
       
       // Clear the hash from the URL to prevent issues on refresh
       if (window.history.replaceState) {
