@@ -24,47 +24,8 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
       if (hash && (hash.includes('access_token') || hash.includes('error'))) {
         console.log("Auth callback detected in URL");
         
-        // Parse the hash to extract parameters
-        const hashParams = new URLSearchParams(hash.substring(1));
-        
-        // Check for the auth type
-        const authType = hashParams.get('type');
-        console.log("Auth type:", authType);
-        
-        // Handle different auth events
-        if (authType === 'signup') {
-          toast({
-            title: "Sign Up Successful",
-            description: "Your account has been created and you are now signed in.",
-          });
-        } else if (authType === 'recovery') {
-          toast({
-            title: "Password Reset Successful",
-            description: "Your password has been reset and you are now signed in.",
-          });
-        } else if (authType === 'magiclink') {
-          toast({
-            title: "Sign In Successful",
-            description: "You have been signed in via magic link.",
-          });
-        }
-        
-        // If there's an error, display it
-        if (hash.includes('error')) {
-          const errorParam = hashParams.get('error_description');
-          if (errorParam) {
-            const decodedError = decodeURIComponent(errorParam);
-            setAuthError(decodedError);
-            toast({
-              title: "Authentication Error",
-              description: decodedError,
-              variant: "destructive",
-            });
-          }
-        }
-        
         try {
-          // Process the hash with Supabase auth
+          // Process the hash with Supabase auth - this should set up the session
           const { data, error } = await supabase.auth.getSession();
           
           if (error) {
@@ -77,25 +38,47 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
             });
           } else if (data.session) {
             console.log("Session after redirect:", data.session.user?.email);
-            // We have a session, redirect to dashboard
-            toast({
-              title: "Authentication Successful",
-              description: "You are now signed in.",
-            });
+            
+            // Extract the authentication type from the hash
+            const hashParams = new URLSearchParams(hash.substring(1));
+            const authType = hashParams.get('type');
+            
+            // Show appropriate toast message based on auth type
+            if (authType === 'signup') {
+              toast({
+                title: "Email Verified",
+                description: "Your account has been verified and you are now signed in.",
+              });
+            } else if (authType === 'recovery') {
+              toast({
+                title: "Password Reset Successful",
+                description: "Your password has been reset and you are now signed in.",
+              });
+            } else if (authType === 'magiclink') {
+              toast({
+                title: "Sign In Successful",
+                description: "You have been signed in via magic link.",
+              });
+            } else {
+              toast({
+                title: "Authentication Successful",
+                description: "You are now signed in.",
+              });
+            }
             
             // Redirect to dashboard after successful authentication
             setTimeout(() => {
               navigate('/dashboard');
             }, 500);
           }
+          
+          // Clear the hash from the URL to prevent issues on refresh
+          if (window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
         } catch (error: any) {
           console.error("Error processing auth redirect:", error);
           setAuthError(error.message);
-        }
-        
-        // Clear the hash from the URL to prevent issues on refresh
-        if (window.history.replaceState) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
       }
       

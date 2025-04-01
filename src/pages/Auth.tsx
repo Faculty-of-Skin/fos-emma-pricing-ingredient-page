@@ -23,6 +23,7 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +31,15 @@ const Auth = () => {
   
   // Check for hash in URL - this indicates an auth redirect
   const hasAuthRedirect = location.hash && location.hash.includes('access_token');
+  
+  // Effect to detect hash changes for auth redirects
+  useEffect(() => {
+    if (hasAuthRedirect) {
+      console.log("Auth redirect detected, setting redirecting state");
+      setIsRedirecting(true);
+      setIsLoading(true);
+    }
+  }, [hasAuthRedirect]);
   
   // Handle form submission
   const handleFormSubmit = () => {
@@ -51,7 +61,7 @@ const Auth = () => {
 
   // Redirect to dashboard if user is already logged in
   // Only redirect if there's no auth redirect in progress
-  if (user && !hasAuthRedirect) {
+  if (user && !isRedirecting) {
     console.log("User is logged in, redirecting to dashboard");
     return <Navigate to="/dashboard" replace />;
   }
@@ -60,61 +70,79 @@ const Auth = () => {
     <div className="min-h-screen bg-brutal-white">
       <Navigation />
       
-      <AuthRedirectHandler setAuthError={setAuthError} />
+      <AuthRedirectHandler 
+        setAuthError={setAuthError} 
+      />
       
       <div className="container mx-auto px-4 pt-24">
         <div className="max-w-md mx-auto py-16">
-          <Card className="brutal-card">
-            <CardHeader>
-              <CardTitle className="text-2xl md:text-3xl font-mono uppercase font-semibold text-brutal-black text-center">
-                {isSignUp ? "Create Account" : "Sign In"}
-              </CardTitle>
-              <CardDescription className="text-center">
-                {isSignUp 
-                  ? "Create a new account to access all features" 
-                  : "Sign in to your account to continue"}
-              </CardDescription>
-            </CardHeader>
-            
-            <CardContent>
-              {authError && (
-                <Alert variant="destructive" className="mb-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    {authError}
-                  </AlertDescription>
-                </Alert>
-              )}
+          {isRedirecting ? (
+            <Card className="brutal-card">
+              <CardHeader>
+                <CardTitle className="text-2xl md:text-3xl font-mono uppercase font-semibold text-brutal-black text-center">
+                  Processing Authentication
+                </CardTitle>
+                <CardDescription className="text-center">
+                  Please wait while we verify your credentials...
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-center py-8">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brutal-black"></div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="brutal-card">
+              <CardHeader>
+                <CardTitle className="text-2xl md:text-3xl font-mono uppercase font-semibold text-brutal-black text-center">
+                  {isSignUp ? "Create Account" : "Sign In"}
+                </CardTitle>
+                <CardDescription className="text-center">
+                  {isSignUp 
+                    ? "Create a new account to access all features" 
+                    : "Sign in to your account to continue"}
+                </CardDescription>
+              </CardHeader>
               
-              <AuthForm 
-                isSignUp={isSignUp}
-                isLoading={isLoading}
-                authError={authError}
-                canSubmit={true}
-                onSubmitSuccess={handleFormSubmit}
-                onToggleMode={() => {
-                  setIsSignUp(!isSignUp);
-                  setAuthError(null);
-                }}
-              />
-            </CardContent>
-            
-            <CardFooter className="flex justify-center">
-              <Button 
-                variant="link" 
-                onClick={() => {
-                  setIsSignUp(!isSignUp);
-                  setAuthError(null);
-                }} 
-                className="text-brutal-gray"
-                disabled={isLoading}
-              >
-                {isSignUp 
-                  ? "Already have an account? Sign In" 
-                  : "Don't have an account? Sign Up"}
-              </Button>
-            </CardFooter>
-          </Card>
+              <CardContent>
+                {authError && (
+                  <Alert variant="destructive" className="mb-4">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      {authError}
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
+                <AuthForm 
+                  isSignUp={isSignUp}
+                  isLoading={isLoading}
+                  authError={authError}
+                  canSubmit={true}
+                  onSubmitSuccess={handleFormSubmit}
+                  onToggleMode={() => {
+                    setIsSignUp(!isSignUp);
+                    setAuthError(null);
+                  }}
+                />
+              </CardContent>
+              
+              <CardFooter className="flex justify-center">
+                <Button 
+                  variant="link" 
+                  onClick={() => {
+                    setIsSignUp(!isSignUp);
+                    setAuthError(null);
+                  }} 
+                  className="text-brutal-gray"
+                  disabled={isLoading}
+                >
+                  {isSignUp 
+                    ? "Already have an account? Sign In" 
+                    : "Don't have an account? Sign Up"}
+                </Button>
+              </CardFooter>
+            </Card>
+          )}
         </div>
       </div>
       
