@@ -50,7 +50,7 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
                     {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4" />}
                     <span className="font-medium">{ingredient.Reference}</span>
                     <span className="text-muted-foreground">•</span>
-                    <span className="truncate">{ingredient.Description}</span>
+                    <span>{ingredient.Description}</span>
                   </div>
                 </Button>
               ))}
