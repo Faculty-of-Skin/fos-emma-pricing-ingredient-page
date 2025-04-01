@@ -165,20 +165,7 @@ const ExpandedIngredientDetails: React.FC<ExpandedIngredientDetailsProps> = ({ i
           </AccordionItem>
         )}
         
-        {/* Final Consumer */}
-        {ingredient["Final consumer"] && (
-          <AccordionItem value="final-consumer">
-            <AccordionTrigger className="text-base font-medium">
-              <div className="flex items-center gap-2">
-                <Info className="h-4 w-4" />
-                Final Consumer
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <p className="text-sm whitespace-pre-wrap">{ingredient["Final consumer"]}</p>
-            </AccordionContent>
-          </AccordionItem>
-        )}
+        {/* Removed Final Consumer section */}
       </Accordion>
     </div>
   );
