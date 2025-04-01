@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
 import { useEmmaIngredients } from "@/hooks/useEmmaIngredients";
-import { EmmaProductSimulator } from "@/components/emma/ingredients/EmmaProductSimulator";
+import { EmmaProductSimulator } from "@/components/emma/ingredients/product-simulator/EmmaProductSimulator";
 import { Separator } from "@/components/ui/separator";
 
 const EmmaIngredientsPage = () => {
