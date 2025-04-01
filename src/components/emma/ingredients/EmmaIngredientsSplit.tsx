@@ -9,8 +9,7 @@ import { EmmaIngredientsLoading } from "./EmmaIngredientsLoading";
 import { EmmaIngredientsCategoryTable } from "./EmmaIngredientsCategoryTable";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Search, Leaf, Sparkles, Droplets } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RefreshCw, Search } from "lucide-react";
 
 export const EmmaIngredientsSplit: React.FC = () => {
   const { 
@@ -30,7 +29,6 @@ export const EmmaIngredientsSplit: React.FC = () => {
   const { isAdmin } = useAuth();
   const [showDebugDialog, setShowDebugDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
   
   // Filter ingredients based on search query
   const filteredIngredients = ingredients.filter(ingredient => {
@@ -133,90 +131,42 @@ export const EmmaIngredientsSplit: React.FC = () => {
 
   return (
     <>
-      <div className="mb-4 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-        <div className="relative w-full md:w-auto">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="relative max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search ingredients..."
-            className="pl-8 w-full md:w-[300px]"
+            className="pl-8 w-[300px]"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={refetch} 
-          className="gap-2"
-        >
+        <Button variant="outline" size="sm" onClick={refetch} className="gap-2">
           <RefreshCw className="h-4 w-4" /> Refresh
         </Button>
       </div>
 
-      <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-4 mb-4">
-          <TabsTrigger value="all" className="flex items-center gap-1">
-            All
-          </TabsTrigger>
-          <TabsTrigger value="texture" className="flex items-center gap-1">
-            <Leaf className="h-4 w-4" /> Texture ({textureIngredients.length})
-          </TabsTrigger>
-          <TabsTrigger value="active" className="flex items-center gap-1">
-            <Sparkles className="h-4 w-4" /> Active ({activeIngredients.length})
-          </TabsTrigger>
-          <TabsTrigger value="fragrance" className="flex items-center gap-1">
-            <Droplets className="h-4 w-4" /> Fragrance ({perfumeIngredients.length})
-          </TabsTrigger>
-        </TabsList>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <EmmaIngredientsCategoryTable 
+          title="Texture Capsules" 
+          ingredients={textureIngredients} 
+          emptyMessage="No texture capsules found"
+        />
         
-        <TabsContent value="all" className="space-y-4">
-          <EmmaIngredientsCategoryTable 
-            title="Texture Capsules" 
-            ingredients={textureIngredients} 
-            emptyMessage="No texture capsules found"
-          />
-          
-          <EmmaIngredientsCategoryTable 
-            title="Active Capsules" 
-            ingredients={activeIngredients} 
-            emptyMessage="No active capsules found"
-          />
-          
-          <EmmaIngredientsCategoryTable 
-            title="Fragrance Capsules" 
-            ingredients={perfumeIngredients} 
-            emptyMessage="No fragrance capsules found"
-          />
-        </TabsContent>
-        
-        <TabsContent value="texture">
-          <EmmaIngredientsCategoryTable 
-            title="Texture Capsules" 
-            ingredients={textureIngredients} 
-            emptyMessage="No texture capsules found"
-            fullWidth
-          />
-        </TabsContent>
-        
-        <TabsContent value="active">
-          <EmmaIngredientsCategoryTable 
-            title="Active Capsules" 
-            ingredients={activeIngredients} 
-            emptyMessage="No active capsules found"
-            fullWidth
-          />
-        </TabsContent>
-        
-        <TabsContent value="fragrance">
-          <EmmaIngredientsCategoryTable 
-            title="Fragrance Capsules" 
-            ingredients={perfumeIngredients} 
-            emptyMessage="No fragrance capsules found"
-            fullWidth
-          />
-        </TabsContent>
-      </Tabs>
+        <EmmaIngredientsCategoryTable 
+          title="Active Capsules" 
+          ingredients={activeIngredients} 
+          emptyMessage="No active capsules found"
+        />
+      </div>
+      
+      <EmmaIngredientsCategoryTable 
+        title="Fragrance Capsules" 
+        ingredients={perfumeIngredients} 
+        emptyMessage="No fragrance capsules found"
+        fullWidth
+      />
       
       {isAdmin && (
         <EmmaIngredientsDebugDialog 
