@@ -16,7 +16,7 @@ export const SupportCard = () => {
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => window.location.href = 'mailto:info@facultyofskin.com'}
+            onClick={() => window.location.href = 'mailto:ade@facultyofskin.com'}
           >
             <Mail className="mr-2 h-4 w-4" />
             Email Us
