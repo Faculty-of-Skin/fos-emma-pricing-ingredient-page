@@ -46,17 +46,17 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
     }
   };
 
-  // Improved filter for face/body products based on "Face Capsule"/"Body Capsule" terminology
+  // Filter products based on Category column values for face/body capsules
   const filteredIngredients = ingredients.filter(ingredient => {
-    const desc = ingredient.Description.toLowerCase();
+    const category = ingredient.Category?.toLowerCase() || "";
     
     if (categoryFilter === "face") {
-      return desc.includes("face capsule") || 
-             (desc.includes("capsule") && !desc.includes("body capsule")) ||
-             (!desc.includes("capsule") && !desc.includes("body"));
+      return category.includes("face capsule") || 
+             (category.includes("capsule") && !category.includes("body capsule")) ||
+             (!category.includes("capsule") && !category.includes("body"));
     } else if (categoryFilter === "body") {
-      return desc.includes("body capsule") || 
-             (desc.includes("body") && !desc.includes("face"));
+      return category.includes("body capsule") || 
+             (category.includes("body") && !category.includes("face"));
     }
     
     return true;
