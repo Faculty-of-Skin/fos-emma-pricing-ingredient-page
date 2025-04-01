@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmmaIngredient } from "@/hooks/useEmmaIngredients";
 import {
@@ -17,8 +17,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface EmmaIngredientsCategoryTableProps {
   title: string;
@@ -33,85 +34,90 @@ export const EmmaIngredientsCategoryTable: React.FC<EmmaIngredientsCategoryTable
   emptyMessage,
   fullWidth = false,
 }) => {
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+  const toggleItem = (reference: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [reference]: !prev[reference]
+    }));
+  };
+
   return (
     <Card className={cn(
-      "border-4 border-brutal-black bg-brutal-white transform transition-transform hover:translate-x-1 hover:translate-y-1",
+      "border-2 shadow-sm",
       fullWidth && "col-span-1 md:col-span-2"
     )}>
-      <CardHeader className="border-b-4 border-brutal-black px-4 py-3">
-        <CardTitle className="text-lg font-mono uppercase tracking-wider text-brutal-black">{title}</CardTitle>
+      <CardHeader className="border-b px-4 py-3 bg-slate-50">
+        <CardTitle className="text-lg font-medium flex items-center justify-between">
+          {title}
+          <Badge variant="outline">{ingredients.length}</Badge>
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         {ingredients.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent border-b-4 border-brutal-black bg-brutal-charcoal">
-                <TableHead className="w-[100px] font-mono uppercase text-brutal-white">Ref</TableHead>
-                <TableHead className="font-mono uppercase text-brutal-white">Name</TableHead>
-                <TableHead className="w-[100px] text-right font-mono uppercase text-brutal-white"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {ingredients.map((ingredient) => (
-                <IngredientRow key={ingredient.Reference} ingredient={ingredient} />
-              ))}
-            </TableBody>
-          </Table>
+          <div className="divide-y">
+            {ingredients.map((ingredient) => (
+              <div key={ingredient.Reference} className="hover:bg-slate-50">
+                <div 
+                  className="px-4 py-3 flex items-center justify-between cursor-pointer"
+                  onClick={() => toggleItem(ingredient.Reference)}
+                >
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">{ingredient.Reference}</span>
+                      {ingredient.Category && (
+                        <Badge variant="outline" className="text-xs">{ingredient.Category}</Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground">{ingredient.Description}</p>
+                  </div>
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    {expandedItems[ingredient.Reference] ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+                
+                {expandedItems[ingredient.Reference] && (
+                  <div className="px-4 py-3 bg-slate-50 border-t text-sm space-y-3">
+                    {ingredient["INCI LIST"] && (
+                      <div>
+                        <h4 className="font-medium mb-1 text-xs uppercase">INCI List:</h4>
+                        <p className="text-muted-foreground">
+                          {ingredient["INCI LIST"]}
+                        </p>
+                      </div>
+                    )}
+                    {ingredient["Ingredient Breakdown"] && (
+                      <div>
+                        <h4 className="font-medium mb-1 text-xs uppercase">Ingredient Breakdown:</h4>
+                        <p className="text-muted-foreground">
+                          {ingredient["Ingredient Breakdown"]}
+                        </p>
+                      </div>
+                    )}
+                    {ingredient.Category && (
+                      <div>
+                        <h4 className="font-medium mb-1 text-xs uppercase">Category:</h4>
+                        <p className="text-muted-foreground">
+                          {ingredient.Category}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         ) : (
-          <div className="text-center py-8 text-brutal-charcoal font-mono uppercase">
+          <div className="text-center py-4 text-muted-foreground">
             {emptyMessage}
           </div>
         )}
       </CardContent>
     </Card>
-  );
-};
-
-const IngredientRow: React.FC<{ ingredient: EmmaIngredient }> = ({ ingredient }) => {
-  return (
-    <React.Fragment>
-      <TableRow className="hover:bg-brutal-white/80 border-b-2 border-brutal-black">
-        <TableCell className="font-mono font-medium text-brutal-black">{ingredient.Reference}</TableCell>
-        <TableCell className="font-mono text-brutal-black">{ingredient.Description}</TableCell>
-        <TableCell className="p-0">
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value={ingredient.Reference} className="border-0">
-              <AccordionTrigger className="py-3 px-4 hover:no-underline hover:bg-brutal-charcoal hover:text-brutal-white">
-                <span className="sr-only">Toggle Details</span>
-                <ChevronDown className="h-4 w-4 shrink-0 text-brutal-black transition-transform duration-200" />
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="px-4 py-3 space-y-3 bg-brutal-white border-t-2 border-brutal-black">
-                  {ingredient["INCI LIST"] && (
-                    <div>
-                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">INCI List:</h4>
-                      <p className="text-sm font-mono text-brutal-charcoal whitespace-pre-wrap">
-                        {ingredient["INCI LIST"]}
-                      </p>
-                    </div>
-                  )}
-                  {ingredient["Ingredient Breakdown"] && (
-                    <div>
-                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">Ingredient Breakdown:</h4>
-                      <p className="text-sm font-mono text-brutal-charcoal whitespace-pre-wrap">
-                        {ingredient["Ingredient Breakdown"]}
-                      </p>
-                    </div>
-                  )}
-                  {ingredient.Category && (
-                    <div>
-                      <h4 className="text-sm font-mono uppercase mb-1 border-b border-brutal-black pb-1 text-brutal-black">Category:</h4>
-                      <p className="text-sm font-mono text-brutal-charcoal">
-                        {ingredient.Category}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
   );
 };
