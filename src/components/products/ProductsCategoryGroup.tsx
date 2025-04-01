@@ -69,12 +69,13 @@ export const ProductsCategoryGroup = ({
     });
   }, [products, activeFilter, shouldShowFilters]);
   
-  // Determine if this category should have scrolling
-  const shouldScroll = shouldShowFilters;
+  // Determine if this category should have scrolling - ALWAYS apply to Face/Body capsules
+  const shouldScroll = category === "Face capsule" || category === "Body capsule";
   
-  // Set a fixed height for scrollable areas
-  const scrollHeight = shouldScroll ? "max-h-[400px]" : undefined;
+  // Set a fixed height for scrollable areas - force it to be smaller to ensure scrolling is visible
+  const scrollHeight = shouldScroll ? "max-h-[300px]" : undefined;
   
+  // Content to display inside or outside of scroll area
   const content = (
     <>
       <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
@@ -107,8 +108,8 @@ export const ProductsCategoryGroup = ({
 
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
-      {finalScrollHeight ? (
-        <ScrollArea className={`pr-4 ${finalScrollHeight}`}>
+      {(shouldScroll || finalScrollHeight) ? (
+        <ScrollArea className={`${finalScrollHeight} pr-4`}>
           {content}
         </ScrollArea>
       ) : (
