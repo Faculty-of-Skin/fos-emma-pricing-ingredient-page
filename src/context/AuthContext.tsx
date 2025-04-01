@@ -127,13 +127,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signIn = async (email: string, password: string) => {
     try {
       console.log("Signing in with email:", email);
-      // Use updated signInWithPassword method
+      // Check for rapid successive calls
       const { error } = await supabase.auth.signInWithPassword({ 
         email, 
         password,
       });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Sign in error:", error.message);
+        
+        // Check if it's a rate limiting error
+        if (error.message.includes("security purposes") && error.message.includes("seconds")) {
+          throw new Error(`Rate limit exceeded. ${error.message}`);
+        }
+        
+        throw error;
+      }
+      
       console.log("Sign in successful");
     } catch (error: any) {
       console.error("Sign in error:", error.message);
@@ -146,6 +156,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // Update signUp with rate limiting handling
   const signUp = async (email: string, password: string, firstName = "", lastName = "") => {
     try {
       console.log("Signing up with email:", email);
@@ -160,7 +171,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Sign up error:", error.message);
+        
+        // Check if it's a rate limiting error
+        if (error.message.includes("security purposes") && error.message.includes("seconds")) {
+          throw new Error(`Rate limit exceeded. ${error.message}`);
+        }
+        
+        throw error;
+      }
       
       console.log("Sign up successful, data:", data);
       

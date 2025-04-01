@@ -36,13 +36,48 @@ const authSchema = z.object({
 
 type AuthFormValues = z.infer<typeof authSchema>;
 
+// Debounce function to prevent multiple rapid form submissions
+const useDebounce = (callback: Function, delay: number) => {
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+
+  const debouncedFn = (...args: any[]) => {
+    if (timer) clearTimeout(timer);
+    
+    return new Promise((resolve) => {
+      const newTimer = setTimeout(async () => {
+        try {
+          const result = await callback(...args);
+          resolve(result);
+        } catch (error) {
+          resolve(error);
+        }
+      }, delay);
+      
+      setTimer(newTimer);
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [timer]);
+
+  return debouncedFn;
+};
+
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [formSubmitTime, setFormSubmitTime] = useState<number | null>(null);
   const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  
+  // Track submission time to enforce cooldown
+  const canSubmit = !formSubmitTime || (Date.now() - formSubmitTime > 5000);
   
   // Check for hash parameters that might indicate a redirect from Supabase auth
   useEffect(() => {
@@ -57,9 +92,11 @@ const Auth = () => {
       if (hash.includes('error')) {
         const errorParam = new URLSearchParams(hash.substring(1)).get('error_description');
         if (errorParam) {
+          const decodedError = decodeURIComponent(errorParam);
+          setAuthError(decodedError);
           toast({
             title: "Authentication Error",
-            description: decodeURIComponent(errorParam),
+            description: decodedError,
             variant: "destructive",
           });
         }
@@ -75,6 +112,9 @@ const Auth = () => {
         description: "Please check your email for verification instructions.",
       });
     }
+
+    // Clear any auth errors when component mounts or route changes
+    setAuthError(null);
   }, [location, toast]);
 
   const form = useForm<AuthFormValues>({
@@ -87,21 +127,52 @@ const Auth = () => {
     },
   });
 
+  // Debounced authentication functions to prevent rapid successive calls
+  const debouncedSignIn = useDebounce(signIn, 500);
+  const debouncedSignUp = useDebounce(signUp, 500);
+
   const onSubmit = async (values: AuthFormValues) => {
-    setIsLoading(true);
+    if (!canSubmit) {
+      toast({
+        title: "Please wait",
+        description: "You're submitting too quickly. Please wait a few seconds before trying again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
+      setIsLoading(true);
+      setAuthError(null);
+      setFormSubmitTime(Date.now());
+      
       console.log("Submitting auth form:", isSignUp ? "signup" : "signin");
       
       if (isSignUp) {
         console.log("Attempting signup with:", values.email);
-        const result = await signUp(values.email, values.password, values.firstName || "", values.lastName || "");
+        const result = await debouncedSignUp(values.email, values.password, values.firstName || "", values.lastName || "");
         console.log("Signup result:", result);
       } else {
         console.log("Attempting signin with:", values.email);
-        await signIn(values.email, values.password);
+        await debouncedSignIn(values.email, values.password);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Authentication error:", error);
+      
+      let errorMessage = error.message || "An error occurred during authentication.";
+      
+      // Check for rate limiting errors
+      if (errorMessage.includes("security purposes") && errorMessage.includes("seconds")) {
+        errorMessage = "Too many login attempts. Please wait a moment before trying again.";
+      }
+      
+      setAuthError(errorMessage);
+      
+      toast({
+        title: "Authentication Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -132,6 +203,12 @@ const Auth = () => {
             </CardHeader>
             
             <CardContent>
+              {authError && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">
+                  {authError}
+                </div>
+              )}
+              
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   {isSignUp && (
@@ -147,6 +224,7 @@ const Auth = () => {
                                 placeholder="John" 
                                 className="border-2 border-brutal-black" 
                                 {...field} 
+                                disabled={isLoading}
                               />
                             </FormControl>
                             <FormMessage />
@@ -165,6 +243,7 @@ const Auth = () => {
                                 placeholder="Doe" 
                                 className="border-2 border-brutal-black" 
                                 {...field} 
+                                disabled={isLoading}
                               />
                             </FormControl>
                             <FormMessage />
@@ -184,7 +263,10 @@ const Auth = () => {
                           <Input 
                             placeholder="you@example.com" 
                             className="border-2 border-brutal-black" 
+                            type="email"
+                            autoComplete={isSignUp ? "email" : "username"}
                             {...field} 
+                            disabled={isLoading}
                           />
                         </FormControl>
                         <FormMessage />
@@ -203,7 +285,9 @@ const Auth = () => {
                             type="password" 
                             placeholder="••••••••" 
                             className="border-2 border-brutal-black" 
+                            autoComplete={isSignUp ? "new-password" : "current-password"}
                             {...field} 
+                            disabled={isLoading}
                           />
                         </FormControl>
                         <FormMessage />
@@ -214,7 +298,7 @@ const Auth = () => {
                   <Button 
                     type="submit" 
                     className="brutal-button w-full mt-6" 
-                    disabled={isLoading}
+                    disabled={isLoading || !canSubmit}
                   >
                     {isLoading ? "Processing..." : isSignUp ? "Sign Up" : "Sign In"}
                   </Button>
@@ -225,8 +309,13 @@ const Auth = () => {
             <CardFooter className="flex justify-center">
               <Button 
                 variant="link" 
-                onClick={() => setIsSignUp(!isSignUp)} 
+                onClick={() => {
+                  setIsSignUp(!isSignUp);
+                  setAuthError(null);
+                  form.reset();
+                }} 
                 className="text-brutal-gray"
+                disabled={isLoading}
               >
                 {isSignUp 
                   ? "Already have an account? Sign In" 
