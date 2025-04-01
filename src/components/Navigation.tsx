@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Logo } from "./navigation/Logo";
-import { NavLinks } from "./navigation/NavLinks";
 import { MobileMenu } from "./navigation/MobileMenu";
 import { NavButton } from "./navigation/NavButton";
 import { MobileMenuToggle } from "./navigation/MobileMenuToggle";
@@ -40,6 +39,10 @@ export const Navigation = () => {
     navigate('/dashboard');
   };
 
+  const handleEmmaIngredientsClick = () => {
+    navigate('/emma-ingredients');
+  };
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -63,14 +66,26 @@ export const Navigation = () => {
               <Logo />
             </div>
 
-            {/* Remove the centered nav links */}
+            {/* Center links */}
+            <div className="hidden md:flex items-center justify-center flex-1">
+              <div className="flex space-x-8 font-mono uppercase text-sm">
+                <a href="/" className="text-brutal-black hover:text-brutal-pink transition-colors">
+                  Emma Pricing
+                </a>
+                <a 
+                  href="/emma-ingredients" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleEmmaIngredientsClick();
+                  }}
+                  className="text-brutal-black hover:text-brutal-pink transition-colors"
+                >
+                  Emma Ingredients
+                </a>
+              </div>
+            </div>
 
             <div className="hidden md:flex items-center space-x-4">
-              {/* Emma Pricing link */}
-              <a href="/" className="text-brutal-black hover:text-brutal-pink transition-colors font-mono uppercase text-sm">
-                Emma Pricing
-              </a>
-              
               {user ? (
                 <NavButton onClick={handleDashboardClick}>
                   Dashboard
@@ -101,6 +116,7 @@ export const Navigation = () => {
         showDashboard={!!user}
         handleDashboardClick={handleDashboardClick}
         handleLoginClick={handleLoginClick}
+        handleEmmaIngredientsClick={handleEmmaIngredientsClick}
         onClose={closeMobileMenu}
       />
     </>

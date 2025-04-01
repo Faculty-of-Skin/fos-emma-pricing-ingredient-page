@@ -8,6 +8,7 @@ interface MobileMenuProps {
   handleWaitlistClick: () => void;
   handleLoginClick: () => void;
   handleDashboardClick: () => void;
+  handleEmmaIngredientsClick: () => void;
   showDashboard: boolean;
   onClose: () => void;
 }
@@ -18,6 +19,7 @@ export const MobileMenu = ({
   handleWaitlistClick,
   handleLoginClick,
   handleDashboardClick,
+  handleEmmaIngredientsClick,
   showDashboard,
   onClose
 }: MobileMenuProps) => {
@@ -45,6 +47,17 @@ export const MobileMenu = ({
         >
           Emma Pricing
         </a>
+        
+        {/* Emma Ingredients link */}
+        <button 
+          onClick={() => {
+            handleEmmaIngredientsClick();
+            onClose();
+          }}
+          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors"
+        >
+          Emma Ingredients
+        </button>
         
         <div className="w-full max-w-sm pt-6 flex flex-col gap-4">
           {showDashboard ? (
