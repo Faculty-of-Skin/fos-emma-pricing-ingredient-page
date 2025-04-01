@@ -30,13 +30,16 @@ export const usePricingVisibility = () => {
       // Check if we're at the top of the page (show currency selector regardless)
       setIsTopOfPage(window.scrollY < 100);
       
-      // Check if Equipment section is visible
+      // Check if Equipment section is visible or we've scrolled past it
       const equipmentSection = document.querySelector('[data-section="equipment"]');
       if (equipmentSection) {
         const rect = equipmentSection.getBoundingClientRect();
+        // Only consider the equipment section visible if we've scrolled to it or past it,
+        // and it's not completely off the top of the screen
         const isVisible = 
-          rect.top < window.innerHeight && 
+          window.scrollY >= equipmentSection.getBoundingClientRect().top + window.scrollY - window.innerHeight/2 && 
           rect.bottom >= 0;
+        
         setIsEquipmentVisible(isVisible);
       }
     };

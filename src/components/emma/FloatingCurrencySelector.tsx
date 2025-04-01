@@ -7,6 +7,7 @@ import { usePricingVisibility } from '@/hooks/usePricingVisibility';
 export const FloatingCurrencySelector = () => {
   const { isEquipmentVisible } = usePricingVisibility();
   
+  // Don't render the component at all if equipment section is not visible
   if (!isEquipmentVisible) return null;
   
   return (
