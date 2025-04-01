@@ -5,15 +5,15 @@ export const SchemaMarkup = () => {
       __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "SpaSense",
+        "name": "Faculty of Skin Emma",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
-        "description": "AI-powered assistant for spa business management. Automates bookings, reduces no-shows, and increases retail sales.",
+        "description": "Emma Ingredients - Personalized skincare formulation system for professional estheticians and skin therapists.",
         "offers": {
           "@type": "Offer",
           "price": "0",
           "priceCurrency": "USD",
-          "description": "30-day free trial"
+          "description": "Explore ingredients and custom formulations"
         }
       })
     }} />
