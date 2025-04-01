@@ -92,6 +92,11 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
   const marketing = sortedCategories.find(cat => cat === "Marketing");
   const accessories = sortedCategories.find(cat => cat === "Accessories");
 
+  // Force reordering for the bottom row
+  const bottomRowItems = [];
+  if (marketing) bottomRowItems.push(marketing);
+  if (accessories) bottomRowItems.push(accessories);
+
   return (
     <div className="space-y-8">
       {/* Top row - Equipment (full width) */}
@@ -130,28 +135,32 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
         )}
       </div>
 
-      {/* Bottom row - Marketing and Accessories (two columns) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Marketing on the left */}
-        {marketing && (
-          <ProductsCategoryGroup 
-            key={marketing}
-            category={marketing}
-            products={groupedProducts[marketing]}
-            isUsingFallbackData={isUsingFallbackData}
-          />
-        )}
-        
-        {/* Accessories on the right */}
-        {accessories && (
-          <ProductsCategoryGroup 
-            key={accessories}
-            category={accessories}
-            products={groupedProducts[accessories]}
-            isUsingFallbackData={isUsingFallbackData}
-          />
-        )}
-      </div>
+      {/* Bottom row - Marketing and Accessories (two columns) FORCED ORDER */}
+      {bottomRowItems.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {marketing && (
+            <div className="col-span-1">
+              <ProductsCategoryGroup 
+                key={marketing}
+                category={marketing}
+                products={groupedProducts[marketing]}
+                isUsingFallbackData={isUsingFallbackData}
+              />
+            </div>
+          )}
+          
+          {accessories && (
+            <div className="col-span-1">
+              <ProductsCategoryGroup 
+                key={accessories}
+                category={accessories}
+                products={groupedProducts[accessories]}
+                isUsingFallbackData={isUsingFallbackData}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Any other categories */}
       {otherCategories.length > 0 && (
