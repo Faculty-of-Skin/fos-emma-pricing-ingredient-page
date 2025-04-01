@@ -1,6 +1,6 @@
 
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { EmmaIngredients } from "@/components/emma/ingredients/EmmaIngredients";
+import { EmmaIngredientsSplit } from "@/components/emma/ingredients/EmmaIngredientsSplit";
 import { Button } from "@/components/ui/button";
 import { HelpCircle, List, FileText } from "lucide-react";
 import { 
@@ -94,7 +94,7 @@ const EmmaIngredientsPage = () => {
           </div>
         </div>
         
-        <EmmaIngredients />
+        <EmmaIngredientsSplit />
       </div>
     </DashboardLayout>
   );

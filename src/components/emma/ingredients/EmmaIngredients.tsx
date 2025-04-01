@@ -1,7 +1,7 @@
 
 import React from "react";
-import { EmmaIngredientsContainer } from "./EmmaIngredientsContainer";
+import { EmmaIngredientsSplit } from "./EmmaIngredientsSplit";
 
 export const EmmaIngredients: React.FC = () => {
-  return <EmmaIngredientsContainer />;
+  return <EmmaIngredientsSplit />;
 };
