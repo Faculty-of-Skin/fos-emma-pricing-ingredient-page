@@ -2,7 +2,7 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { EmmaIngredientsSplit } from "@/components/emma/ingredients/EmmaIngredientsSplit";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, List, FileText, Leaf, Sparkles, Droplets } from "lucide-react";
+import { HelpCircle, List, FileText, Leaf, Sparkles, Droplets, Beaker, Flask } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -97,7 +97,7 @@ const EmmaIngredientsPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center transition-all hover:shadow-md">
-              <div className="h-12 w-12 rounded-full bg-green-50 flex items-center justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center mb-4">
                 <Leaf className="h-6 w-6 text-green-600" />
               </div>
               <h3 className="text-lg font-medium mb-2">Texture Capsules</h3>
@@ -107,7 +107,7 @@ const EmmaIngredientsPage = () => {
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center transition-all hover:shadow-md">
-              <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mb-4">
                 <Sparkles className="h-6 w-6 text-blue-600" />
               </div>
               <h3 className="text-lg font-medium mb-2">Active Capsules</h3>
@@ -117,7 +117,7 @@ const EmmaIngredientsPage = () => {
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center transition-all hover:shadow-md">
-              <div className="h-12 w-12 rounded-full bg-purple-50 flex items-center justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center mb-4">
                 <Droplets className="h-6 w-6 text-purple-600" />
               </div>
               <h3 className="text-lg font-medium mb-2">Fragrance Capsules</h3>
@@ -148,9 +148,23 @@ const EmmaIngredientsPage = () => {
           </div>
           
           {!isLoading && !error && filteredIngredientsWithoutEquipment.length > 0 && (
-            <div className="bg-gradient-to-br from-slate-50 to-white p-8 rounded-xl shadow-sm border border-slate-100">
-              <h2 className="text-2xl font-bold mb-6">Product Simulator</h2>
-              <EmmaProductSimulator ingredients={filteredIngredientsWithoutEquipment} />
+            <div className="relative overflow-hidden mb-8 bg-gradient-to-br from-slate-100 to-slate-50 p-1 rounded-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-100/20 via-purple-100/20 to-green-100/20 pointer-events-none"></div>
+              <div className="relative rounded-xl overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-blue-500 to-purple-500"></div>
+                <div className="p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-slate-800 to-slate-600 flex items-center justify-center">
+                      <Flask className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Formula Creator</h2>
+                      <p className="text-slate-500">Mix and match capsules to visualize your custom product</p>
+                    </div>
+                  </div>
+                  <EmmaProductSimulator ingredients={filteredIngredientsWithoutEquipment} />
+                </div>
+              </div>
             </div>
           )}
         </div>
