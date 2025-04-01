@@ -6,9 +6,10 @@ import { supabase, getSiteUrl } from "@/integrations/supabase/client";
 
 interface AuthRedirectHandlerProps {
   setAuthError: (error: string | null) => void;
+  intendedDestination?: string;
 }
 
-export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) => {
+export const AuthRedirectHandler = ({ setAuthError, intendedDestination = '/dashboard' }: AuthRedirectHandlerProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -23,6 +24,7 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
       console.log("Checking for auth redirects, URL:", window.location.href);
       console.log("Search params:", location.search);
       console.log("Auth code in URL:", code || "none");
+      console.log("Intended destination:", intendedDestination);
       
       if (code) {
         console.log("Auth code detected in URL:", code);
@@ -46,9 +48,9 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
               description: "Your account has been verified and you are now signed in.",
             });
             
-            // Redirect to dashboard after successful authentication
+            // Redirect to intended destination after successful authentication
             setTimeout(() => {
-              navigate('/dashboard');
+              navigate(intendedDestination);
             }, 1000);
           }
           
@@ -113,9 +115,9 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
               });
             }
             
-            // Redirect to dashboard after successful authentication
+            // Redirect to intended destination after successful authentication
             setTimeout(() => {
-              navigate('/dashboard');
+              navigate(intendedDestination);
             }, 1000);
           }
           
@@ -148,7 +150,7 @@ export const AuthRedirectHandler = ({ setAuthError }: AuthRedirectHandlerProps) 
     return () => {
       setAuthError(null);
     };
-  }, [location, toast, setAuthError, navigate]);
+  }, [location, toast, setAuthError, navigate, intendedDestination]);
   
   return null;
 };

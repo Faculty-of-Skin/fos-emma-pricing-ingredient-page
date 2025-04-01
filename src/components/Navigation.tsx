@@ -1,17 +1,18 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Logo } from "./navigation/Logo";
 import { MobileMenu } from "./navigation/MobileMenu";
 import { NavButton } from "./navigation/NavButton";
 import { MobileMenuToggle } from "./navigation/MobileMenuToggle";
 import { useScrollEffect } from "@/hooks/useScrollEffect";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth";
 
 export const Navigation = () => {
   const isScrolled = useScrollEffect(10);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
 
   // Prevent scrolling when mobile menu is open
@@ -40,7 +41,12 @@ export const Navigation = () => {
   };
 
   const handleEmmaIngredientsClick = () => {
-    navigate('/emma-ingredients');
+    if (user) {
+      navigate('/emma-ingredients');
+    } else {
+      // Redirect to auth page with intended destination
+      navigate('/auth', { state: { from: '/emma-ingredients' } });
+    }
   };
 
   const scrollToSection = (id: string) => {

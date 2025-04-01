@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/auth";
@@ -29,6 +30,9 @@ const Auth = () => {
   const location = useLocation();
   const { toast } = useToast();
   
+  // Get intended destination from location state
+  const intendedDestination = location.state?.from || '/dashboard';
+  
   // Check for code or hash in URL - this indicates an auth redirect
   const hasAuthRedirect = location.search.includes('code=') || 
                           (location.hash && (
@@ -43,6 +47,7 @@ const Auth = () => {
     console.log("Site URL from config:", getSiteUrl());
     console.log("Has auth redirect:", hasAuthRedirect);
     console.log("User authenticated:", !!user);
+    console.log("Intended destination:", intendedDestination);
     
     if (location.search) {
       console.log("URL search params:", location.search);
@@ -51,7 +56,7 @@ const Auth = () => {
     if (location.hash) {
       console.log("URL hash:", location.hash);
     }
-  }, [location, hasAuthRedirect, user]);
+  }, [location, hasAuthRedirect, user, intendedDestination]);
   
   // Effect to detect hash changes for auth redirects
   useEffect(() => {
@@ -98,8 +103,8 @@ const Auth = () => {
   // Redirect to dashboard if user is already logged in
   // Only redirect if there's no auth redirect in progress
   if (user && !isRedirecting && !isEmailRedirect) {
-    console.log("User is logged in, redirecting to dashboard");
-    return <Navigate to="/dashboard" replace />;
+    console.log("User is logged in, redirecting to:", intendedDestination);
+    return <Navigate to={intendedDestination} replace />;
   }
 
   return (
@@ -108,6 +113,7 @@ const Auth = () => {
       
       <AuthRedirectHandler 
         setAuthError={setAuthError} 
+        intendedDestination={intendedDestination}
       />
       
       <div className="container mx-auto px-4 pt-24">
