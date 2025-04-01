@@ -1,6 +1,5 @@
-
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
@@ -46,13 +45,10 @@ export const AdminRoute = () => {
     );
   }
 
-  // If we have a profile error but user exists, allow access to avoid completely blocking the user
-  // The UI can handle specific permissions internally
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
 
-  // Only redirect if we're certain user is not an admin (no profile error)
   if (!isAdmin && !profileError) {
     return <Navigate to="/dashboard" replace />;
   }

@@ -1,9 +1,10 @@
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/auth";
 
 export const UnlockPricingSection = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const handleLoginClick = () => {
     navigate('/auth');

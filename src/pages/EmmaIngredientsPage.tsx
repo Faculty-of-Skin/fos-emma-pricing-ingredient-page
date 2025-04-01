@@ -1,7 +1,6 @@
-
 import React, { useEffect } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth";
 import { useEmmaIngredients } from "@/hooks/useEmmaIngredients";
 import { EmmaIngredientsHeader } from "@/components/emma/ingredients/page/EmmaIngredientsHeader";
 import { IngredientTypeCards } from "@/components/emma/ingredients/page/IngredientTypeCards";
@@ -12,7 +11,6 @@ const EmmaIngredientsPage = () => {
   const { isAdmin } = useAuth();
   const { ingredients, isLoading, error } = useEmmaIngredients();
   
-  // Update document title when component mounts
   useEffect(() => {
     document.title = "Faculty of Skin - Emma Ingredients";
     return () => {
@@ -21,7 +19,6 @@ const EmmaIngredientsPage = () => {
     };
   }, []);
   
-  // Filter out equipment and accessories
   const filteredIngredientsWithoutEquipment = !isLoading && !error ? ingredients.filter(
     (ingredient) => {
       const category = ingredient.Category?.toLowerCase() || "";

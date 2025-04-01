@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { QuickAccess } from "@/components/dashboard/QuickAccess";
