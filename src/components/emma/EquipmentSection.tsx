@@ -6,7 +6,7 @@ export const EquipmentSection = () => {
   const { formatPrice, convertPrice } = useCurrency();
   
   return (
-    <section className="py-4">
+    <section className="py-4" data-section="equipment">
       <div className="container mx-auto px-4">
         <div className="brutal-card mb-6">
           <div className="text-center mb-4">
