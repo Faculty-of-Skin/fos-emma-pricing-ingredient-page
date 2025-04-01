@@ -26,6 +26,8 @@ interface EmmaIngredientsDebugDialogProps {
   ingredients: EmmaIngredient[];
   refetch: () => void;
   testSQL: () => void;
+  rowCount?: number | null;
+  checkRowCount?: () => Promise<number | null>;
 }
 
 export const EmmaIngredientsDebugDialog: React.FC<EmmaIngredientsDebugDialogProps> = ({
@@ -38,6 +40,8 @@ export const EmmaIngredientsDebugDialog: React.FC<EmmaIngredientsDebugDialogProp
   ingredients,
   refetch,
   testSQL,
+  rowCount,
+  checkRowCount,
 }) => {
   return (
     <Dialog open={showDebugDialog} onOpenChange={setShowDebugDialog}>
@@ -50,6 +54,29 @@ export const EmmaIngredientsDebugDialog: React.FC<EmmaIngredientsDebugDialogProp
             <h3 className="font-semibold text-md">Connection Status:</h3>
             <div className="p-2 bg-muted rounded-md">
               <ConnectionStatusIndicator connectionStatus={connectionStatus} />
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="font-semibold text-md">Table Data Status:</h3>
+            <div className="p-2 bg-muted rounded-md">
+              <p>Row Count: {rowCount !== null ? rowCount : 'Unknown'}</p>
+              {rowCount === 0 && (
+                <p className="text-amber-500 mt-1">Table exists but contains no data</p>
+              )}
+              {rowCount !== null && rowCount > 0 && (
+                <p className="text-green-500 mt-1">Table contains {rowCount} rows of data</p>
+              )}
+              {checkRowCount && (
+                <Button 
+                  onClick={checkRowCount} 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-2"
+                >
+                  Check Row Count
+                </Button>
+              )}
             </div>
           </div>
           

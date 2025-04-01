@@ -36,6 +36,7 @@ export const useEmmaIngredients = () => {
     tableName: 'emma_ingredients'
   });
   const [tableInfo, setTableInfo] = useState<any>(null);
+  const [rowCount, setRowCount] = useState<number | null>(null);
 
   const checkConnection = async () => {
     try {
@@ -86,6 +87,38 @@ export const useEmmaIngredients = () => {
     }
   };
 
+  const fetchRowCount = async () => {
+    try {
+      console.log("Checking if emma_ingredients table has any data...");
+      
+      // Use the count option in Supabase's select method to get a row count
+      const { count, error } = await supabase
+        .from('emma_ingredients')
+        .select('*', { count: 'exact', head: true });
+      
+      if (error) {
+        console.error("Row count check failed:", error);
+        toast.error("Failed to count rows: " + error.message);
+        return null;
+      }
+      
+      console.log("Table row count:", count);
+      setRowCount(count);
+      
+      if (count === 0) {
+        toast.warning("The emma_ingredients table exists but contains no data");
+      } else if (count && count > 0) {
+        toast.success(`Found ${count} rows in emma_ingredients table`);
+      }
+      
+      return count;
+    } catch (err) {
+      console.error("Error counting rows:", err);
+      toast.error("Failed to count rows due to an unexpected error");
+      return null;
+    }
+  };
+
   const fetchIngredients = async () => {
     try {
       setIsLoading(true);
@@ -102,6 +135,16 @@ export const useEmmaIngredients = () => {
       
       // Try to get table structure info
       await getTableInfo();
+      
+      // Check row count before fetching all data
+      const count = await fetchRowCount();
+      
+      if (count === 0) {
+        console.log("No data found in emma_ingredients table");
+        setIngredients([]);
+        setIsLoading(false);
+        return;
+      }
       
       console.log("Fetching all rows from emma_ingredients table...");
       
@@ -198,6 +241,8 @@ export const useEmmaIngredients = () => {
     rawData,
     queryDetails,
     tableInfo,
-    testSQL: testTableWithSQL
+    testSQL: testTableWithSQL,
+    rowCount,
+    checkRowCount: fetchRowCount
   };
 };

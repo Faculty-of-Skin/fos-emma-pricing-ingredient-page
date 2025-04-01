@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Card,
@@ -31,7 +30,9 @@ export const EmmaIngredients: React.FC = () => {
     rawData,
     queryDetails,
     tableInfo,
-    testSQL
+    testSQL,
+    rowCount,
+    checkRowCount
   } = useEmmaIngredients();
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -42,7 +43,8 @@ export const EmmaIngredients: React.FC = () => {
     console.log("EmmaIngredients loaded with data:", ingredients);
     console.log("Connection status:", connectionStatus);
     console.log("Raw data from hook:", rawData);
-  }, [ingredients, connectionStatus, rawData]);
+    console.log("Table row count:", rowCount);
+  }, [ingredients, connectionStatus, rawData, rowCount]);
 
   const toggleIngredient = (reference: string) => {
     if (expandedIngredient === reference) {
@@ -94,6 +96,8 @@ export const EmmaIngredients: React.FC = () => {
           ingredients={ingredients}
           refetch={refetch}
           testSQL={testSQL}
+          rowCount={rowCount}
+          checkRowCount={checkRowCount}
         />
       </>
     );
@@ -118,6 +122,8 @@ export const EmmaIngredients: React.FC = () => {
           ingredients={ingredients}
           refetch={refetch}
           testSQL={testSQL}
+          rowCount={rowCount}
+          checkRowCount={checkRowCount}
         />
       </>
     );
@@ -175,6 +181,8 @@ export const EmmaIngredients: React.FC = () => {
         ingredients={ingredients}
         refetch={refetch}
         testSQL={testSQL}
+        rowCount={rowCount}
+        checkRowCount={checkRowCount}
       />
     </>
   );
