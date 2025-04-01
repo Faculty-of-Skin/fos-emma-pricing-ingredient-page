@@ -149,22 +149,22 @@ export const EmmaIngredientsSplit: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <EmmaIngredientsCategoryTable 
-          title="Texture Ingredients" 
+          title="Texture Capsules" 
           ingredients={textureIngredients} 
-          emptyMessage="No texture ingredients found"
+          emptyMessage="No texture capsules found"
         />
         
         <EmmaIngredientsCategoryTable 
-          title="Active Ingredients" 
+          title="Active Capsules" 
           ingredients={activeIngredients} 
-          emptyMessage="No active ingredients found"
+          emptyMessage="No active capsules found"
         />
       </div>
       
       <EmmaIngredientsCategoryTable 
-        title="Perfume & Fragrance Ingredients" 
+        title="Fragrance Capsules" 
         ingredients={perfumeIngredients} 
-        emptyMessage="No perfume ingredients found"
+        emptyMessage="No fragrance capsules found"
         fullWidth
       />
       
