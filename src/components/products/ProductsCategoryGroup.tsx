@@ -40,9 +40,8 @@ export const ProductsCategoryGroup = ({
   maxHeight
 }: ProductsCategoryGroupProps) => {
   const [activeFilter, setActiveFilter] = useState<FilterOption>("all");
-  const [showAll, setShowAll] = useState(false);
   
-  // Check if this category should have filters and pagination (Face or Body capsules)
+  // Check if this category should have filters (Face or Body capsules)
   const isCapsuleCategory = category === "Face capsule" || category === "Body capsule";
   
   // Determine available filter types based on product descriptions
@@ -71,21 +70,10 @@ export const ProductsCategoryGroup = ({
     });
   }, [products, activeFilter, isCapsuleCategory]);
   
-  // For capsule categories, show exactly 5 products initially, unless showAll is true
-  const displayProducts = useMemo(() => {
-    if (!isCapsuleCategory || showAll) return filteredProducts;
-
-    // Always show exactly 5 products if available
-    return filteredProducts.slice(0, 5);
-  }, [filteredProducts, isCapsuleCategory, showAll]);
+  // For capsule categories, show all products (no pagination) 
+  const displayProducts = filteredProducts;
   
-  // Calculate if we need to show the "Show more" button
-  const hasMoreProducts = isCapsuleCategory && filteredProducts.length > 5;
-  
-  // Always apply a fixed height for Face/Body capsules (smaller height to force scrolling)
-  const scrollHeight = "max-h-[250px]";
-  
-  // Content to display inside or outside of scroll area
+  // Content to display inside
   const content = (
     <>
       <h3 className="text-lg font-semibold mb-4 px-2">{category}</h3>
@@ -110,33 +98,12 @@ export const ProductsCategoryGroup = ({
           ))}
         </TableBody>
       </Table>
-      
-      {hasMoreProducts && (
-        <div className="w-full flex justify-center mt-4 mb-2">
-          <button 
-            onClick={() => setShowAll(!showAll)} 
-            className="flex items-center gap-1 px-3 py-1 text-sm border rounded-full hover:bg-gray-50 transition-colors"
-          >
-            {showAll ? "Show less" : `Show all ${filteredProducts.length} products`}
-            <ChevronDown className={`h-4 w-4 transition-transform ${showAll ? 'rotate-180' : ''}`} />
-          </button>
-        </div>
-      )}
     </>
   );
 
-  // Use the provided maxHeight prop or our default scrollHeight (always use a fixed height for capsules)
-  const finalScrollHeight = maxHeight || scrollHeight;
-
   return (
     <div className={`brutal-card p-4 overflow-hidden ${className}`}>
-      {isCapsuleCategory ? (
-        <ScrollArea className={finalScrollHeight}>
-          {content}
-        </ScrollArea>
-      ) : (
-        content
-      )}
+      {content}
     </div>
   );
 };

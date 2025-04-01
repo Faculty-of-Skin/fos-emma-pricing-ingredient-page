@@ -112,7 +112,7 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
         ))}
       </div>
 
-      {/* Middle row - Face Capsules and Body Capsules (two columns) with forced scrolling */}
+      {/* Middle row - Face Capsules and Body Capsules (two columns) - now showing all products */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {middleRowCategories.map(category => (
           <ProductsCategoryGroup 
@@ -120,8 +120,6 @@ export const ProductsTable = ({ products, isLoading, onRefresh, isUsingFallbackD
             category={category}
             products={groupedProducts[category]}
             isUsingFallbackData={isUsingFallbackData}
-            // Set a consistent height for the scrollable area
-            maxHeight="max-h-[250px]"
           />
         ))}
       </div>
