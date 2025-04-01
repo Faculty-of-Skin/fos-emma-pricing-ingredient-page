@@ -87,6 +87,7 @@ export const ProductsCategoryGroup = ({
   const handleToggleShowAll = (e: React.MouseEvent) => {
     // Prevent default to avoid page navigation/scrolling
     e.preventDefault();
+    e.stopPropagation(); // Stop event propagation
     console.log("Toggling show all from", showAll, "to", !showAll);
     setShowAll(prev => !prev);
   };
@@ -108,19 +109,22 @@ export const ProductsCategoryGroup = ({
       
       {isCapsuleCategory ? (
         <div className="flex flex-col">
-          <div className={`${fixedHeight ? "overflow-auto" : ""} transition-all duration-300`}>
-            <Table className="w-full">
-              <ProductsTableHeader />
-              <TableBody>
-                {displayProducts.map((product) => (
-                  <ProductsTableRow 
-                    key={product.id} 
-                    product={product} 
-                    isUsingFallbackData={isUsingFallbackData} 
-                  />
-                ))}
-              </TableBody>
-            </Table>
+          {/* We're using ScrollArea with a fixed height to enable scrolling within the component */}
+          <div className={`${fixedHeight} overflow-visible transition-all duration-300`}>
+            <ScrollArea className="w-full" style={{ height: showAll ? 'auto' : '300px' }}>
+              <Table className="w-full">
+                <ProductsTableHeader />
+                <TableBody>
+                  {displayProducts.map((product) => (
+                    <ProductsTableRow 
+                      key={product.id} 
+                      product={product} 
+                      isUsingFallbackData={isUsingFallbackData} 
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
           </div>
           
           {hasMoreProducts && (
