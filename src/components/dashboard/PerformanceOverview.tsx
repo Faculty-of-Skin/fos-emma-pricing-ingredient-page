@@ -46,14 +46,14 @@ export const PerformanceOverview = () => {
             />
             <StatCard 
               title="Est. Revenue" 
-              value={formatPrice(data?.estimatedRevenue || 0)} 
-              trend={`+${data?.revenueGrowth || 0}% from last month`} 
+              value="Coming Soon" 
+              trend="Feature in development" 
               icon={<TrendingUp className="h-4 w-4 text-brutal-charcoal" />}
             />
             <StatCard 
               title="Potential Clients" 
-              value={data?.potentialClients?.toString() || "0"} 
-              trend={`${data?.newLeads || 0} new leads`} 
+              value="Coming Soon" 
+              trend="Feature in development" 
               icon={<TrendingUp className="h-4 w-4 text-brutal-charcoal" />}
             />
           </div>

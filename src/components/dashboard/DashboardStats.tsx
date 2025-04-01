@@ -25,14 +25,14 @@ export const DashboardStats = () => {
       />
       <StatCard 
         title="Revenue" 
-        value={formatPrice(data?.estimatedRevenue || 0)} 
-        trend={`+${data?.revenueGrowth || 0}% from last month`} 
+        value="Coming Soon" 
+        trend="Feature in development"
         icon={<ShoppingCart className="h-5 w-5 text-brutal-charcoal" />}
       />
       <StatCard 
         title="Clients" 
-        value={data?.potentialClients?.toString() || "0"} 
-        trend={`${data?.newLeads || 0} new leads`} 
+        value="Coming Soon" 
+        trend="Feature in development" 
         icon={<Users className="h-5 w-5 text-brutal-charcoal" />}
       />
     </div>

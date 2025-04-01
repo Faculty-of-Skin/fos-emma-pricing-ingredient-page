@@ -5,9 +5,7 @@ import {
   Briefcase,
   Calendar,
   LineChart,
-  Settings,
   Database,
-  LayoutDashboard,
   ArrowRight
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -48,13 +46,6 @@ const QuickAccessItem: React.FC<QuickAccessItemProps> = ({
 export const QuickAccess: React.FC = () => {
   const quickAccessItems = [
     {
-      icon: <LayoutDashboard className="h-6 w-6 text-brutal-black" />,
-      title: "Dashboard",
-      description: "View overall insights",
-      path: "/dashboard",
-      color: "bg-brutal-white",
-    },
-    {
       icon: <Briefcase className="h-6 w-6 text-brutal-black" />,
       title: "Products",
       description: "Manage your products",
@@ -75,17 +66,10 @@ export const QuickAccess: React.FC = () => {
       path: "/emma-ingredients",
       color: "bg-brutal-white",
     },
-    {
-      icon: <Settings className="h-6 w-6 text-brutal-black" />,
-      title: "Settings",
-      description: "Configure app settings",
-      path: "/account-settings",
-      color: "bg-brutal-white",
-    },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {quickAccessItems.map((item) => (
         <QuickAccessItem key={item.title} {...item} />
       ))}
