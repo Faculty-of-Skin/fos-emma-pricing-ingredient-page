@@ -11,7 +11,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { EmmaIngredient } from "@/hooks/useEmmaIngredients";
-import { useCurrency } from "@/context/CurrencyContext";
 
 interface EmmaIngredientsTableProps {
   ingredients: EmmaIngredient[];
@@ -25,8 +24,6 @@ export const EmmaIngredientsTable: React.FC<EmmaIngredientsTableProps> = ({
   expandedIngredient,
   toggleIngredient,
 }) => {
-  const { formatPrice, convertPrice } = useCurrency();
-
   return (
     <ScrollArea className="h-[600px] rounded-md border">
       <Table>
@@ -35,10 +32,6 @@ export const EmmaIngredientsTable: React.FC<EmmaIngredientsTableProps> = ({
             <TableHead className="w-32">Reference</TableHead>
             <TableHead>Description</TableHead>
             <TableHead className="w-36">Category</TableHead>
-            <TableHead className="w-36">Order Quantity</TableHead>
-            <TableHead className="w-28 text-right">Beauty Institute</TableHead>
-            <TableHead className="w-28 text-right">Distributor</TableHead>
-            <TableHead className="w-28 text-right">Importer</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -55,26 +48,10 @@ export const EmmaIngredientsTable: React.FC<EmmaIngredientsTableProps> = ({
                     <Badge variant="outline">{ingredient.Category}</Badge>
                   )}
                 </TableCell>
-                <TableCell>{ingredient["Order quantity"] || "EMPTY"}</TableCell>
-                <TableCell className="text-right">
-                  {ingredient["Beauty institute"] 
-                    ? formatPrice(convertPrice(ingredient["Beauty institute"])) 
-                    : "-"}
-                </TableCell>
-                <TableCell className="text-right">
-                  {ingredient.Distributor 
-                    ? formatPrice(convertPrice(ingredient.Distributor)) 
-                    : "-"}
-                </TableCell>
-                <TableCell className="text-right">
-                  {ingredient.Importer 
-                    ? formatPrice(convertPrice(ingredient.Importer)) 
-                    : "-"}
-                </TableCell>
               </TableRow>
               {expandedIngredient === ingredient.Reference && (
                 <TableRow className="bg-muted/30">
-                  <TableCell colSpan={7} className="p-4">
+                  <TableCell colSpan={3} className="p-4">
                     <ExpandedIngredientDetails ingredient={ingredient} />
                   </TableCell>
                 </TableRow>
