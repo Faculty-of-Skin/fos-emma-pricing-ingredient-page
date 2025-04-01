@@ -69,7 +69,7 @@ export const EmmaIngredientsDebugDialog: React.FC<EmmaIngredientsDebugDialogProp
               )}
               {checkRowCount && (
                 <Button 
-                  onClick={checkRowCount} 
+                  onClick={() => checkRowCount()} 
                   variant="outline" 
                   size="sm" 
                   className="mt-2"
