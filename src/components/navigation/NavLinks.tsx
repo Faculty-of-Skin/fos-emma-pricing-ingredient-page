@@ -1,4 +1,3 @@
-
 import { useLocation } from 'react-router-dom';
 
 type NavLinksProps = {
@@ -9,7 +8,7 @@ export const NavLinks = ({ scrollToSection }: NavLinksProps) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/pricing';
 
-  // Links for the pricing page
+  // Links for the pricing page (sections on the page)
   const pricingLinks = [
     { label: "Features", action: () => scrollToSection("features") },
     { label: "How It Works", action: () => scrollToSection("how-it-works") },
@@ -18,10 +17,9 @@ export const NavLinks = ({ scrollToSection }: NavLinksProps) => {
     { label: "FAQ", action: () => scrollToSection("faq") },
   ];
 
-  // Links for other pages - renamed Home to Emma Pricing
+  // Links for other pages - only keep Emma Pricing
   const otherLinks = [
-    { label: "Emma Pricing", href: "/" },
-    { label: "Join Waitlist", href: "/join-waitlist" }
+    { label: "Emma Pricing", href: "/" }
   ];
 
   const links = isHomePage ? pricingLinks : otherLinks;

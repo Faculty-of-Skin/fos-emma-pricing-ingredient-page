@@ -63,11 +63,14 @@ export const Navigation = () => {
               <Logo />
             </div>
 
-            <div className="hidden md:flex items-center justify-center flex-1 mx-8">
-              <NavLinks scrollToSection={scrollToSection} />
-            </div>
+            {/* Remove the centered nav links */}
 
             <div className="hidden md:flex items-center space-x-4">
+              {/* Emma Pricing link */}
+              <a href="/" className="text-brutal-black hover:text-brutal-pink transition-colors font-mono uppercase text-sm">
+                Emma Pricing
+              </a>
+              
               {user ? (
                 <NavButton onClick={handleDashboardClick}>
                   Dashboard

@@ -38,35 +38,13 @@ export const MobileMenu = ({
       </div>
       
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-4">
-        <button 
-          onClick={() => {
-            scrollToSection('features');
-            onClose();
-          }} 
-          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors"
+        {/* Emma Pricing link */}
+        <a 
+          href="/"
+          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors text-center"
         >
-          Features
-        </button>
-        
-        <button 
-          onClick={() => {
-            scrollToSection('how-it-works');
-            onClose();
-          }} 
-          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors"
-        >
-          How It Works
-        </button>
-        
-        <button 
-          onClick={() => {
-            scrollToSection('faq');
-            onClose();
-          }} 
-          className="w-full max-w-sm py-3 px-4 text-lg font-mono uppercase text-brutal-black hover:bg-brutal-gray/10 border-2 border-brutal-black rounded-md transition-colors"
-        >
-          FAQ
-        </button>
+          Emma Pricing
+        </a>
         
         <div className="w-full max-w-sm pt-6 flex flex-col gap-4">
           {showDashboard ? (
