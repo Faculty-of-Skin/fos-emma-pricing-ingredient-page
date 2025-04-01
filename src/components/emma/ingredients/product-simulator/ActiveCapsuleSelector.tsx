@@ -47,12 +47,14 @@ export const ActiveCapsuleSelector: React.FC<ActiveCapsulesProps> = ({
                   onClick={() => onActiveChange(ingredient.Reference)}
                 >
                   <div className="w-full overflow-hidden">
-                    <div className="flex items-center gap-2 whitespace-nowrap">
-                      {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4 flex-shrink-0" />}
-                      <span className="font-medium flex-shrink-0">{ingredient.Reference}</span>
-                      <span className="text-muted-foreground flex-shrink-0">•</span>
-                      <span>{ingredient.Description}</span>
-                    </div>
+                    <ScrollArea className="w-full max-w-full">
+                      <div className="flex items-center gap-2 whitespace-nowrap">
+                        {selectedActiveRefs.includes(ingredient.Reference) && <Check className="h-4 w-4 flex-shrink-0" />}
+                        <span className="font-medium flex-shrink-0">{ingredient.Reference}</span>
+                        <span className="text-muted-foreground flex-shrink-0">•</span>
+                        <span className="truncate">{ingredient.Description}</span>
+                      </div>
+                    </ScrollArea>
                   </div>
                 </Button>
               ))}
