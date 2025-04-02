@@ -1,7 +1,7 @@
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
 import { CurrencyProvider } from "./context/CurrencyContext";
 import { NotificationProvider } from "./context/NotificationContext";
@@ -50,6 +50,7 @@ const App = () => {
                   <Route path="/join-waitlist" element={<JoinWaitlist />} />
                   <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/auth/*" element={<Auth />} /> {/* Handle any auth/ subpaths */}
                   <Route path="/email-confirmation" element={<EmailConfirmation />} />
                   
                   {/* Protected routes - require authentication */}

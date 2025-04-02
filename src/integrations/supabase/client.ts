@@ -20,7 +20,7 @@ const siteUrl = isProduction
   ? 'https://emma.facultyofskin.com' 
   : currentOrigin || 'http://localhost:3000';
 
-// The redirect URL for authentication
+// The redirect URL for authentication - ensure it matches path in App.tsx
 const redirectUrl = `${siteUrl}/auth`;
 
 console.log('Configuring Supabase with redirect URL:', redirectUrl);
