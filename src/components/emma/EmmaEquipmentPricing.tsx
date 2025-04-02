@@ -27,12 +27,18 @@ export const EmmaEquipmentPricing = () => {
     filteredProducts, 
     isLoading, 
     error, 
-    refetch
+    refetch,
+    setCategoryFilter
   } = useProducts();
+  
+  // Set category filter to "Equipment" on component mount
+  useEffect(() => {
+    setCategoryFilter("Equipment");
+    console.log("Setting category filter to Equipment");
+  }, [setCategoryFilter]);
   
   // Filter equipment products when filteredProducts changes
   const equipmentData: Equipment[] = filteredProducts
-    .filter(product => product.category === "Equipment")
     .map(product => ({
       reference: product.reference,
       description: product.description,
@@ -58,7 +64,8 @@ export const EmmaEquipmentPricing = () => {
     console.log("Equipment component rendered");
     console.log("Current currency:", currency);
     console.log("Equipment data:", equipmentData);
-  }, [currency, equipmentData]);
+    console.log("All filtered products:", filteredProducts);
+  }, [currency, equipmentData, filteredProducts]);
 
   return (
     <div className="brutal-card">
