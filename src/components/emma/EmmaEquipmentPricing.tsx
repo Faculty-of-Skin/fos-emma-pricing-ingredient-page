@@ -1,10 +1,9 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Info, Loader2, RefreshCcw, Database, ServerOff } from "lucide-react";
+import { Info, Loader2, RefreshCcw, ServerOff } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { fetchProductsWithFallback } from "@/utils/supabase";
 import { Button } from "@/components/ui/button";
@@ -27,7 +26,6 @@ export const EmmaEquipmentPricing = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [fetchAttempt, setFetchAttempt] = useState(0);
-  const { toast } = useToast();
   
   const fetchEquipment = async () => {
     try {
@@ -43,19 +41,12 @@ export const EmmaEquipmentPricing = () => {
       if (result.data && result.data.length > 0) {
         console.log("Equipment data fetch successful:", result.data.length, "items");
         setEquipmentData(result.data);
-        if (error) {
-          toast({
-            title: "Data connection restored",
-            description: "Equipment data loaded successfully.",
-            variant: "default",
-          });
-        }
       } else {
         console.warn("Equipment data fetch returned no data");
         setEquipmentData([]);
         setError("No equipment data available. This could be due to a temporary issue with the data connection.");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to fetch equipment data:", error);
       setError("Unable to load equipment data. Please try again later.");
     } finally {
@@ -65,7 +56,7 @@ export const EmmaEquipmentPricing = () => {
   
   useEffect(() => {
     fetchEquipment();
-  }, [fetchAttempt, toast]);
+  }, [fetchAttempt]);
   
   const beautyInstituteData = equipmentData.length > 0 
     ? { moq: equipmentData[0].beauty_institute_moq }
@@ -73,10 +64,6 @@ export const EmmaEquipmentPricing = () => {
 
   const handleRefresh = () => {
     setFetchAttempt(prev => prev + 1);
-    toast({
-      title: "Refreshing data",
-      description: "Attempting to retrieve the latest equipment data.",
-    });
   };
 
   return (
