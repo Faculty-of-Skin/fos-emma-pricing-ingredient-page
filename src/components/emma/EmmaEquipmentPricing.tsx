@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { fetchProductsWithFallback } from "@/utils/supabase";
 import { Button } from "@/components/ui/button";
+import { useProducts } from "@/hooks/useProducts";
 
 type Equipment = {
   reference: string;
@@ -22,55 +23,42 @@ type Equipment = {
 
 export const EmmaEquipmentPricing = () => {
   const { convertPrice, formatPrice, currency } = useCurrency();
-  const [equipmentData, setEquipmentData] = useState<Equipment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [fetchAttempt, setFetchAttempt] = useState(0);
+  const { 
+    filteredProducts, 
+    isLoading, 
+    error, 
+    refetch
+  } = useProducts();
   
-  const fetchEquipment = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      console.log("Fetching equipment data... (attempt: " + (fetchAttempt + 1) + ")");
-      
-      const result = await fetchProductsWithFallback({
-        category: "Equipment",
-        orderBy: ["reference.asc"]
-      });
-      
-      if (result.data && result.data.length > 0) {
-        console.log("Equipment data fetch successful:", result.data.length, "items");
-        setEquipmentData(result.data);
-      } else {
-        console.warn("Equipment data fetch returned no data");
-        setEquipmentData([]);
-        setError("No equipment data available. This could be due to a temporary issue with the data connection.");
-      }
-    } catch (error) {
-      console.error("Failed to fetch equipment data:", error);
-      setError("Unable to load equipment data. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
-  useEffect(() => {
-    fetchEquipment();
-  }, [fetchAttempt]);
+  // Filter equipment products when filteredProducts changes
+  const equipmentData: Equipment[] = filteredProducts
+    .filter(product => product.category === "Equipment")
+    .map(product => ({
+      reference: product.reference,
+      description: product.description,
+      importer_price: product.importer_price,
+      distributor_price: product.distributor_price,
+      beauty_institute_price: product.beauty_institute_price,
+      final_consumer_price: product.final_consumer_price,
+      importer_moq: product.importer_moq,
+      distributor_moq: product.distributor_moq,
+      beauty_institute_moq: product.beauty_institute_moq,
+    }));
   
   const beautyInstituteData = equipmentData.length > 0 
     ? { moq: equipmentData[0].beauty_institute_moq }
     : { moq: 1 };
 
   const handleRefresh = () => {
-    setFetchAttempt(prev => prev + 1);
+    refetch();
   };
 
-  // Adding currency as a dependency to ensure re-rendering when currency changes
+  // For debugging
   useEffect(() => {
-    // This effect will run when currency changes
-    console.log("Currency changed to:", currency);
-  }, [currency]);
+    console.log("Equipment component rendered");
+    console.log("Current currency:", currency);
+    console.log("Equipment data:", equipmentData);
+  }, [currency, equipmentData]);
 
   return (
     <div className="brutal-card">
