@@ -31,10 +31,10 @@ export const EmmaEquipmentPricing = () => {
     setCategoryFilter
   } = useProducts();
   
-  // Set category filter to "Equipment" on component mount
+  // Set category filter to "Equipments" on component mount - using the correct category name
   useEffect(() => {
-    setCategoryFilter("Equipment");
-    console.log("Setting category filter to Equipment");
+    setCategoryFilter("Equipments");
+    console.log("Setting category filter to Equipments");
   }, [setCategoryFilter]);
   
   // Filter equipment products when filteredProducts changes
@@ -65,6 +65,7 @@ export const EmmaEquipmentPricing = () => {
     console.log("Current currency:", currency);
     console.log("Equipment data:", equipmentData);
     console.log("All filtered products:", filteredProducts);
+    console.log("Filtering for category: Equipments");
   }, [currency, equipmentData, filteredProducts]);
 
   return (
