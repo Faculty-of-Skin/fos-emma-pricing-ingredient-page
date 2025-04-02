@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Session, User } from "@supabase/supabase-js";
+import { Session, User, AuthResponse } from "@supabase/supabase-js";
 import { supabase, getSiteUrl, getRedirectUrl } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Profile } from "./types";
@@ -9,28 +9,28 @@ import { UserType } from "@/utils/auth/validation";
 export const useAuthSignIn = () => {
   const { toast } = useToast();
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string): Promise<AuthResponse> => {
     try {
       console.log("Signing in with email:", email);
       // Check for rapid successive calls
-      const { data, error } = await supabase.auth.signInWithPassword({ 
+      const response = await supabase.auth.signInWithPassword({ 
         email, 
         password,
       });
       
-      if (error) {
-        console.error("Sign in error:", error.message);
+      if (response.error) {
+        console.error("Sign in error:", response.error.message);
         
         // Check if it's a rate limiting error
-        if (error.message.includes("security purposes") && error.message.includes("seconds")) {
-          throw new Error(`Rate limit exceeded. ${error.message}`);
+        if (response.error.message.includes("security purposes") && response.error.message.includes("seconds")) {
+          throw new Error(`Rate limit exceeded. ${response.error.message}`);
         }
         
-        throw error;
+        throw response.error;
       }
       
-      console.log("Sign in successful, data:", data);
-      return data;
+      console.log("Sign in successful, data:", response.data);
+      return response;
     } catch (error: any) {
       console.error("Sign in error:", error.message);
       toast({

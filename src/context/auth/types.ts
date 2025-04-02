@@ -1,5 +1,5 @@
 
-import { Session, User } from "@supabase/supabase-js";
+import { Session, User, AuthResponse, AuthTokenResponse, WeakPassword } from "@supabase/supabase-js";
 import { UserType } from "@/utils/auth/validation";
 
 export type Profile = {
@@ -14,7 +14,7 @@ export type AuthContextType = {
   profile: Profile | null;
   profileError: Error | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<AuthResponse>;
   signUp: (email: string, password: string, firstName?: string, lastName?: string, userType?: UserType) => Promise<any>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
