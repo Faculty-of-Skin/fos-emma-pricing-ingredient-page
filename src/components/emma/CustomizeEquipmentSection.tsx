@@ -1,15 +1,16 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCurrency } from "@/context/CurrencyContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
-// Base prices in EUR
-const PRICES = {
-  machinePack: 1150,
-  calibrationKit: 14,
-  thermalPrinter: 150,
-  dermoSmart: 621
+type EquipmentProduct = {
+  reference: string;
+  description: string;
+  beauty_institute_price: number;
+  final_consumer_price: number | null;
 };
 
 export const CustomizeEquipmentSection = () => {
@@ -18,18 +19,82 @@ export const CustomizeEquipmentSection = () => {
   const [calibrationKitCount, setCalibrationKitCount] = useState(0);
   const [thermalPrinterCount, setThermalPrinterCount] = useState(0);
   const [dermoSmartCount, setDermoSmartCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [equipmentProducts, setEquipmentProducts] = useState<EquipmentProduct[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fallback prices (in EUR) in case database fetch fails
+  const FALLBACK_PRICES = {
+    AE101: 1500, // Emma Machine Pack
+    AE201: 14,   // Calibration Kit
+    AE600: 200,  // Thermal Printer
+    AE500: 721   // Chowis DermoSmart
+  };
+
+  useEffect(() => {
+    const fetchEquipmentProducts = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("reference, description, beauty_institute_price, final_consumer_price")
+          .eq("category", "Equipment")
+          .in("reference", ["AE101", "AE201", "AE600", "AE500"])
+          .order("reference");
+          
+        if (error) {
+          console.error("Error fetching equipment products:", error);
+          setError("Failed to load equipment data");
+        } else {
+          console.log("Fetched equipment products for customize section:", data);
+          setEquipmentProducts(data || []);
+        }
+      } catch (err) {
+        console.error("Exception fetching equipment for customize section:", err);
+        setError("An unexpected error occurred");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchEquipmentProducts();
+  }, []);
+
+  // Helper function to get product price from database or use fallback
+  const getProductPrice = (reference: string): number => {
+    const product = equipmentProducts.find(product => product.reference === reference);
+    if (product && product.beauty_institute_price) {
+      return product.beauty_institute_price;
+    }
+    return FALLBACK_PRICES[reference as keyof typeof FALLBACK_PRICES] || 0;
+  };
 
   // Calculate the total price based on selected quantities
   const calculateTotalPrice = () => {
-    const machinePackPrice = PRICES.machinePack * machinePackCount;
-    const calibrationKitPrice = PRICES.calibrationKit * calibrationKitCount;
-    const thermalPrinterPrice = PRICES.thermalPrinter * thermalPrinterCount;
-    const dermoSmartPrice = PRICES.dermoSmart * dermoSmartCount;
+    const machinePackPrice = getProductPrice("AE101") * machinePackCount;
+    const calibrationKitPrice = getProductPrice("AE201") * calibrationKitCount;
+    const thermalPrinterPrice = getProductPrice("AE600") * thermalPrinterCount;
+    const dermoSmartPrice = getProductPrice("AE500") * dermoSmartCount;
     
     return machinePackPrice + calibrationKitPrice + thermalPrinterPrice + dermoSmartPrice;
   };
 
   const totalPrice = calculateTotalPrice();
+  
+  if (isLoading) {
+    return (
+      <section className="py-2">
+        <div className="container mx-auto px-4">
+          <div className="brutal-card mb-4 bg-brutal-white/60 border-2 border-brutal-black p-6">
+            <div className="flex justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-2">Loading equipment data...</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   
   return (
     <section className="py-2">
@@ -48,7 +113,7 @@ export const CustomizeEquipmentSection = () => {
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Emma Machine Pack</h3>
                   <p className="text-sm text-brutal-charcoal mb-2 font-mono">
-                    {formatPrice(convertPrice(PRICES.machinePack))} each
+                    {formatPrice(convertPrice(getProductPrice("AE101")))} each
                   </p>
                   <div className="w-full mt-2">
                     <Select 
@@ -65,7 +130,7 @@ export const CustomizeEquipmentSection = () => {
                     </Select>
                   </div>
                   <p className="text-xs text-brutal-charcoal mt-2 italic font-mono">
-                    Required component
+                    Required component (AE101)
                   </p>
                 </div>
               </CardContent>
@@ -76,7 +141,7 @@ export const CustomizeEquipmentSection = () => {
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Calibration Kit</h3>
                   <p className="text-sm text-brutal-charcoal mb-2 font-mono">
-                    {formatPrice(convertPrice(PRICES.calibrationKit))} each
+                    {formatPrice(convertPrice(getProductPrice("AE201")))} each
                   </p>
                   <div className="w-full mt-2">
                     <Select 
@@ -93,6 +158,9 @@ export const CustomizeEquipmentSection = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  <p className="text-xs text-brutal-charcoal mt-2 italic font-mono">
+                    AE201
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -102,7 +170,7 @@ export const CustomizeEquipmentSection = () => {
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Thermal Printer</h3>
                   <p className="text-sm text-brutal-charcoal mb-2 font-mono">
-                    {formatPrice(convertPrice(PRICES.thermalPrinter))} each
+                    {formatPrice(convertPrice(getProductPrice("AE600")))} each
                   </p>
                   <div className="w-full mt-2">
                     <Select 
@@ -118,6 +186,9 @@ export const CustomizeEquipmentSection = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  <p className="text-xs text-brutal-charcoal mt-2 italic font-mono">
+                    AE600
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -127,7 +198,7 @@ export const CustomizeEquipmentSection = () => {
                 <div className="flex flex-col items-center">
                   <h3 className="font-mono text-brutal-black font-bold mb-2">Chowis DermoSmart</h3>
                   <p className="text-sm text-brutal-charcoal mb-2 font-mono">
-                    {formatPrice(convertPrice(PRICES.dermoSmart))} each
+                    {formatPrice(convertPrice(getProductPrice("AE500")))} each
                   </p>
                   <div className="w-full mt-2">
                     <Select 
@@ -143,6 +214,9 @@ export const CustomizeEquipmentSection = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  <p className="text-xs text-brutal-charcoal mt-2 italic font-mono">
+                    AE500
+                  </p>
                 </div>
               </CardContent>
             </Card>
