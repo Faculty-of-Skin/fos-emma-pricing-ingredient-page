@@ -36,7 +36,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     autoRefreshToken: true,
     detectSessionInUrl: true,
     storage: localStorage,
-    flowType: 'pkce', // Using PKCE flow instead of implicit for better security
+    flowType: 'pkce', // Using PKCE flow for better security
   }
 });
 

@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 interface SubmitButtonProps {
   isSignUp: boolean;
@@ -14,7 +15,7 @@ export const SubmitButton = ({ isSignUp, isLoading, cooldownRemaining }: SubmitB
     }
     
     if (isLoading) {
-      return "Processing...";
+      return isSignUp ? "Signing Up..." : "Signing In...";
     }
     
     return isSignUp ? "Sign Up" : "Sign In";
@@ -26,6 +27,7 @@ export const SubmitButton = ({ isSignUp, isLoading, cooldownRemaining }: SubmitB
       className="brutal-button w-full mt-6" 
       disabled={isLoading || cooldownRemaining > 0}
     >
+      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
       {getButtonText()}
     </Button>
   );

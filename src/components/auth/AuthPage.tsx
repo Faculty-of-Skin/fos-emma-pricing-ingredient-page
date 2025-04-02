@@ -40,6 +40,11 @@ const AuthPage = () => {
     return <Navigate to={intendedDestination} replace />;
   }
 
+  const handleToggleMode = () => {
+    setIsSignUp(!isSignUp);
+    setAuthError(null);
+  };
+
   return (
     <div className="min-h-screen bg-brutal-white">
       <Navigation />
@@ -73,20 +78,14 @@ const AuthPage = () => {
                   authError={authError}
                   canSubmit={true}
                   onSubmitSuccess={handleFormSubmit}
-                  onToggleMode={() => {
-                    setIsSignUp(!isSignUp);
-                    setAuthError(null);
-                  }}
+                  onToggleMode={handleToggleMode}
                 />
               </CardContent>
               
               <CardFooter className="flex justify-center">
                 <Button 
                   variant="link" 
-                  onClick={() => {
-                    setIsSignUp(!isSignUp);
-                    setAuthError(null);
-                  }} 
+                  onClick={handleToggleMode} 
                   className="text-brutal-gray"
                   disabled={isLoading}
                 >

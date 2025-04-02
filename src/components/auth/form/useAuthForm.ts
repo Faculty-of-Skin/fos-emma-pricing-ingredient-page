@@ -31,7 +31,7 @@ export const useAuthForm = ({ isSignUp, onSubmitSuccess }: UseAuthFormProps) => 
       password: "",
       firstName: "",
       lastName: "",
-      userType: undefined,
+      userType: "Individual",
     },
     mode: "onBlur", // Validate on blur for better user experience
   });
@@ -114,6 +114,9 @@ export const useAuthForm = ({ isSignUp, onSubmitSuccess }: UseAuthFormProps) => 
       } else {
         console.log("Attempting signin with:", values.email);
         await signIn(values.email, values.password);
+        
+        // Only navigate to dashboard on successful sign in
+        navigate('/dashboard');
       }
       
       if (onSubmitSuccess) {

@@ -13,7 +13,7 @@ export const useAuthSignIn = () => {
     try {
       console.log("Signing in with email:", email);
       // Check for rapid successive calls
-      const { error } = await supabase.auth.signInWithPassword({ 
+      const { data, error } = await supabase.auth.signInWithPassword({ 
         email, 
         password,
       });
@@ -29,7 +29,8 @@ export const useAuthSignIn = () => {
         throw error;
       }
       
-      console.log("Sign in successful");
+      console.log("Sign in successful, data:", data);
+      return data;
     } catch (error: any) {
       console.error("Sign in error:", error.message);
       toast({

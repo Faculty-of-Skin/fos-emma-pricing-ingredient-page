@@ -28,6 +28,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("Auth state changed:", event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
+        
+        // If user logged out, clear profile
+        if (!session) {
+          setProfile(null);
+        }
       }
     );
 
@@ -40,8 +45,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [setSession, setUser, setIsLoading]);
+  }, [setSession, setUser, setIsLoading, setProfile]);
 
+  // Load profile when user changes
   useEffect(() => {
     const loadUserProfile = async () => {
       if (user) {
