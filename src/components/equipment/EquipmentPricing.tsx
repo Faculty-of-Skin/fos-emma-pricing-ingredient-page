@@ -21,7 +21,7 @@ export const EquipmentPricing = () => {
       console.log("Fetching equipment data... (attempt: " + (fetchAttempt + 1) + ")");
       
       const result = await fetchProductsWithFallback({
-        category: "Equipments", // Updated to match the correct category name
+        category: "Equipment", // Updated to match the correct category name
         orderBy: ["reference.asc"]
       });
       
