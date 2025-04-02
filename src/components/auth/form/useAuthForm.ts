@@ -33,6 +33,7 @@ export const useAuthForm = ({ isSignUp, onSubmitSuccess }: UseAuthFormProps) => 
       lastName: "",
       userType: undefined,
     },
+    mode: "onBlur", // Validate on blur for better user experience
   });
 
   // Countdown timer for cooldown

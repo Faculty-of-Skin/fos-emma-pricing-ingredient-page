@@ -17,7 +17,9 @@ export const UserTypeSelector = ({ form, disabled }: UserTypeSelectorProps) => {
       name="userType"
       render={({ field }) => (
         <FormItem className="space-y-3">
-          <FormLabel className="font-mono uppercase">Who are you?</FormLabel>
+          <FormLabel className="font-mono uppercase">
+            Who are you? <span className="text-destructive">*</span>
+          </FormLabel>
           <FormControl>
             <RadioGroup
               onValueChange={field.onChange}
