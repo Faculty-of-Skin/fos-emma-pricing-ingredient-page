@@ -4,6 +4,7 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase, getSiteUrl, getRedirectUrl } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Profile } from "./types";
+import { UserType } from "@/utils/auth/validation";
 
 export const useAuthSignIn = () => {
   const { toast } = useToast();
@@ -47,7 +48,13 @@ export const useAuthSignUp = () => {
   const { toast } = useToast();
   const redirectTo = getRedirectUrl();
 
-  const signUp = async (email: string, password: string, firstName = "", lastName = "") => {
+  const signUp = async (
+    email: string, 
+    password: string, 
+    firstName = "", 
+    lastName = "",
+    userType?: UserType
+  ) => {
     try {
       console.log("Signing up with email:", email);
       console.log("Using redirect URL:", redirectTo);
@@ -58,7 +65,8 @@ export const useAuthSignUp = () => {
         options: {
           data: {
             first_name: firstName,
-            last_name: lastName
+            last_name: lastName,
+            user_type: userType
           },
           emailRedirectTo: redirectTo
         }

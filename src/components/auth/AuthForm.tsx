@@ -4,8 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/context/auth";
 import { useToast } from "@/hooks/use-toast";
-import { useDebounce } from "@/hooks/use-debounce";
-import { AuthFormValues, authSchema } from "@/utils/auth/validation";
+import { AuthFormValues, authSchema, userTypes } from "@/utils/auth/validation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface AuthFormProps {
   isSignUp: boolean;
@@ -51,7 +51,8 @@ export const AuthForm = ({
       email: "",
       password: "",
       firstName: "",
-      lastName: ""
+      lastName: "",
+      userType: undefined,
     },
   });
 
@@ -119,7 +120,13 @@ export const AuthForm = ({
       
       if (isSignUp) {
         console.log("Attempting signup with:", values.email);
-        await signUp(values.email, values.password, values.firstName || "", values.lastName || "");
+        await signUp(
+          values.email, 
+          values.password, 
+          values.firstName || "", 
+          values.lastName || "", 
+          values.userType
+        );
         
         // Redirect to email confirmation page after successful signup
         navigate('/email-confirmation');
@@ -168,45 +175,78 @@ export const AuthForm = ({
         )}
         
         {isSignUp && (
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-mono uppercase">First Name</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="John" 
-                      className="border-2 border-brutal-black" 
-                      {...field} 
-                      disabled={isLoading || cooldownRemaining > 0}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-mono uppercase">First Name</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="John" 
+                        className="border-2 border-brutal-black" 
+                        {...field} 
+                        disabled={isLoading || cooldownRemaining > 0}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-mono uppercase">Last Name</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Doe" 
+                        className="border-2 border-brutal-black" 
+                        {...field} 
+                        disabled={isLoading || cooldownRemaining > 0}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             
             <FormField
               control={form.control}
-              name="lastName"
+              name="userType"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-mono uppercase">Last Name</FormLabel>
+                <FormItem className="space-y-3">
+                  <FormLabel className="font-mono uppercase">Who are you?</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Doe" 
-                      className="border-2 border-brutal-black" 
-                      {...field} 
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1 p-1"
                       disabled={isLoading || cooldownRemaining > 0}
-                    />
+                    >
+                      {userTypes.map((type) => (
+                        <FormItem 
+                          key={type} 
+                          className="flex items-center space-x-3 space-y-0 p-2 border-2 border-brutal-black rounded"
+                        >
+                          <FormControl>
+                            <RadioGroupItem value={type} className="border-brutal-black" />
+                          </FormControl>
+                          <FormLabel className="font-normal cursor-pointer w-full">{type}</FormLabel>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
+          </>
         )}
         
         <FormField
