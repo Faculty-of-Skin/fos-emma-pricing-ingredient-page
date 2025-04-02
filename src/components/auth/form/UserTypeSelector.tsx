@@ -22,7 +22,7 @@ export const UserTypeSelector = ({ form, disabled }: UserTypeSelectorProps) => {
             <RadioGroup
               onValueChange={field.onChange}
               defaultValue={field.value}
-              className="flex flex-col space-y-1 p-1"
+              className="grid grid-cols-2 gap-2 p-1"
               disabled={disabled}
             >
               {userTypes.map((type) => (

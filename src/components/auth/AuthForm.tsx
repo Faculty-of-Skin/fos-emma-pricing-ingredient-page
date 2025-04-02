@@ -34,10 +34,7 @@ export const AuthForm = ({
         <CooldownMessage cooldownRemaining={cooldownRemaining} />
         
         {isSignUp && (
-          <>
-            <NameFields form={form} disabled={isLoading || cooldownRemaining > 0} />
-            <UserTypeSelector form={form} disabled={isLoading || cooldownRemaining > 0} />
-          </>
+          <NameFields form={form} disabled={isLoading || cooldownRemaining > 0} />
         )}
         
         <EmailPasswordFields 
@@ -45,6 +42,10 @@ export const AuthForm = ({
           disabled={isLoading || cooldownRemaining > 0} 
           isSignUp={isSignUp}
         />
+        
+        {isSignUp && (
+          <UserTypeSelector form={form} disabled={isLoading || cooldownRemaining > 0} />
+        )}
         
         <SubmitButton 
           isSignUp={isSignUp} 
