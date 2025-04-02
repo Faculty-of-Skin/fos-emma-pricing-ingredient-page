@@ -2,13 +2,22 @@
 import { useCurrency, Currency } from '@/context/CurrencyContext';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { DollarSign, Euro } from "lucide-react";
+import { useEffect } from 'react';
 
 export const CurrencyToggleGroup = () => {
   const { currency, setCurrency } = useCurrency();
   
   const handleCurrencyChange = (value: string) => {
-    if (value) setCurrency(value as Currency);
+    if (value) {
+      console.log("CurrencyToggleGroup: Setting currency to", value);
+      setCurrency(value as Currency);
+    }
   };
+
+  // Debug current currency value
+  useEffect(() => {
+    console.log("CurrencyToggleGroup: Current currency is", currency);
+  }, [currency]);
 
   return (
     <ToggleGroup 

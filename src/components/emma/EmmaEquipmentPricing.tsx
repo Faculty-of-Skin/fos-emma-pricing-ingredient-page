@@ -66,7 +66,21 @@ export const EmmaEquipmentPricing = () => {
     console.log("Equipment data:", equipmentData);
     console.log("All filtered products:", filteredProducts);
     console.log("Filtering for category: Equipment");
-  }, [currency, equipmentData, filteredProducts]);
+    
+    // Add detailed debugging for price conversion to diagnose the issue
+    if (equipmentData.length > 0) {
+      const firstProduct = equipmentData[0];
+      console.log("First product price conversion:");
+      console.log("Original price (EUR):", firstProduct.beauty_institute_price);
+      console.log("Converted price:", convertPrice(firstProduct.beauty_institute_price));
+      console.log("Formatted price:", formatPrice(convertPrice(firstProduct.beauty_institute_price)));
+      console.log("Currency conversion rates:", {
+        EUR: 1,
+        USD: 1.10,
+        CAD: 1.10 * 1.45
+      });
+    }
+  }, [currency, equipmentData, filteredProducts, convertPrice, formatPrice]);
 
   return (
     <div className="brutal-card">
