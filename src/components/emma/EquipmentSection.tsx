@@ -54,28 +54,28 @@ export const EquipmentSection = () => {
   // Define the equipment items we want to display
   const equipmentItems = [
     { 
-      reference: "EM001", 
+      reference: "AE101", 
       title: "Emma Machine Pack",
       description: "Equip your institute with the latest in skincare technology, designed for bespoke beauty experiences.",
-      fallbackPrice: 1150
+      fallbackPrice: 1500
     },
     { 
-      reference: "EM002", 
+      reference: "AE201", 
       title: "Calibration Kit",
       description: "Essential for ensuring your equipment operates with precision and accuracy.",
       fallbackPrice: 14
     },
     { 
-      reference: "EM003", 
+      reference: "AE600", 
       title: "Thermal Printer",
       description: "Streamline your operations with on-site printing for client treatment plans and receipts.",
-      fallbackPrice: 150
+      fallbackPrice: 200
     },
     { 
-      reference: "EM004", 
+      reference: "AE500", 
       title: "Chowis DermoSmart",
       description: "An advanced diagnostic tool that enhances treatment personalization and effectiveness.",
-      fallbackPrice: 621
+      fallbackPrice: 721
     }
   ];
   
