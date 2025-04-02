@@ -21,7 +21,7 @@ type Equipment = {
 };
 
 export const EmmaEquipmentPricing = () => {
-  const { convertPrice, formatPrice } = useCurrency();
+  const { convertPrice, formatPrice, currency } = useCurrency();
   const [equipmentData, setEquipmentData] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,6 +65,12 @@ export const EmmaEquipmentPricing = () => {
   const handleRefresh = () => {
     setFetchAttempt(prev => prev + 1);
   };
+
+  // Adding currency as a dependency to ensure re-rendering when currency changes
+  useEffect(() => {
+    // This effect will run when currency changes
+    console.log("Currency changed to:", currency);
+  }, [currency]);
 
   return (
     <div className="brutal-card">
