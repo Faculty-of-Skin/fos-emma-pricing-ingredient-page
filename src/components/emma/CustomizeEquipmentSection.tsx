@@ -183,6 +183,7 @@ export const CustomizeEquipmentSection = () => {
                       <SelectContent className="bg-brutal-white border-2 border-brutal-black">
                         <SelectItem value="0" className="font-mono">0</SelectItem>
                         <SelectItem value="1" className="font-mono">1</SelectItem>
+                        <SelectItem value="2" className="font-mono">2</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -211,6 +212,7 @@ export const CustomizeEquipmentSection = () => {
                       <SelectContent className="bg-brutal-white border-2 border-brutal-black">
                         <SelectItem value="0" className="font-mono">0</SelectItem>
                         <SelectItem value="1" className="font-mono">1</SelectItem>
+                        <SelectItem value="2" className="font-mono">2</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
