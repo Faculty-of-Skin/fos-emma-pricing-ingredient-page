@@ -7,7 +7,7 @@ export const ErrorMessage = ({ authError }: ErrorMessageProps) => {
   if (!authError) return null;
   
   return (
-    <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-xs">
+    <div className="mb-4 p-3 bg-brutal-charcoal border border-brutal-black text-brutal-white rounded-md text-xs">
       <h4 className="font-bold mb-1 text-sm">Authentication Failed</h4>
       <p className="break-words overflow-hidden">{authError}</p>
     </div>
