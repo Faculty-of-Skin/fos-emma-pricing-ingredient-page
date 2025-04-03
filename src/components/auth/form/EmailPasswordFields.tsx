@@ -53,7 +53,7 @@ export const EmailPasswordFields = ({ form, disabled, isSignUp }: EmailPasswordF
                 autoComplete={isSignUp ? "new-password" : "current-password"}
               />
             </FormControl>
-            <FormMessage className="text-xs md:text-sm whitespace-normal break-words text-wrap hyphens-auto" />
+            <FormMessage className="text-xs break-words max-w-full overflow-hidden" />
           </FormItem>
         )}
       />

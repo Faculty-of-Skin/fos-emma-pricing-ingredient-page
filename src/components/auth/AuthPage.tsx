@@ -54,24 +54,24 @@ const AuthPage = () => {
         intendedDestination={intendedDestination}
       />
       
-      <div className="container mx-auto px-3 md:px-4 pt-12 md:pt-24">
-        <div className="max-w-[95%] md:max-w-md mx-auto py-6 md:py-16">
+      <div className="container mx-auto px-2 pt-8 md:pt-24">
+        <div className="w-[95%] max-w-md mx-auto py-4 md:py-12">
           {isRedirecting || isEmailRedirect ? (
             <AuthProcessingCard />
           ) : (
             <Card className="brutal-card overflow-hidden">
-              <CardHeader className="p-3 md:p-6">
-                <CardTitle className="text-xl md:text-2xl lg:text-3xl font-mono uppercase font-semibold text-brutal-black text-center">
+              <CardHeader className="p-4">
+                <CardTitle className="text-xl md:text-2xl font-mono uppercase font-semibold text-brutal-black text-center">
                   {isSignUp ? "Create Account" : "Sign In"}
                 </CardTitle>
-                <CardDescription className="text-center text-sm md:text-base">
+                <CardDescription className="text-center text-sm">
                   {isSignUp 
                     ? "Create a new account to access all features" 
                     : "Sign in to your account to continue"}
                 </CardDescription>
               </CardHeader>
               
-              <CardContent className="p-3 md:p-6">
+              <CardContent className="p-4">
                 <AuthForm 
                   isSignUp={isSignUp}
                   isLoading={isLoading}
@@ -82,11 +82,11 @@ const AuthPage = () => {
                 />
               </CardContent>
               
-              <CardFooter className="flex justify-center p-3 md:p-6">
+              <CardFooter className="flex justify-center p-4">
                 <Button 
                   variant="link" 
                   onClick={handleToggleMode} 
-                  className="text-brutal-gray text-sm md:text-base"
+                  className="text-brutal-gray text-sm"
                   disabled={isLoading}
                 >
                   {isSignUp 
