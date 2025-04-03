@@ -54,8 +54,8 @@ const AuthPage = () => {
         intendedDestination={intendedDestination}
       />
       
-      <div className="container mx-auto px-2 pt-8 md:pt-24">
-        <div className="w-[95%] max-w-md mx-auto py-4 md:py-12">
+      <div className="container mx-auto px-4 pt-8 md:pt-24">
+        <div className="w-full max-w-sm mx-auto py-4 md:py-12">
           {isRedirecting || isEmailRedirect ? (
             <AuthProcessingCard />
           ) : (
