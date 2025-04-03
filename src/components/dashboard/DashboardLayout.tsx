@@ -13,15 +13,20 @@ import {
   X,
   Settings,
   Beaker,
+  BookOpen,
 } from "lucide-react";
 import { NotificationDropdown } from "./NotificationDropdown";
 import { useNotifications } from "@/context/NotificationContext";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Tutorial } from "./Tutorial";
+import { useTutorial } from "@/hooks/useTutorial";
 
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { notifications, markAsRead, markAllAsRead, hasUnread } = useNotifications();
+  const { completedTutorials } = useTutorial();
 
   const handleSignOut = async () => {
     await signOut();
@@ -31,6 +36,10 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const totalTutorials = 3; // Update this number if you add more tutorials
+  const completedTutorialsCount = completedTutorials.length;
+  const hasUncompletedTutorials = completedTutorialsCount < totalTutorials;
 
   return (
     <div className="min-h-screen bg-brutal-white flex">
@@ -64,6 +73,29 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
             <NavItem icon={<Package size={18} />} href="/products" label="Products" />
             <NavItem icon={<Beaker size={18} />} href="/emma-ingredients" label="Ingredients" />
             <NavItem icon={<BarChart3 size={18} />} href="/forecasts" label="Forecasts" />
+            
+            {/* Tutorial Dialog */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-2 font-mono text-sm transition-transform uppercase
+                    text-brutal-black hover:bg-brutal-black/10
+                    border-2 border-transparent hover:border-brutal-black/50 relative"
+                >
+                  <BookOpen size={18} />
+                  Tutorials
+                  {hasUncompletedTutorials && (
+                    <span className="absolute right-2 top-2.5 h-2 w-2 rounded-full bg-brutal-red"></span>
+                  )}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+                <div className="p-6">
+                  <Tutorial />
+                </div>
+              </DialogContent>
+            </Dialog>
             
             {isAdmin && (
               <NavItem icon={<UserCog size={18} />} href="/admin" label="Admin" />

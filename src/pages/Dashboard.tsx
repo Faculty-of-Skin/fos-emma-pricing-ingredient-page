@@ -9,8 +9,6 @@ import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { AccountCard } from "@/components/dashboard/AccountCard";
 import { AdminTools } from "@/components/dashboard/AdminTools";
 import { SupportCard } from "@/components/dashboard/SupportCard";
-import { Tutorial } from "@/components/dashboard/Tutorial";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -29,35 +27,21 @@ const Dashboard = () => {
         {/* Quick Access Tiles */}
         <QuickAccess />
         
-        {/* Tabs for Dashboard Content */}
-        <Tabs defaultValue="overview" className="mt-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="overview">Dashboard Overview</TabsTrigger>
-            <TabsTrigger value="tutorials">Tutorials</TabsTrigger>
-          </TabsList>
+        {/* Main Content Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            <PerformanceOverview />
+            <RecentActivity />
+          </div>
           
-          <TabsContent value="overview" className="mt-4">
-            {/* Main Content Sections */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Left Column */}
-              <div className="lg:col-span-2 space-y-6">
-                <PerformanceOverview />
-                <RecentActivity />
-              </div>
-              
-              {/* Right Column */}
-              <div className="space-y-6">
-                <AccountCard />
-                <AdminTools />
-                <SupportCard />
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="tutorials" className="mt-4">
-            <Tutorial />
-          </TabsContent>
-        </Tabs>
+          {/* Right Column */}
+          <div className="space-y-6">
+            <AccountCard />
+            <AdminTools />
+            <SupportCard />
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );

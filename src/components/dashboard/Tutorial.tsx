@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Book, Play, ArrowRight, Check, Info } from 'lucide-react';
+import { Book, Play, ArrowRight, Check, Info, X } from 'lucide-react';
 import { useTutorial } from '@/hooks/useTutorial';
 
 interface TutorialStepProps {
@@ -225,7 +224,7 @@ const ActiveTutorial: React.FC<ActiveTutorialProps> = ({ tutorialId, onClose, on
           <CardTitle className="text-lg font-mono uppercase">{currentTutorial.title}</CardTitle>
           <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
             <span className="sr-only">Close</span>
-            <span className="text-lg">&times;</span>
+            <X className="h-5 w-5" />
           </Button>
         </div>
         <div className="flex items-center gap-1 mt-2">
