@@ -18,15 +18,15 @@ export const EmailPasswordFields = ({ form, disabled, isSignUp }: EmailPasswordF
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="font-mono uppercase">Email</FormLabel>
+            <FormLabel className="text-brutal-black font-medium">Email</FormLabel>
             <FormControl>
-              <Input 
-                placeholder="you@example.com" 
-                className="border-2 border-brutal-black" 
+              <Input
                 type="email"
-                autoComplete={isSignUp ? "email" : "username"}
-                {...field} 
+                placeholder="your@email.com"
+                className="brutal-input placeholder:text-brutal-gray/50"
                 disabled={disabled}
+                {...field}
+                autoComplete="email"
               />
             </FormControl>
             <FormMessage />
@@ -39,18 +39,21 @@ export const EmailPasswordFields = ({ form, disabled, isSignUp }: EmailPasswordF
         name="password"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="font-mono uppercase">Password</FormLabel>
+            <FormLabel className="text-brutal-black font-medium">
+              Password
+              {isSignUp && <span className="text-brutal-gray ml-1 text-xs">(min. 6 characters)</span>}
+            </FormLabel>
             <FormControl>
-              <Input 
-                type="password" 
-                placeholder="••••••••" 
-                className="border-2 border-brutal-black" 
-                autoComplete={isSignUp ? "new-password" : "current-password"}
-                {...field} 
+              <Input
+                type="password"
+                placeholder={isSignUp ? "Create secure password" : "Enter your password"}
+                className="brutal-input placeholder:text-brutal-gray/50"
                 disabled={disabled}
+                {...field}
+                autoComplete={isSignUp ? "new-password" : "current-password"}
               />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-xs md:text-sm whitespace-normal break-words" />
           </FormItem>
         )}
       />
