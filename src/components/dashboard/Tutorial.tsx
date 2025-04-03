@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Book, Check } from 'lucide-react';
+import { BookOpen, BookText, BookCheck, Check, Package, Layers, BarChart3 } from 'lucide-react';
 import { useTutorial } from '@/hooks/useTutorial';
 import { TutorialStep } from './TutorialStep';
 import { ActiveTutorial } from './ActiveTutorial';
@@ -21,7 +21,7 @@ export const Tutorial = () => {
       id: 'products',
       title: 'Manage Products',
       description: 'Learn how to view and manage your product catalog',
-      icon: <Book className="h-4 w-4" />,
+      icon: <Package className="h-4 w-4" />,
       actionLabel: 'Start Tutorial',
       onAction: () => setActiveTutorial('products')
     },
@@ -29,7 +29,7 @@ export const Tutorial = () => {
       id: 'ingredients',
       title: 'Explore Ingredients',
       description: 'Discover the Emma ingredients database',
-      icon: <Book className="h-4 w-4" />,
+      icon: <Layers className="h-4 w-4" />,
       actionLabel: 'Start Tutorial',
       onAction: () => setActiveTutorial('ingredients')
     },
@@ -37,7 +37,7 @@ export const Tutorial = () => {
       id: 'forecasts',
       title: 'View Forecasts',
       description: 'Understand your sales forecasts and analytics',
-      icon: <Book className="h-4 w-4" />,
+      icon: <BarChart3 className="h-4 w-4" />,
       actionLabel: 'Start Tutorial',
       onAction: () => setActiveTutorial('forecasts')
     }

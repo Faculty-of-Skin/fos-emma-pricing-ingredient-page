@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Info, X } from 'lucide-react';
+import { BookOpen, BookCheck, BookText, Book, Layers, Package, BarChart3, X } from 'lucide-react';
 import { tutorials } from './tutorialData';
 
 interface ActiveTutorialProps {
@@ -26,6 +26,31 @@ export const ActiveTutorial: React.FC<ActiveTutorialProps> = ({ tutorialId, onCl
     } else {
       setCurrentStep(prevStep => prevStep + 1);
     }
+  };
+
+  // Map tutorial IDs to appropriate icons
+  const getTutorialIcon = (id: string) => {
+    switch(id) {
+      case 'products':
+        return <Package className="h-16 w-16 text-brutal-black/70" />;
+      case 'ingredients':
+        return <Layers className="h-16 w-16 text-brutal-black/70" />;
+      case 'forecasts':
+        return <BarChart3 className="h-16 w-16 text-brutal-black/70" />;
+      default:
+        return <BookOpen className="h-16 w-16 text-brutal-black/70" />;
+    }
+  };
+
+  // Get decorative background colors based on tutorialId
+  const getBackgroundStyle = (id: string) => {
+    const styles = {
+      'products': 'bg-gradient-to-br from-blue-50 to-indigo-100',
+      'ingredients': 'bg-gradient-to-br from-amber-50 to-yellow-100',
+      'forecasts': 'bg-gradient-to-br from-green-50 to-emerald-100',
+    };
+    
+    return styles[id as keyof typeof styles] || 'bg-gradient-to-br from-gray-50 to-slate-100';
   };
   
   return (
@@ -55,16 +80,8 @@ export const ActiveTutorial: React.FC<ActiveTutorialProps> = ({ tutorialId, onCl
       </CardHeader>
       <CardContent className="pt-4">
         <div className="space-y-4">
-          <div className="aspect-video bg-muted rounded-md overflow-hidden flex items-center justify-center">
-            {currentTutorialStep.image ? (
-              <img 
-                src={currentTutorialStep.image} 
-                alt={currentTutorialStep.title} 
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <Info className="h-12 w-12 text-muted-foreground" />
-            )}
+          <div className={`aspect-video ${getBackgroundStyle(tutorialId)} rounded-md overflow-hidden flex items-center justify-center`}>
+            {getTutorialIcon(tutorialId)}
           </div>
           <div>
             <h3 className="text-md font-semibold mb-1">{currentTutorialStep.title}</h3>
