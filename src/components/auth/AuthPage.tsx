@@ -54,13 +54,13 @@ const AuthPage = () => {
         intendedDestination={intendedDestination}
       />
       
-      <div className="container mx-auto px-3 md:px-4 pt-16 md:pt-24">
-        <div className="max-w-md mx-auto py-8 md:py-16">
+      <div className="container mx-auto px-3 md:px-4 pt-12 md:pt-24">
+        <div className="max-w-[95%] md:max-w-md mx-auto py-6 md:py-16">
           {isRedirecting || isEmailRedirect ? (
             <AuthProcessingCard />
           ) : (
             <Card className="brutal-card overflow-hidden">
-              <CardHeader className="p-4 md:p-6">
+              <CardHeader className="p-3 md:p-6">
                 <CardTitle className="text-xl md:text-2xl lg:text-3xl font-mono uppercase font-semibold text-brutal-black text-center">
                   {isSignUp ? "Create Account" : "Sign In"}
                 </CardTitle>
@@ -71,7 +71,7 @@ const AuthPage = () => {
                 </CardDescription>
               </CardHeader>
               
-              <CardContent className="p-4 md:p-6">
+              <CardContent className="p-3 md:p-6">
                 <AuthForm 
                   isSignUp={isSignUp}
                   isLoading={isLoading}
@@ -82,7 +82,7 @@ const AuthPage = () => {
                 />
               </CardContent>
               
-              <CardFooter className="flex justify-center p-4 md:p-6">
+              <CardFooter className="flex justify-center p-3 md:p-6">
                 <Button 
                   variant="link" 
                   onClick={handleToggleMode} 
