@@ -61,17 +61,17 @@ export const tutorials: TutorialCollection = {
       {
         title: 'View Analytics Dashboard',
         content: 'The forecasts page provides an overview of your projected sales and performance metrics.',
-        image: '/lovable-uploads/c13d39fd-c905-47bf-851e-c83cb104ef06.png'
+        image: '/lovable-uploads/984b6e2f-88fb-4f13-8fe1-53f5df90ba86.png'
       },
       {
         title: 'Understand Trends',
         content: 'Analyze sales trends over time to identify patterns and opportunities for growth.',
-        image: '/lovable-uploads/d4ffa129-b0aa-44e7-a687-b046e9eecd59.png'
+        image: '/lovable-uploads/22be9c95-0307-451b-86cf-0af775239198.png'
       },
       {
         title: 'Export Reports',
         content: 'Export detailed reports for your records or to share with team members.',
-        image: '/lovable-uploads/e7d663d7-1652-4978-8d2e-fbd5afac95b5.png'
+        image: '/lovable-uploads/4e8f1b0e-d148-4ce6-b43c-79631a6ad14f.png'
       }
     ]
   }
