@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookOpen, BookCheck, BookText, Book, Layers, Package, BarChart3, X } from 'lucide-react';
+import { BookOpen, BookCheck, BookText, Book, Layers, Package, BarChart3, X, BarChart } from 'lucide-react';
 import { tutorials } from './tutorialData';
 
 interface ActiveTutorialProps {
@@ -25,6 +25,34 @@ export const ActiveTutorial: React.FC<ActiveTutorialProps> = ({ tutorialId, onCl
       onComplete();
     } else {
       setCurrentStep(prevStep => prevStep + 1);
+    }
+  };
+
+  // Get icon based on tutorial ID
+  const getTutorialIcon = () => {
+    switch(tutorialId) {
+      case 'products':
+        return <Package className="h-12 w-12 text-brutal-black/70" />;
+      case 'ingredients':
+        return <Layers className="h-12 w-12 text-brutal-black/70" />;
+      case 'forecasts':
+        return <BarChart3 className="h-12 w-12 text-brutal-black/70" />;
+      default:
+        return <Book className="h-12 w-12 text-brutal-black/70" />;
+    }
+  };
+
+  // Get gradient based on tutorial ID
+  const getTutorialGradient = () => {
+    switch(tutorialId) {
+      case 'products':
+        return 'bg-gradient-to-br from-blue-50 to-indigo-50';
+      case 'ingredients':
+        return 'bg-gradient-to-br from-green-50 to-emerald-50';
+      case 'forecasts':
+        return 'bg-gradient-to-br from-amber-50 to-yellow-50';
+      default:
+        return 'bg-gradient-to-br from-gray-50 to-slate-50';
     }
   };
 
@@ -55,13 +83,22 @@ export const ActiveTutorial: React.FC<ActiveTutorialProps> = ({ tutorialId, onCl
       </CardHeader>
       <CardContent className="pt-4">
         <div className="space-y-4">
-          <div className="rounded-md overflow-hidden h-48 w-full">
-            <img 
-              src={currentTutorialStep.image} 
-              alt={currentTutorialStep.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
+          {currentTutorialStep.image ? (
+            <div className="rounded-md overflow-hidden h-48 w-full">
+              <img 
+                src={currentTutorialStep.image} 
+                alt={currentTutorialStep.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className={`rounded-md overflow-hidden h-48 w-full flex items-center justify-center ${getTutorialGradient()}`}>
+              <div className="text-center">
+                {getTutorialIcon()}
+                <p className="mt-2 font-semibold">{currentTutorialStep.title}</p>
+              </div>
+            </div>
+          )}
           <div>
             <h3 className="text-md font-semibold mb-1">{currentTutorialStep.title}</h3>
             <p className="text-sm text-muted-foreground">{currentTutorialStep.content}</p>

@@ -2,7 +2,7 @@
 export interface TutorialStep {
   title: string;
   content: string;
-  image: string; // Adding image field
+  image?: string; // Making image optional
 }
 
 export interface TutorialData {
@@ -60,18 +60,15 @@ export const tutorials: TutorialCollection = {
     steps: [
       {
         title: 'View Analytics Dashboard',
-        content: 'The forecasts page provides an overview of your projected sales and performance metrics.',
-        image: '/lovable-uploads/984b6e2f-88fb-4f13-8fe1-53f5df90ba86.png'
+        content: 'The forecasts page provides an overview of your projected sales and performance metrics.'
       },
       {
         title: 'Understand Trends',
-        content: 'Analyze sales trends over time to identify patterns and opportunities for growth.',
-        image: '/lovable-uploads/22be9c95-0307-451b-86cf-0af775239198.png'
+        content: 'Analyze sales trends over time to identify patterns and opportunities for growth.'
       },
       {
         title: 'Export Reports',
-        content: 'Export detailed reports for your records or to share with team members.',
-        image: '/lovable-uploads/4e8f1b0e-d148-4ce6-b43c-79631a6ad14f.png'
+        content: 'Export detailed reports for your records or to share with team members.'
       }
     ]
   }
