@@ -31,7 +31,7 @@ export const AuthForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
         {authError && (
-          <div className="w-full overflow-hidden">
+          <div className="w-full">
             <ErrorMessage authError={authError} />
           </div>
         )}

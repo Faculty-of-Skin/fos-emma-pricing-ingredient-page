@@ -66,6 +66,11 @@
   .brutal-nav {
     @apply bg-brutal-white border-b-4 border-brutal-black;
   }
+  
+  /* New auth-error styling */
+  .auth-error-message {
+    @apply bg-black text-white p-4 border-2 border-brutal-charcoal rounded-md shadow-lg;
+  }
 }
 
 /* Custom scrollbar */
