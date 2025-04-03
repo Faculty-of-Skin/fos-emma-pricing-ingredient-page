@@ -30,11 +30,7 @@ export const AuthForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
-        {authError && (
-          <div className="w-full">
-            <ErrorMessage authError={authError} />
-          </div>
-        )}
+        {authError && <ErrorMessage authError={authError} />}
         <CooldownMessage cooldownRemaining={cooldownRemaining} />
         
         {isSignUp && (
