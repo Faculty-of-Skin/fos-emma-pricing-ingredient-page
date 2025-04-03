@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
 import { CurrencyProvider } from "./context/CurrencyContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { TutorialProvider } from "./hooks/useTutorial";
 import { ProtectedRoute, AdminRoute } from "./components/auth";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -41,37 +42,39 @@ const App = () => {
         <AuthProvider>
           <CurrencyProvider>
             <NotificationProvider>
-              <BrowserRouter>
-                <Routes>
-                  {/* Public routes */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/pricing" element={<PricingPage />} />
-                  <Route path="/emma-pricing" element={<EmmaPricing />} />
-                  <Route path="/join-waitlist" element={<JoinWaitlist />} />
-                  <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/auth/*" element={<Auth />} /> {/* Handle any auth/ subpaths */}
-                  <Route path="/email-confirmation" element={<EmailConfirmation />} />
-                  
-                  {/* Protected routes - require authentication */}
-                  <Route element={<ProtectedRoute />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/forecasts" element={<Forecasts />} />
-                    <Route path="/account-settings" element={<AccountSettings />} />
-                    <Route path="/emma-ingredients" element={<EmmaIngredientsPage />} />
+              <TutorialProvider>
+                <BrowserRouter>
+                  <Routes>
+                    {/* Public routes */}
+                    <Route path="/" element={<Index />} />
+                    <Route path="/pricing" element={<PricingPage />} />
+                    <Route path="/emma-pricing" element={<EmmaPricing />} />
+                    <Route path="/join-waitlist" element={<JoinWaitlist />} />
+                    <Route path="/waitlist-redirect" element={<WaitlistRedirect />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/auth/*" element={<Auth />} /> {/* Handle any auth/ subpaths */}
+                    <Route path="/email-confirmation" element={<EmailConfirmation />} />
                     
-                    {/* Admin-only routes */}
-                    <Route element={<AdminRoute />}>
-                      <Route path="/admin" element={<AdminPanel />} />
+                    {/* Protected routes - require authentication */}
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/forecasts" element={<Forecasts />} />
+                      <Route path="/account-settings" element={<AccountSettings />} />
+                      <Route path="/emma-ingredients" element={<EmmaIngredientsPage />} />
+                      
+                      {/* Admin-only routes */}
+                      <Route element={<AdminRoute />}>
+                        <Route path="/admin" element={<AdminPanel />} />
+                      </Route>
                     </Route>
-                  </Route>
-                  
-                  {/* 404 Page */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-              <Toaster />
+                    
+                    {/* 404 Page */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </BrowserRouter>
+                <Toaster />
+              </TutorialProvider>
             </NotificationProvider>
           </CurrencyProvider>
         </AuthProvider>
