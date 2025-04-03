@@ -20,6 +20,7 @@ import { useNotifications } from "@/context/NotificationContext";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tutorial } from "./Tutorial";
 import { useTutorial } from "@/hooks/useTutorial";
+import { NavItem } from "./NavItem";
 
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { signOut, isAdmin } = useAuth();
@@ -139,26 +140,5 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
         </main>
       </div>
     </div>
-  );
-};
-
-const NavItem = ({ icon, href, label }: { icon: React.ReactNode; href: string; label: string }) => {
-  const navigate = useNavigate();
-  const isActive = window.location.pathname === href;
-
-  return (
-    <Button
-      variant="ghost"
-      className={`w-full justify-start gap-2 font-mono text-sm transition-transform uppercase
-        ${isActive 
-          ? "bg-brutal-black text-brutal-white font-bold transform translate-x-1 translate-y-1" 
-          : "text-brutal-black hover:bg-brutal-black/10"
-        } 
-        border-2 ${isActive ? "border-brutal-black" : "border-transparent hover:border-brutal-black/50"}`}
-      onClick={() => navigate(href)}
-    >
-      {icon}
-      {label}
-    </Button>
   );
 };
