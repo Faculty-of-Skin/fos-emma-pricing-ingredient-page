@@ -54,24 +54,24 @@ const AuthPage = () => {
         intendedDestination={intendedDestination}
       />
       
-      <div className="container mx-auto px-4 pt-8 md:pt-24">
-        <div className="w-full max-w-sm mx-auto py-4 md:py-12">
+      <div className="container mx-auto px-4 pt-4 md:pt-12">
+        <div className="w-full max-w-xs mx-auto py-2 md:py-6">
           {isRedirecting || isEmailRedirect ? (
             <AuthProcessingCard />
           ) : (
             <Card className="brutal-card overflow-hidden">
-              <CardHeader className="p-4">
-                <CardTitle className="text-xl md:text-2xl font-mono uppercase font-semibold text-brutal-black text-center">
+              <CardHeader className="p-3">
+                <CardTitle className="text-lg md:text-xl font-mono uppercase font-semibold text-brutal-black text-center">
                   {isSignUp ? "Create Account" : "Sign In"}
                 </CardTitle>
-                <CardDescription className="text-center text-sm">
+                <CardDescription className="text-center text-xs">
                   {isSignUp 
                     ? "Create a new account to access all features" 
                     : "Sign in to your account to continue"}
                 </CardDescription>
               </CardHeader>
               
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <AuthForm 
                   isSignUp={isSignUp}
                   isLoading={isLoading}
@@ -82,11 +82,11 @@ const AuthPage = () => {
                 />
               </CardContent>
               
-              <CardFooter className="flex justify-center p-4">
+              <CardFooter className="flex justify-center p-3">
                 <Button 
                   variant="link" 
                   onClick={handleToggleMode} 
-                  className="text-brutal-gray text-sm"
+                  className="text-brutal-gray text-xs"
                   disabled={isLoading}
                 >
                   {isSignUp 
